@@ -1,0 +1,52 @@
+{
+  "name": "web-starter-pack",
+  "version": "1.0.0",
+  "description": "A starting point for web development",
+  "main": "webpack.config.js",
+  "bin": {
+    "web-starter-pack": "app.bundle.js"
+  },
+  "dependencies": {
+    "autoprefixer-loader": "^3.2.0",
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2017": "^6.24.1",
+    "css-loader": "^0.28.2",
+    "diet": "^0.16.0",
+    "diet-cross-origin": "^0.2.3",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.3",
+    "moduler": "git+https://github.com/dbrdarski/moduler.git",
+    "pg": "^6.4.0",
+    "pg-hstore": "^2.3.2",
+    "ramda": "^0.24.1",
+    "sequelize": "^4.2.1",
+    "sequelize-hierarchy": "^1.3.1",
+    "string": "^3.3.3",
+    "style-loader": "^0.18.1",
+    "webpack": "^2.6.0"
+  },
+  "devDependencies": {
+    "autoprefixer-loader": "^3.2.0",
+    "babel-cli": "^6.24.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators": "^6.24.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-preset-es2017": "^6.24.1",
+    "css-loader": "^0.28.2",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.3",
+    "style-loader": "^0.18.1",
+    "webpack-node-server-plugin": "^0.2.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack.config.js"
+  },
+  "author": "Dane Brdarski",
+  "license": "ISC"
+}
