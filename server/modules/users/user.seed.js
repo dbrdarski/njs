@@ -1,19 +1,12 @@
-export default function( User, Role ){
+export default function( $ ){
+  let { User, Role } = $.models;
 
-  function chain(){
-      return Array.prototype.reduce.call(arguments, (acc, x)=>{
-        return acc ? acc.then(x) : x();
-      })
-  }
-
-  let administrator = Role.build({
-		name : 'admin',
-		description : 'Administrator'
-	})
-
-  administrator.save().then((a)=>{
-    console.log(["AAAAAAAAAAADDDMIIIIIIIIIIIIIIIIIIIIIIIIN", a])
-    let admin = User.build({
+  $.chain(
+    ( ) => (Role.build({
+  		name : 'admin',
+  		description : 'Administrator'
+  	}).save()),
+    (admin) => (User.build({
       username : 'admin',
       email : 'admin@course.plus',
       firstName : 'Dane',
@@ -21,22 +14,26 @@ export default function( User, Role ){
       password : 'qwertybanana',
       image : 'dane.jpg',
       description : 'All-seeing, All-knowing. The Admin.'
-  	})
-
-    admin.setRole(a)
+  	}).setRole(admin))
+  )()
+  $.chain(
+    () => (Role.build({
+  		name : 'student',
+  		description : 'Student'
+  	}).save()),
+    (student) => (User.build({
+      username : 'student',
+      email : 'student@course.plus',
+      firstName : 'Pepe',
+      lastName : 'Biserov',
+      password : 'qwertybanana'
+  	}).setRole(student))
+  )()
+  Role.create({
+    name : 'lecturer',
+    description : 'Lecturer'
   })
-
-	Role.create({
-		name : 'lecturer',
-		description : 'Lecturer'
-	})
-
-  let student = Role.build({
-		name : 'student',
-		description : 'Student'
-	})
-
-  student.save()
+  // pepe.setRole(student)
 
 
   // .then((admin)=>{

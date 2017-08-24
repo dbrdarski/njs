@@ -164,20 +164,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     app.config('route', routes.getOrSet);
     app.config('routes', routes.getAll);
 
-    app
-      // .run(['routes','administration', 'courses', 'lessions'], function({server}){
-      .run(['admin', 'courses', 'lessions', 'users'], function({server, routes}){
-        Object.getOwnPropertyNames(routes).forEach(x=>routes[x])
+    app.config('chain', function(){
+	    return (init) => Array.prototype.reduce.call(arguments, (acc, x) => acc && acc.then ? acc.then(x) : x(acc), init)
+    })
 
-        server.get('/', ($)=>{
-          $.data.message = 'Hello World!!!!'
-          $.data.context = this.constructor.name
-          $.data.r = Object.getOwnPropertyNames(routes)
-          $.data.app = app.constructor.name
-          // $.data.isEqual = $ === this
-          $.json()
-        })
+    app.modules()
+    app.run(function({server, routes}){
+      routes();
+      server.get('/', ($)=>{
+        $.data.message = 'Hello World!!!!'
+        $.data.context = this.constructor.name
+        $.data.r = Object.getOwnPropertyNames(routes)
+        $.data.app = app.constructor.name
+        // $.data.isEqual = $ === this
+        $.json()
       })
+    })
 
       // .run(['models'], ($, models)=>{
       //   $.run()
@@ -757,10 +759,10 @@ __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('users', function($){
 /* harmony export (immutable) */ __webpack_exports__["a"] = UserCtrl;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__user_seed__ = __webpack_require__(33);
 
-function UserCtrl({
-  models : { User, Role }
-}){
+function UserCtrl($$){
   this.relations.User
+  let User = this.models.User
+
   return {
     index : function($){
       User
@@ -771,19 +773,20 @@ function UserCtrl({
           $.data.body = $.body
           $.json()
         })
-      },
-      new : function($){
-        var user = User.build($.query)
-        $.data.msg = $.query
-        user.save()
+
+    },
+    new : function($){
+      var user = User.build($.query)
+      $.data.msg = $.query
+      user.save()
+      $.json()
+    },
+    install : function($){
+      User.sync({force: true}).then(()=>{
+        $.data.msg = {installed: 'users table'}
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__user_seed__["a" /* default */])($$)
         $.json()
-      },
-      install : function($){
-        User.sync({force: true}).then(()=>{
-          $.data.msg = {installed: 'users table'}
-          __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__user_seed__["a" /* default */])(User, Role)
-          $.json()
-        })
+      })
     }
   }
 }
@@ -875,22 +878,15 @@ function UserCtrl({
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function( User, Role ){
+/* harmony default export */ __webpack_exports__["a"] = (function( $ ){
+  let { User, Role } = $.models;
 
-  function chain(){
-      return Array.prototype.reduce.call(arguments, (acc, x)=>{
-        return acc ? acc.then(x) : x();
-      })
-  }
-
-  let administrator = Role.build({
-		name : 'admin',
-		description : 'Administrator'
-	})
-
-  administrator.save().then((a)=>{
-    console.log(["AAAAAAAAAAADDDMIIIIIIIIIIIIIIIIIIIIIIIIN", a])
-    let admin = User.build({
+  $.chain(
+    ( ) => (Role.build({
+  		name : 'admin',
+  		description : 'Administrator'
+  	}).save()),
+    (admin) => (User.build({
       username : 'admin',
       email : 'admin@course.plus',
       firstName : 'Dane',
@@ -898,22 +894,26 @@ function UserCtrl({
       password : 'qwertybanana',
       image : 'dane.jpg',
       description : 'All-seeing, All-knowing. The Admin.'
-  	})
-
-    admin.setRole(a)
+  	}).setRole(admin))
+  )()
+  $.chain(
+    () => (Role.build({
+  		name : 'student',
+  		description : 'Student'
+  	}).save()),
+    (student) => (User.build({
+      username : 'student',
+      email : 'student@course.plus',
+      firstName : 'Pepe',
+      lastName : 'Biserov',
+      password : 'qwertybanana'
+  	}).setRole(student))
+  )()
+  Role.create({
+    name : 'lecturer',
+    description : 'Lecturer'
   })
-
-	Role.create({
-		name : 'lecturer',
-		description : 'Lecturer'
-	})
-
-  let student = Role.build({
-		name : 'student',
-		description : 'Student'
-	})
-
-  student.save()
+  // pepe.setRole(student)
 
 
   // .then((admin)=>{

@@ -51,20 +51,22 @@
     app.config('route', routes.getOrSet);
     app.config('routes', routes.getAll);
 
-    app
-      // .run(['routes','administration', 'courses', 'lessions'], function({server}){
-      .run(['admin', 'courses', 'lessions', 'users'], function({server, routes}){
-        Object.getOwnPropertyNames(routes).forEach(x=>routes[x])
+    app.config('chain', function(){
+	    return (init) => Array.prototype.reduce.call(arguments, (acc, x) => acc && acc.then ? acc.then(x) : x(acc), init)
+    })
 
-        server.get('/', ($)=>{
-          $.data.message = 'Hello World!!!!'
-          $.data.context = this.constructor.name
-          $.data.r = Object.getOwnPropertyNames(routes)
-          $.data.app = app.constructor.name
-          // $.data.isEqual = $ === this
-          $.json()
-        })
+    app.modules()
+    app.run(function({server, routes}){
+      routes();
+      server.get('/', ($)=>{
+        $.data.message = 'Hello World!!!!'
+        $.data.context = this.constructor.name
+        $.data.r = Object.getOwnPropertyNames(routes)
+        $.data.app = app.constructor.name
+        // $.data.isEqual = $ === this
+        $.json()
       })
+    })
 
       // .run(['models'], ($, models)=>{
       //   $.run()
