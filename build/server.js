@@ -886,28 +886,34 @@ function UserCtrl($$){
   		name : 'admin',
   		description : 'Administrator'
   	}).save()),
-    (admin) => (User.build({
-      username : 'admin',
-      email : 'admin@course.plus',
-      firstName : 'Dane',
-      lastName : 'Brdarski',
-      password : 'qwertybanana',
-      image : 'dane.jpg',
-      description : 'All-seeing, All-knowing. The Admin.'
-  	}).save()).then(s=>s.setRole(admin))
+    (administrator) => {
+      var admin = new User();
+      admin.setRole(administrator, {save: false})
+      admin.username = 'admin'
+      admin.email = 'admin@course.plus'
+      admin.firstName = 'Dane'
+      admin.lastName = 'Brdarski'
+      admin.password = 'qwertybanana'
+      admin.image = 'dane.jpg'
+      admin.description = 'All-seeing, All-knowing. The Admin.'
+      admin.save()
+  	}
   )()
   $.chain(
     () => (Role.build({
   		name : 'student',
   		description : 'Student'
   	}).save()),
-    (student) => (User.build({
-      username : 'student',
-      email : 'student@course.plus',
-      firstName : 'Pepe',
-      lastName : 'Biserov',
-      password : 'qwertybanana'
-  	}).save()).then(s=>s.setRole(student))
+    (student) => {
+      let pepe = new User()
+      pepe.setRole(student, {save: false})
+      pepe.username = 'student'
+      pepe.email = 'student@course.plus'
+      pepe.firstName = 'Pepe'
+      pepe.lastName = 'Biserov'
+      pepe.password = 'qwertybanana'
+      pepe.save()
+    }
   )()
   Role.create({
     name : 'lecturer',
