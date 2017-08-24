@@ -851,7 +851,7 @@ function UserCtrl($$){
 }){
   User.Courses = User.hasMany(Course)
   User.Role = User.belongsTo(Role, {
-    as: "Role"    
+    as: "role"    
   })
   return true
 });
@@ -894,7 +894,7 @@ function UserCtrl($$){
       password : 'qwertybanana',
       image : 'dane.jpg',
       description : 'All-seeing, All-knowing. The Admin.'
-  	}).setRole(admin))
+  	}).save()).then(s=>s.setRole(admin))
   )()
   $.chain(
     () => (Role.build({
@@ -907,7 +907,7 @@ function UserCtrl($$){
       firstName : 'Pepe',
       lastName : 'Biserov',
       password : 'qwertybanana'
-  	}).setRole(student))
+  	}).save()).then(s=>s.setRole(student))
   )()
   Role.create({
     name : 'lecturer',

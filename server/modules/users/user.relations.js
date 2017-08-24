@@ -3,7 +3,7 @@ export default function({
 }){
   User.Courses = User.hasMany(Course)
   User.Role = User.belongsTo(Role, {
-    as: "Role"    
+    as: "role"    
   })
   return true
 }
