@@ -7,7 +7,7 @@ export default function( $ ){
   		description : 'Administrator'
   	}).save()),
     (administrator) => {
-      var admin = new User();
+      var admin = new User()
       admin.setRole(administrator, {save: false})
       admin.username = 'admin'
       admin.email = 'admin@course.plus'
