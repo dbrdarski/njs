@@ -7,5 +7,4 @@ export default function({
   User.Role = User.belongsTo(Role, {
     as: "role"
   })
-  return true
 }

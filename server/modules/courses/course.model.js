@@ -20,8 +20,16 @@ export default function({Q, db}){
     image : {
       type: Q.STRING
     },
-    level : Q.INTEGER,
-    color : Q.INTEGER,
+    color : {
+      type: Q.ENUM,
+      values: [ 'default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue' ],
+      defaultValue: 'default'
+    },
+    level : {
+      type: Q.ENUM,
+      values : [ 'Beginner', 'Intermediate', 'Advanced' ],
+      defaultValue: 'Beginner'
+    },
     active : {
       type : Q.BOOLEAN,
       defaultValue : false
