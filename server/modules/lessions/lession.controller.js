@@ -1,4 +1,5 @@
 export default function LessionCtrl({ models: { Lession }}){
+  this.relations.Lession
   return {
     index : function($){
       Lession

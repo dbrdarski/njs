@@ -11,9 +11,6 @@ export default function({Q, db}){
     slug : {
       type: Q.STRING
     },
-    slug : {
-      type: Q.STRING
-    },
     description : {
       type: Q.TEXT
     },
