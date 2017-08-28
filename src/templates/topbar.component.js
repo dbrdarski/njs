@@ -1,3 +1,4 @@
+import './topbar.less'
 export default function({m}){
   return {
     view: function() {
