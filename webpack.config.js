@@ -50,7 +50,7 @@ fs.readdirSync('node_modules')
 
 module.exports = [{
     target: 'node',
-    entry: './server/app.js',
+    entry: './src/server.js',
     output: {
         path: path.join(__dirname, 'build'),
         // path: path.resolve(__dirname),
@@ -63,7 +63,7 @@ module.exports = [{
     ]
 },
 {
-    entry: './src/main.js',
+    entry: './src/client.js',
     output: {
         path: path.resolve(__dirname, 'bin'),
         filename: 'app.bundle.js',
