@@ -1,10 +1,12 @@
 export default function({
-  m, components : { Navbar }
-}){
-  console.log(Navbar)
+  m, components : { Navbar, Content }
+}){  
   return {
     view: function() {
-      return m(Navbar)
+      return [
+        m(Navbar),
+        m(Content)
+      ]
     }
   }
 }

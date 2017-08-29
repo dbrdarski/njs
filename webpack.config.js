@@ -127,6 +127,9 @@ module.exports = [{
     },
     devServer: {
         contentBase: "./src",
-        historyApiFallback: true
+        hot: true,
+        historyApiFallback: {
+          index: '/'
+        }
     }
 }];
