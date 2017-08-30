@@ -1,9 +1,13 @@
-import './topbar.less'
 export default function({m}){
   return {
-    view: function() {
+    view: function(vnode) {
       return m(
-        'h1', 'Hello darkness my old friend'
+        '.container', [
+          m(
+            'h1.punchline', "Browse our courses..."
+          ),
+          m('.row', vnode.children)
+        ]
       )
     }
   }

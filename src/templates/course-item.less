@@ -1,0 +1,68 @@
+.course {
+  border-radius: 3px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+  .thumb {
+    position: relative;
+    height: 8em;
+    display: block;
+    text-decoration: none;
+    padding: 0 0.5em;
+
+    &:hover .thumb-img {
+      opacity: 1;
+    }
+  }
+
+  .thumb-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 8em;
+    width: 100%;
+    background: #41a85f right center;
+    opacity: .8;
+    transition: opacity .3s;
+    transform: translateZ(0);
+  }
+  .name {
+    position: relative;
+    display: inline;
+    font-size: 23px;
+    font-weight: 400;
+    line-height: 1.45em;
+    padding: 0.175em 0 .275em;
+    box-shadow: -0.375em 0, 0.325em 0;
+    text-decoration: none;
+    transform: translateZ(0);
+    > * {
+      color: white;
+    }
+  }
+  .inner{
+    padding: 20px;
+  }
+  .description{
+    min-height: 6.4em;
+    line-height: 1.25em;
+    padding: 0;
+  }
+  .author{
+    line-height: 1em;
+    padding-top: 10px;
+  }
+  ul {
+      margin: 0;
+      padding: 0;
+  }
+  li{
+    list-style-type: none;
+    line-height: 1em;
+    padding-top: 10px;
+  }
+  a{
+    text-decoration: none;
+  }
+}

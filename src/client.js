@@ -11,11 +11,10 @@ app.config('components', components.getAll);
 import './templates/module'
 
 app.run(['templates'], function({
-  components: { Topbar }
+  components: { Page }
 }){
-  console.log(Topbar)
-  m.mount(document.body, Topbar)
-
+  console.log(Page)
+  m.mount(document.body, Page)
 })
 console.log(app)
 
