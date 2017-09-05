@@ -60,7 +60,14 @@ module.exports = [{
     devtool: 'sourcemap',
     plugins: [
         new WebpackNodeServerPlugin()
-    ]
+    ],
+    module: {
+        rules: [{
+            test: /\.less$/,
+            exclude: '/node_modules/',
+            loader: 'ignore-loader'
+        }]
+    }
 },
 {
     entry: './src/client.js',

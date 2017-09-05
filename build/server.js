@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 47);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -74,139 +74,1079 @@ module.exports = require("moduler");
 
 /***/ }),
 /* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__users_module__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__roles_permissions_module__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__courses_module__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lessions_module__ = __webpack_require__(15);
 
 
-
+module.exports = typeof setImmediate === "function" ? setImmediate : setTimeout
 
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("diet");
+"use strict";
+
+
+module.exports = function parseURL(url, root) {
+	var data = {}
+	var protocolIndex = url.indexOf("://")
+	var pathnameIndex = protocolIndex > -1 ? url.indexOf("/", protocolIndex + 3) : url.indexOf("/")
+	var searchIndex = url.indexOf("?")
+	var hashIndex = url.indexOf("#")
+	if ((pathnameIndex > searchIndex && searchIndex > -1) || (pathnameIndex > hashIndex && hashIndex > -1)) pathnameIndex = -1
+	if (searchIndex > hashIndex && hashIndex > -1) searchIndex = -1
+	var pathnameEnd = searchIndex > -1 ? searchIndex : hashIndex > -1 ? hashIndex : url.length
+	if (protocolIndex > -1) {
+		//it's a full URL
+		if (pathnameIndex < 0) pathnameIndex = url.length
+		var portIndex = url.indexOf(":", protocolIndex + 1)
+		if (portIndex < 0) portIndex = pathnameIndex
+		data.protocol = url.slice(0, protocolIndex + 1)
+		data.hostname = url.slice(protocolIndex + 3, portIndex)
+		data.port = url.slice(portIndex + 1, pathnameIndex)
+		data.pathname = url.slice(pathnameIndex, pathnameEnd) || "/"
+	}
+	else {
+		data.protocol = root.protocol
+		data.hostname = root.hostname
+		data.port = root.port
+		if (pathnameIndex === 0) {
+			//it's an absolute path
+			data.pathname = url.slice(pathnameIndex, pathnameEnd) || "/"
+		}
+		else if (searchIndex !== 0 && hashIndex !== 0) {
+			//it's a relative path
+			var slashIndex = root.pathname.lastIndexOf("/")
+			var path = slashIndex > -1 ? root.pathname.slice(0, slashIndex + 1) : "./"
+			var normalized = url.slice(0, pathnameEnd).replace(/^\.$/, root.pathname.slice(slashIndex + 1)).replace(/^\.\//, "")
+			var dotdot = /\/[^\/]+?\/\.{2}/g
+			var pathname = path + normalized
+			pathname = path + normalized
+			while (dotdot.test(pathname)) pathname = pathname.replace(dotdot, "")
+			pathname = pathname.replace(/\/\.\//g, "/").replace(/^(\/\.{2})+/, "") || "/"
+			data.pathname = pathname
+		}
+	}
+	var searchEnd = hashIndex > -1 ? hashIndex : url.length
+	data.search = searchIndex > -1 ? url.slice(searchIndex, searchEnd) : ""
+	data.hash = hashIndex > -1 ? url.slice(hashIndex) : ""
+	return data
+}
+
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("diet-cross-origin");
+"use strict";
+
+
+var pushStateMock = __webpack_require__(17)
+var domMock = __webpack_require__(16)
+var xhrMock = __webpack_require__(18)
+
+module.exports = function(env) {
+	env = env || {}
+	var $window = env.window = {}
+
+	var dom = domMock()
+	var xhr = xhrMock()
+	for (var key in dom) if (!$window[key]) $window[key] = dom[key]
+	for (var key in xhr) if (!$window[key]) $window[key] = xhr[key]
+	pushStateMock(env)
+
+	return $window
+}
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-module.exports = require("sequelize");
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__users_module__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__roles_permissions_module__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__courses_module__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lessions_module__ = __webpack_require__(28);
+
+
+
+
 
 /***/ }),
 /* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules__ = __webpack_require__(1);
-  // Create an app
-    const app = __webpack_require__(0)
-    const SQL = __webpack_require__(4)
-    const diet = __webpack_require__(2)
-    const crossOrigin = __webpack_require__(3)
-
-    app.module('a', function(){})
-    app.module({'b' : function(){}})
-    
-
-    const server = diet()
-    server.header(crossOrigin({
-      defaults: {
-        origin: '*',
-        credentials: true
-      }
-    }))
-
-    server.listen('http://localhost:8000')
-
-    const db = new SQL('postgres', 'postgres', 'qwerty', {
-      host: 'localhost',
-      dialect: 'postgres',
-
-      pool: {
-        max: 5,
-        min: 0,
-        idle: 10000
-      }
-    })
-
-    db.authenticate()
-
-    app
-      .config('server', server)
-      .config('Q', SQL)
-      .config('db', db)
-
-    // app.module('setup', function($){
-
-    let models = app.store();
-    app.config('model', models.getOrSet);
-    app.config('models', models.getAll);
-    let relations = app.store();
-    app.config('relation', relations.getOrSet);
-    app.config('relations', relations.getAll);
-    let controllers = app.store();
-    app.config('controller', controllers.getOrSet);
-    app.config('controllers', controllers.getAll);
-    let routes = app.store();
-    app.config('route', routes.getOrSet);
-    app.config('routes', routes.getAll);
-
-    app.config('chain', function(){
-	    return (init) => Array.prototype.reduce.call(arguments, (acc, x) => acc && acc.then ? acc.then(x) : x(acc), init)
-    })
-
-    app.modules()
-    app.run(function({server, routes}){
-      routes();
-      server.get('/', ($)=>{
-        $.data.message = 'Hello World!!!!'
-        $.data.context = this.constructor.name
-        $.data.r = Object.getOwnPropertyNames(routes)
-        $.data.app = app.constructor.name
-        // $.data.isEqual = $ === this
-        $.json()
-      })
-    })
-
-      // .run(['models'], ($, models)=>{
-      //   $.run()
-      // })
-
-      // .then(() => {
-      //   console.log('Connection has been established successfully.');
-      // })
-      // .catch(err => {
-      //   console.error('Unable to connect to the database:', err);
-      // });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__topbar_component__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__course_item_component__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__content_component__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_component__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_component2__ = __webpack_require__(51);
 
 
-// force: true will drop the table if it already exists
+
+
+
+
+
+
+__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('templates', function($){
+  $.component({Topbar: __WEBPACK_IMPORTED_MODULE_1__topbar_component__["a" /* default */]})
+  $.component({Content: __WEBPACK_IMPORTED_MODULE_3__content_component__["a" /* default */]})
+  $.component({CourseItem: __WEBPACK_IMPORTED_MODULE_2__course_item_component__["a" /* default */]})
+  $.component({Page: __WEBPACK_IMPORTED_MODULE_4__page_component__["a" /* default */]})
+  $.component({Page2: __WEBPACK_IMPORTED_MODULE_5__page_component2__["a" /* default */]})
+})
 
 
 /***/ }),
 /* 6 */
+/***/ (function(module, exports) {
+
+module.exports = require("diet");
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports) {
+
+module.exports = require("diet-cross-origin");
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+module.exports = require("diet-static");
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+module.exports = require("fs");
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+module.exports = require("mithril");
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports) {
+
+module.exports = require("mithril-node-render");
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+module.exports = require("sequelize");
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function(string) {
+	if (string === "" || string == null) return {}
+	if (string.charAt(0) === "?") string = string.slice(1)
+
+	var entries = string.split("&"), data = {}, counters = {}
+	for (var i = 0; i < entries.length; i++) {
+		var entry = entries[i].split("=")
+		var key = decodeURIComponent(entry[0])
+		var value = entry.length === 2 ? decodeURIComponent(entry[1]) : ""
+
+		if (value === "true") value = true
+		else if (value === "false") value = false
+
+		var levels = key.split(/\]\[?|\[/)
+		var cursor = data
+		if (key.indexOf("[") > -1) levels.pop()
+		for (var j = 0; j < levels.length; j++) {
+			var level = levels[j], nextLevel = levels[j + 1]
+			var isNumber = nextLevel == "" || !isNaN(parseInt(nextLevel, 10))
+			var isValue = j === levels.length - 1
+			if (level === "") {
+				var key = levels.slice(0, j).join()
+				if (counters[key] == null) counters[key] = 0
+				level = counters[key]++
+			}
+			if (cursor[level] == null) {
+				cursor[level] = isValue ? value : isNumber ? [] : {}
+			}
+			cursor = cursor[level]
+		}
+	}
+	return data
+}
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/*
+Known limitations:
+
+- `option.selected` can't be set/read when the option doesn't have a `select` parent
+- `element.attributes` is just a map of attribute names => Attr objects stubs
+- ...
+
+*/
+
+/*
+options:
+- spy:(f: Function) => Function
+*/
+
+module.exports = function(options) {
+	options = options || {}
+	var spy = options.spy || function(f){return f}
+	var spymap = []
+	function registerSpies(element, spies) {
+		if(options.spy) {
+			var i = spymap.indexOf(element)
+			if (i === -1) {
+				spymap.push(element, spies)
+			} else {
+				var existing = spymap[i + 1]
+				for (var k in spies) existing[k] = spies[k]
+			}
+		}
+	}
+	function getSpies(element) {
+		if (element == null || typeof element !== "object") throw new Error("Element expected")
+		if(options.spy) return spymap[spymap.indexOf(element) + 1]
+	}
+
+	function isModernEvent(type) {
+		return type === "transitionstart" || type === "transitionend" || type === "animationstart" || type === "animationend"
+	}
+	function appendChild(child) {
+		var ancestor = this
+		while (ancestor !== child && ancestor !== null) ancestor = ancestor.parentNode
+		if (ancestor === child) throw new Error("Node cannot be inserted at the specified point in the hierarchy")
+
+		if (child.nodeType == null) throw new Error("Argument is not a DOM element")
+
+		var index = this.childNodes.indexOf(child)
+		if (index > -1) this.childNodes.splice(index, 1)
+		if (child.nodeType === 11) {
+			while (child.firstChild != null) this.appendChild(child.firstChild)
+			child.childNodes = []
+		}
+		else {
+			this.childNodes.push(child)
+			if (child.parentNode != null && child.parentNode !== this) child.parentNode.removeChild(child)
+			child.parentNode = this
+		}
+	}
+	function removeChild(child) {
+		var index = this.childNodes.indexOf(child)
+		if (index > -1) {
+			this.childNodes.splice(index, 1)
+			child.parentNode = null
+		}
+		else throw new TypeError("Failed to execute 'removeChild'")
+	}
+	function insertBefore(child, reference) {
+		var ancestor = this
+		while (ancestor !== child && ancestor !== null) ancestor = ancestor.parentNode
+		if (ancestor === child) throw new Error("Node cannot be inserted at the specified point in the hierarchy")
+
+		if (child.nodeType == null) throw new Error("Argument is not a DOM element")
+
+		var refIndex = this.childNodes.indexOf(reference)
+		var index = this.childNodes.indexOf(child)
+		if (reference !== null && refIndex < 0) throw new TypeError("Invalid argument")
+		if (index > -1) this.childNodes.splice(index, 1)
+		if (reference === null) this.appendChild(child)
+		else {
+			if (child.nodeType === 11) {
+				this.childNodes.splice.apply(this.childNodes, [refIndex, 0].concat(child.childNodes))
+				while (child.firstChild) {
+					var subchild = child.firstChild
+					child.removeChild(subchild)
+					subchild.parentNode = this
+				}
+				child.childNodes = []
+			}
+			else {
+				this.childNodes.splice(refIndex, 0, child)
+				if (child.parentNode != null && child.parentNode !== this) child.parentNode.removeChild(child)
+				child.parentNode = this
+			}
+		}
+	}
+	function getAttribute(name) {
+		if (this.attributes[name] == null) return null
+		return this.attributes[name].value
+	}
+	function setAttribute(name, value) {
+		/*eslint-disable no-implicit-coercion*/
+		// this is the correct kind of conversion, passing a Symbol throws in browsers too.
+		var nodeValue = "" + value
+		/*eslint-enable no-implicit-coercion*/
+
+		this.attributes[name] = {
+			namespaceURI: null,
+			get value() {return nodeValue},
+			set value(value) {
+				/*eslint-disable no-implicit-coercion*/
+				nodeValue = "" + value
+				/*eslint-enable no-implicit-coercion*/
+			},
+			get nodeValue() {return nodeValue},
+			set nodeValue(value) {
+				this.value = value
+			}
+		}
+	}
+	function setAttributeNS(ns, name, value) {
+		this.setAttribute(name, value)
+		this.attributes[name].namespaceURI = ns
+	}
+	function removeAttribute(name) {
+		delete this.attributes[name]
+	}
+	function hasAttribute(name) {
+		return name in this.attributes
+	}
+	var declListTokenizer = /;|"(?:\\.|[^"\n])*"|'(?:\\.|[^'\n])*'/g
+	/**
+	 * This will split a semicolon-separated CSS declaration list into an array of
+	 * individual declarations, ignoring semicolons in strings.
+	 *
+	 * Comments are also stripped.
+	 *
+	 * @param {string} declList
+	 * @return {string[]}
+	 */
+	function splitDeclList(declList) {
+		var indices = [], res = [], match
+
+		// remove comments, preserving comments in strings.
+		declList = declList.replace(
+			/("(?:\\.|[^"\n])*"|'(?:\\.|[^'\n])*')|\/\*[\s\S]*?\*\//g,
+			function(m, str){
+				return str || ""
+			}
+		)
+		/*eslint-disable no-cond-assign*/
+		while (match = declListTokenizer.exec(declList)) {
+			if (match[0] === ";") indices.push(match.index)
+		}
+		/*eslint-enable no-cond-assign*/
+		for (var i = indices.length; i--;){
+			res.unshift(declList.slice(indices[i] + 1))
+			declList = declList.slice(0, indices[i])
+		}
+		res.unshift(declList)
+		return res
+	}
+
+	var activeElement
+	var $window = {
+		document: {
+			createElement: function(tag) {
+				var cssText = ""
+				var style = {}
+				Object.defineProperty(style, "cssText", {
+					get: function() {return cssText},
+					set: function (value) {
+						var buf = []
+						if (typeof value === "string") {
+							for (var key in style) style[key] = ""
+							var rules = splitDeclList(value)
+							for (var i = 0; i < rules.length; i++) {
+								var rule = rules[i]
+								var colonIndex = rule.indexOf(":")
+								if (colonIndex > -1) {
+									var rawKey = rule.slice(0, colonIndex).trim()
+									var key = rawKey.replace(/-\D/g, function(match) {return match[1].toUpperCase()})
+									var value = rule.slice(colonIndex + 1).trim()
+									if (key !== "cssText") {
+										style[key] = value
+										buf.push(rawKey + ": " + value + ";")
+									}
+								}
+							}
+							cssText = buf.join(" ")
+						}
+					}
+				})
+				var events = {}
+				var element = {
+					nodeType: 1,
+					nodeName: tag.toUpperCase(),
+					namespaceURI: "http://www.w3.org/1999/xhtml",
+					appendChild: appendChild,
+					removeChild: removeChild,
+					insertBefore: insertBefore,
+					hasAttribute: hasAttribute,
+					getAttribute: getAttribute,
+					setAttribute: setAttribute,
+					setAttributeNS: setAttributeNS,
+					removeAttribute: removeAttribute,
+					parentNode: null,
+					childNodes: [],
+					attributes: {},
+					get firstChild() {
+						return this.childNodes[0] || null
+					},
+					get nextSibling() {
+						if (this.parentNode == null) return null
+						var index = this.parentNode.childNodes.indexOf(this)
+						if (index < 0) throw new TypeError("Parent's childNodes is out of sync")
+						return this.parentNode.childNodes[index + 1] || null
+					},
+					set textContent(value) {
+						this.childNodes = []
+						if (value !== "") this.appendChild($window.document.createTextNode(value))
+					},
+					set innerHTML(value) {
+						while (this.firstChild) this.removeChild(this.firstChild)
+
+						var stack = [this], depth = 0, voidElements = ["area", "base", "br", "col", "command", "embed", "hr", "img", "input", "keygen", "link", "meta", "param", "source", "track", "wbr"]
+						value.replace(/<([a-z0-9\-]+?)((?:\s+?[^=]+?=(?:"[^"]*?"|'[^']*?'|[^\s>]*))*?)(\s*\/)?>|<\/([a-z0-9\-]+?)>|([^<]+)/g, function(match, startTag, attrs, selfClosed, endTag, text) {
+							if (startTag) {
+								var element = $window.document.createElement(startTag)
+								attrs.replace(/\s+?([^=]+?)=(?:"([^"]*?)"|'([^']*?)'|([^\s>]*))/g, function(match, key, doubleQuoted, singleQuoted, unquoted) {
+									var keyParts = key.split(":")
+									var name = keyParts.pop()
+									var ns = keyParts[0]
+									var value = doubleQuoted || singleQuoted || unquoted || ""
+									if (ns != null) element.setAttributeNS(ns, name, value)
+									else element.setAttribute(name, value)
+								})
+								stack[depth].appendChild(element)
+								if (!selfClosed && voidElements.indexOf(startTag.toLowerCase()) < 0) stack[++depth] = element
+							}
+							else if (endTag) {
+								depth--
+							}
+							else if (text) {
+								stack[depth].appendChild($window.document.createTextNode(text)) // FIXME handle html entities
+							}
+						})
+					},
+					get style() {
+						return style
+					},
+					set style(_){
+						// https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/style#Setting_style
+						throw new Error("setting element.style is not portable")
+					},
+					get className() {
+						return this.attributes["class"] ? this.attributes["class"].value : ""
+					},
+					set className(value) {
+						if (this.namespaceURI === "http://www.w3.org/2000/svg") throw new Error("Cannot set property className of SVGElement")
+						else this.setAttribute("class", value)
+					},
+					focus: function() {activeElement = this},
+					addEventListener: function(type, callback) {
+						if (events[type] == null) events[type] = [callback]
+						else events[type].push(callback)
+					},
+					removeEventListener: function(type, callback) {
+						if (events[type] != null) {
+							var index = events[type].indexOf(callback)
+							if (index > -1) events[type].splice(index, 1)
+						}
+					},
+					dispatchEvent: function(e) {
+						if (this.nodeName === "INPUT" && this.attributes["type"] != null && this.attributes["type"].value === "checkbox" && e.type === "click") {
+							this.checked = !this.checked
+						}
+
+						e.target = this
+						if (events[e.type] != null) {
+							for (var i = 0; i < events[e.type].length; i++) {
+								events[e.type][i].call(this, e)
+							}
+						}
+						e.preventDefault = function() {
+							// TODO: should this do something?
+						}
+						if (typeof this["on" + e.type] === "function" && !isModernEvent(e.type)) this["on" + e.type](e)
+					},
+					onclick: null,
+				}
+
+				if (element.nodeName === "A") {
+					Object.defineProperty(element, "href", {
+						get: function() {return this.attributes["href"] === undefined ? "" : "[FIXME implement]"},
+						set: function(value) {this.setAttribute("href", value)},
+						enumerable: true,
+					})
+				}
+
+				if (element.nodeName === "INPUT") {
+					var checked
+					Object.defineProperty(element, "checked", {
+						get: function() {return checked === undefined ? this.attributes["checked"] !== undefined : checked},
+						set: function(value) {checked = Boolean(value)},
+						enumerable: true,
+					})
+
+					var value = ""
+					var valueSetter = spy(function(v) {
+						/*eslint-disable no-implicit-coercion*/
+						value = v === null ? "" : "" + v
+						/*eslint-enable no-implicit-coercion*/
+					})
+					Object.defineProperty(element, "value", {
+						get: function() {
+							return value
+						},
+						set: valueSetter,
+						enumerable: true,
+					})
+
+					// we currently emulate the non-ie behavior, but emulating ie may be more useful (throw when an invalid type is set)
+					var typeSetter = spy(function(v) {
+						this.setAttribute("type", v)
+					})
+					Object.defineProperty(element, "type", {
+						get: function() {
+							if (!this.hasAttribute("type")) return "text"
+							var type = this.getAttribute("type")
+							return (/^(?:radio|button|checkbox|color|date|datetime|datetime-local|email|file|hidden|month|number|password|range|research|search|submit|tel|text|url|week|image)$/)
+							.test(type)
+							? type
+							: "text"
+						},
+						set: typeSetter,
+						enumerable: true,
+					})
+					registerSpies(element, {
+						valueSetter: valueSetter,
+						typeSetter: typeSetter
+					})
+				}
+
+
+				if (element.nodeName === "TEXTAREA") {
+					var wasNeverSet = true
+					var value = ""
+					var valueSetter = spy(function(v) {
+						wasNeverSet = false
+						/*eslint-disable no-implicit-coercion*/
+						value = v === null ? "" : "" + v
+						/*eslint-enable no-implicit-coercion*/
+					})
+					Object.defineProperty(element, "value", {
+						get: function() {
+							return wasNeverSet && this.firstChild ? this.firstChild.nodeValue : value
+						},
+						set: valueSetter,
+						enumerable: true,
+					})
+					registerSpies(element, {
+						valueSetter: valueSetter
+					})
+				}
+
+				/* eslint-disable radix */
+
+				if (element.nodeName === "CANVAS") {
+					Object.defineProperty(element, "width", {
+						get: function() {return this.attributes["width"] ? Math.floor(parseInt(this.attributes["width"].value) || 0) : 300},
+						set: function(value) {this.setAttribute("width", Math.floor(Number(value) || 0).toString())},
+					})
+					Object.defineProperty(element, "height", {
+						get: function() {return this.attributes["height"] ? Math.floor(parseInt(this.attributes["height"].value) || 0) : 300},
+						set: function(value) {this.setAttribute("height", Math.floor(Number(value) || 0).toString())},
+					})
+				}
+
+				/* eslint-enable radix */
+
+				function getOptions(element) {
+					var options = []
+					for (var i = 0; i < element.childNodes.length; i++) {
+						if (element.childNodes[i].nodeName === "OPTION") options.push(element.childNodes[i])
+						else if (element.childNodes[i].nodeName === "OPTGROUP") options = options.concat(getOptions(element.childNodes[i]))
+					}
+					return options
+				}
+				function getOptionValue(element) {
+					return element.attributes["value"] != null ?
+						element.attributes["value"].value :
+						element.firstChild != null ? element.firstChild.nodeValue : ""
+				}
+				if (element.nodeName === "SELECT") {
+					// var selectedValue
+					var selectedIndex = 0
+					Object.defineProperty(element, "selectedIndex", {
+						get: function() {return getOptions(this).length > 0 ? selectedIndex : -1},
+						set: function(value) {
+							var options = getOptions(this)
+							if (value >= 0 && value < options.length) {
+								// selectedValue = getOptionValue(options[selectedIndex])
+								selectedIndex = value
+							}
+							else {
+								// selectedValue = ""
+								selectedIndex = -1
+							}
+						},
+						enumerable: true,
+					})
+					var valueSetter = spy(function(value) {
+						if (value === null) {
+							selectedIndex = -1
+						} else {
+							var options = getOptions(this)
+							/*eslint-disable no-implicit-coercion*/
+							var stringValue = "" + value
+							/*eslint-enable no-implicit-coercion*/
+							for (var i = 0; i < options.length; i++) {
+								if (getOptionValue(options[i]) === stringValue) {
+									// selectedValue = stringValue
+									selectedIndex = i
+									return
+								}
+							}
+							// selectedValue = stringValue
+							selectedIndex = -1
+						}
+					})
+					Object.defineProperty(element, "value", {
+						get: function() {
+							if (this.selectedIndex > -1) return getOptionValue(getOptions(this)[this.selectedIndex])
+							return ""
+						},
+						set: valueSetter,
+						enumerable: true,
+					})
+					registerSpies(element, {
+						valueSetter: valueSetter
+					})
+				}
+				if (element.nodeName === "OPTION") {
+					var valueSetter = spy(function(value) {
+						/*eslint-disable no-implicit-coercion*/
+						this.setAttribute("value", value === null ? "" : "" + value)
+						/*eslint-enable no-implicit-coercion*/
+					})
+					Object.defineProperty(element, "value", {
+						get: function() {return getOptionValue(this)},
+						set: valueSetter,
+						enumerable: true,
+					})
+					registerSpies(element, {
+						valueSetter: valueSetter
+					})
+
+					Object.defineProperty(element, "selected", {
+						// TODO? handle `selected` without a parent (works in browsers)
+						get: function() {
+							var options = getOptions(this.parentNode)
+							var index = options.indexOf(this)
+							return index === this.parentNode.selectedIndex
+						},
+						set: function(value) {
+							if (value) {
+								var options = getOptions(this.parentNode)
+								var index = options.indexOf(this)
+								if (index > -1) this.parentNode.selectedIndex = index
+							}
+							else this.parentNode.selectedIndex = 0
+						},
+						enumerable: true,
+					})
+				}
+				return element
+			},
+			createElementNS: function(ns, tag, is) {
+				var element = this.createElement(tag, is)
+				element.nodeName = tag
+				element.namespaceURI = ns
+				return element
+			},
+			createTextNode: function(text) {
+				/*eslint-disable no-implicit-coercion*/
+				var nodeValue = "" + text
+				/*eslint-enable no-implicit-coercion*/
+				return {
+					nodeType: 3,
+					nodeName: "#text",
+					parentNode: null,
+					get nodeValue() {return nodeValue},
+					set nodeValue(value) {
+						/*eslint-disable no-implicit-coercion*/
+						nodeValue = "" + value
+						/*eslint-enable no-implicit-coercion*/
+					},
+				}
+			},
+			createDocumentFragment: function() {
+				return {
+					nodeType: 11,
+					nodeName: "#document-fragment",
+					appendChild: appendChild,
+					insertBefore: insertBefore,
+					removeChild: removeChild,
+					parentNode: null,
+					childNodes: [],
+					get firstChild() {
+						return this.childNodes[0] || null
+					},
+				}
+			},
+			createEvent: function() {
+				return {
+					initEvent: function(type) {this.type = type},
+				}
+			},
+			get activeElement() {return activeElement},
+		},
+	}
+	$window.document.documentElement = $window.document.createElement("html")
+	$window.document.documentElement.appendChild($window.document.createElement("head"))
+	$window.document.body = $window.document.createElement("body")
+	$window.document.documentElement.appendChild($window.document.body)
+	activeElement = $window.document.body
+
+	if (options.spy) $window.__getSpies = getSpies
+
+	return $window
+}
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var parseURL = __webpack_require__(2)
+var callAsync = __webpack_require__(1)
+
+function debouncedAsync(f) {
+	var ref
+	return function() {
+		if (ref != null) return
+		ref = callAsync(function(){
+			ref = null
+			f()
+		})
+	}
+}
+
+module.exports = function(options) {
+	if (options == null) options = {}
+
+	var $window = options.window || {}
+	var protocol = options.protocol || "http:"
+	var hostname = options.hostname || "localhost"
+	var port = ""
+	var pathname = "/"
+	var search = ""
+	var hash = ""
+
+	var past = [{url: getURL(), isNew: true, state: null, title: null}], future = []
+
+	function getURL() {
+		if (protocol === "file:") return protocol + "//" + pathname + search + hash
+		return protocol + "//" + hostname + prefix(":", port) + pathname + search + hash
+	}
+	function setURL(value) {
+		var data = parseURL(value, {protocol: protocol, hostname: hostname, port: port, pathname: pathname})
+		var isNew = false
+		if (data.protocol != null && data.protocol !== protocol) protocol = data.protocol, isNew = true
+		if (data.hostname != null && data.hostname !== hostname) hostname = data.hostname, isNew = true
+		if (data.port != null && data.port !== port) port = data.port, isNew = true
+		if (data.pathname != null && data.pathname !== pathname) pathname = data.pathname, isNew = true
+		if (data.search != null && data.search !== search) search = data.search, isNew = true
+		if (data.hash != null && data.hash !== hash) {
+			hash = data.hash
+			if (!isNew) {
+				hashchange()
+			}
+		}
+		return isNew
+	}
+
+	function prefix(prefix, value) {
+		if (value === "") return ""
+		return (value.charAt(0) !== prefix ? prefix : "") + value
+	}
+	function _hashchange() {
+		if (typeof $window.onhashchange === "function") $window.onhashchange({type: "hashchange"})
+	}
+	var hashchange = debouncedAsync(_hashchange)
+	function popstate() {
+		if (typeof $window.onpopstate === "function") $window.onpopstate({type: "popstate", state: $window.history.state})
+	}
+	function unload() {
+		if (typeof $window.onunload === "function") $window.onunload({type: "unload"})
+	}
+
+	$window.location = {
+		get protocol() {
+			return protocol
+		},
+		get hostname() {
+			return hostname
+		},
+		get port() {
+			return port
+		},
+		get pathname() {
+			return pathname
+		},
+		get search() {
+			return search
+		},
+		get hash() {
+			return hash
+		},
+		get origin() {
+			if (protocol === "file:") return "null"
+			return protocol + "//" + hostname + prefix(":", port)
+		},
+		get host() {
+			if (protocol === "file:") return ""
+			return hostname + prefix(":", port)
+		},
+		get href() {
+			return getURL()
+		},
+
+		set protocol(value) {
+			throw new Error("Protocol is read-only")
+		},
+		set hostname(value) {
+			unload()
+			past.push({url: getURL(), isNew: true})
+			future = []
+			hostname = value
+		},
+		set port(value) {
+			if (protocol === "file:") throw new Error("Port is read-only under `file://` protocol")
+			unload()
+			past.push({url: getURL(), isNew: true})
+			future = []
+			port = value
+		},
+		set pathname(value) {
+			if (protocol === "file:") throw new Error("Pathname is read-only under `file://` protocol")
+			unload()
+			past.push({url: getURL(), isNew: true})
+			future = []
+			pathname = prefix("/", value)
+		},
+		set search(value) {
+			unload()
+			past.push({url: getURL(), isNew: true})
+			future = []
+			search = prefix("?", value)
+		},
+		set hash(value) {
+			var oldHash = hash
+			past.push({url: getURL(), isNew: false})
+			future = []
+			hash = prefix("#", value)
+			if (oldHash != hash) hashchange()
+		},
+
+		set origin(value) {
+			//origin is writable but ignored
+		},
+		set host(value) {
+			//host is writable but ignored in Chrome
+		},
+		set href(value) {
+			var url = getURL()
+			var isNew = setURL(value)
+			if (isNew) {
+				setURL(url)
+				unload()
+				setURL(value)
+			}
+			past.push({url: url, isNew: isNew})
+			future = []
+		},
+	}
+	$window.history = {
+		pushState: function(state, title, url) {
+			past.push({url: getURL(), isNew: false, state: state, title: title})
+			future = []
+			setURL(url)
+		},
+		replaceState: function(state, title, url) {
+			var entry = past[past.length - 1]
+			entry.state = state
+			entry.title = title
+			setURL(url)
+		},
+		back: function() {
+			if (past.length > 1) {
+				var entry = past.pop()
+				if (entry.isNew) unload()
+				future.push({url: getURL(), isNew: false, state: entry.state, title: entry.title})
+				setURL(entry.url)
+				if (!entry.isNew) popstate()
+			}
+		},
+		forward: function() {
+			var entry = future.pop()
+			if (entry != null) {
+				if (entry.isNew) unload()
+				past.push({url: getURL(), isNew: false, state: entry.state, title: entry.title})
+				setURL(entry.url)
+				if (!entry.isNew) popstate()
+			}
+		},
+		get state() {
+			return past.length === 0 ? null : past[past.length - 1].state
+		},
+	}
+	$window.onpopstate = null,
+	$window.onhashchange = null,
+	$window.onunload = null
+
+	return $window
+}
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var callAsync = __webpack_require__(1)
+var parseURL = __webpack_require__(2)
+var parseQueryString = __webpack_require__(15)
+
+module.exports = function() {
+	var routes = {}
+	// var callback = "callback"
+	var serverErrorHandler = function(url) {
+		return {status: 500, responseText: "server error, most likely the URL was not defined " + url}
+	}
+
+	var $window = {
+		XMLHttpRequest: function XMLHttpRequest() {
+			var args = {}
+			var headers = {}
+			var aborted = false
+			this.setRequestHeader = function(header, value) {
+				headers[header] = value
+			}
+			this.getRequestHeader = function(header) {
+				return headers[header]
+			}
+			this.open = function(method, url, async, user, password) {
+				var urlData = parseURL(url, {protocol: "http:", hostname: "localhost", port: "", pathname: "/"})
+				args.method = method
+				args.pathname = urlData.pathname
+				args.search = urlData.search
+				args.async = async != null ? async : true
+				args.user = user
+				args.password = password
+			}
+			this.send = function(body) {
+				var self = this
+				if(!aborted) {
+					var handler = routes[args.method + " " + args.pathname] || serverErrorHandler.bind(null, args.pathname)
+					var data = handler({url: args.pathname, query: args.search || {}, body: body || null})
+					self.status = data.status
+					self.responseText = data.responseText
+				} else {
+					self.status = 0
+				}
+				self.readyState = 4
+				if (args.async === true) {
+					callAsync(function() {
+						if (typeof self.onreadystatechange === "function") self.onreadystatechange()
+					})
+				}
+			}
+			this.abort = function() {
+				aborted = true
+			}
+		},
+		document: {
+			createElement: function(tag) {
+				return {nodeName: tag.toUpperCase(), parentNode: null}
+			},
+			documentElement: {
+				appendChild: function(element) {
+					element.parentNode = this
+					if (element.nodeName === "SCRIPT") {
+						var urlData = parseURL(element.src, {protocol: "http:", hostname: "localhost", port: "", pathname: "/"})
+						var handler = routes["GET " + urlData.pathname] || serverErrorHandler.bind(null, element.src)
+						var data = handler({url: urlData.pathname, query: urlData.search, body: null})
+						parseQueryString(urlData.search)
+						callAsync(function() {
+							if (data.status === 200) {
+								new Function("$window", "with ($window) return " + data.responseText).call($window, $window)
+							}
+							else if (typeof element.onerror === "function") {
+								element.onerror({type: "error"})
+							}
+						})
+					}
+				},
+				removeChild: function(element) {
+					element.parentNode = null
+				},
+			},
+		},
+		$defineRoutes: function(rules) {
+			routes = rules
+		},
+		$defineJSONPCallbackKey: function(/* key */) {
+			// callback = key
+		},
+	}
+	return $window
+}
+
+
+/***/ }),
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = CourseCtrl;
-function CourseCtrl($){
-  let { Course } = $.models
+function CourseCtrl({
+  m, render, baseTemplate,
+  models: { Course },
+  components: { Page2 }
+}){
+  // let { Course } = $.models
   this.relations.Course
   return {
-    index : function($){
+    indexPost : function($){
       Course.findAll({
         include : Course.Author
       }).then(courses => {
@@ -214,6 +1154,17 @@ function CourseCtrl($){
         $.data.courses = courses
         $.data.body = $.body
         $.json()
+      })
+    },
+    index : function($){
+      Course.findAll({
+        include : Course.Author
+      }).then(courses => {
+        return render(m(Page2, courses)).then((t)=>{
+          $.header('content-type', 'text/html')
+          $.send(baseTemplate.replace('<!--body-->', t))
+          $.end()
+        })
       })
     },
     new : function($){
@@ -232,7 +1183,7 @@ function CourseCtrl($){
 
 
 /***/ }),
-/* 7 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -277,7 +1228,7 @@ function CourseCtrl($){
 
 
 /***/ }),
-/* 8 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -289,15 +1240,23 @@ function CourseCtrl($){
 
 
 /***/ }),
-/* 9 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony default export */ __webpack_exports__["a"] = (function( { server, controllers :  { CourseCtrl }} ){
-    server
-        .get('/courses', CourseCtrl.index)
-        .get('/course/new', CourseCtrl.new)
-        .get('/course/install', CourseCtrl.install)
+  server
+    .get('/courses', CourseCtrl.index)
+    .post('/courses', CourseCtrl.indexPost)
+    .get('/course/new', CourseCtrl.new)
+    /*=>  /course/new.get
+          /course/new.post
+          /course/new.put
+    */
+
+
+
+    .get('/course/install', CourseCtrl.install)
 
     // server.get('/:page', function($){
     //     $.data.msg = $.params.page
@@ -307,16 +1266,16 @@ function CourseCtrl($){
 
 
 /***/ }),
-/* 10 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__course_model__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__course_relations__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__course_routes__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__course_controller__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__course_model__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__course_relations__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__course_routes__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__course_controller__ = __webpack_require__(19);
 
 
 
@@ -334,7 +1293,7 @@ __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('courses', function($){
 
 
 /***/ }),
-/* 11 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -368,7 +1327,7 @@ function LessionCtrl({ models: { Lession }}){
 
 
 /***/ }),
-/* 12 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -403,7 +1362,7 @@ function LessionCtrl({ models: { Lession }}){
 
 
 /***/ }),
-/* 13 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -414,7 +1373,7 @@ function LessionCtrl({ models: { Lession }}){
 
 
 /***/ }),
-/* 14 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -432,16 +1391,16 @@ function LessionCtrl({ models: { Lession }}){
 
 
 /***/ }),
-/* 15 */
+/* 28 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lession_model__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lession_routes__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lession_controller__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lession_relations__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lession_model__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lession_routes__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lession_controller__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lession_relations__ = __webpack_require__(26);
 
 
 
@@ -458,19 +1417,19 @@ __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('lessions', function($){
 
 
 /***/ }),
-/* 16 */
+/* 29 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__role_model__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__permission_model__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__roles_permissions_model__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__role_controller__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__permission_controller__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__permission_routes__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__role_routes__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__role_model__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__permission_model__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__roles_permissions_model__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__role_controller__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__permission_controller__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__permission_routes__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__role_routes__ = __webpack_require__(38);
 
 
 
@@ -485,8 +1444,8 @@ __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('admin', function($){
 	$.model({Role: __WEBPACK_IMPORTED_MODULE_1__role_model__["a" /* default */]})
 	$.model({Permission: __WEBPACK_IMPORTED_MODULE_2__permission_model__["a" /* default */]})
 	$.model({RolePermission: __WEBPACK_IMPORTED_MODULE_3__roles_permissions_model__["a" /* default */]})
-	$.relation('Role', __webpack_require__(24))
-	$.relation('Permission', __webpack_require__(19))
+	$.relation('Role', __webpack_require__(37))
+	$.relation('Permission', __webpack_require__(32))
 	$.controller({RoleCtrl: __WEBPACK_IMPORTED_MODULE_4__role_controller__["a" /* default */]})
 	$.controller({PermissionCtrl: __WEBPACK_IMPORTED_MODULE_5__permission_controller__["a" /* default */]})
 	$.route({RoleRoutes: __WEBPACK_IMPORTED_MODULE_7__role_routes__["a" /* default */]})
@@ -496,12 +1455,12 @@ __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('admin', function($){
 
 
 /***/ }),
-/* 17 */
+/* 30 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = PermissionCtrl;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__permission_seed__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__permission_seed__ = __webpack_require__(34);
 
 function PermissionCtrl({
     models: { Permission }  
@@ -535,7 +1494,7 @@ function PermissionCtrl({
 
 
 /***/ }),
-/* 18 */
+/* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -558,7 +1517,7 @@ function PermissionCtrl({
 
 
 /***/ }),
-/* 19 */
+/* 32 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -569,7 +1528,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 20 */
+/* 33 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -582,7 +1541,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 21 */
+/* 34 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -603,12 +1562,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 22 */
+/* 35 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = RoleCtrl;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__role_seed__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__role_seed__ = __webpack_require__(39);
 
 function RoleCtrl({
     models: { Role },
@@ -643,7 +1602,7 @@ function RoleCtrl({
 
 
 /***/ }),
-/* 23 */
+/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -666,7 +1625,7 @@ function RoleCtrl({
 
 
 /***/ }),
-/* 24 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -678,7 +1637,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 25 */
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -691,7 +1650,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 26 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -712,7 +1671,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 27 */
+/* 40 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -736,16 +1695,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 28 */
+/* 41 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__user_model__ = __webpack_require__(30);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__user_routes__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__user_controller__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__user_relations__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__user_model__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__user_routes__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__user_controller__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__user_relations__ = __webpack_require__(44);
 
 
 
@@ -762,12 +1721,12 @@ __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('users', function($){
 
 
 /***/ }),
-/* 29 */
+/* 42 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = UserCtrl;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__user_seed__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__user_seed__ = __webpack_require__(46);
 
 function UserCtrl($$){
   this.relations.User
@@ -803,7 +1762,7 @@ function UserCtrl($$){
 
 
 /***/ }),
-/* 30 */
+/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -852,7 +1811,7 @@ function UserCtrl($$){
 
 
 /***/ }),
-/* 31 */
+/* 44 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -869,7 +1828,7 @@ function UserCtrl($$){
 
 
 /***/ }),
-/* 32 */
+/* 45 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -885,7 +1844,7 @@ function UserCtrl($$){
 
 
 /***/ }),
-/* 33 */
+/* 46 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1066,6 +2025,297 @@ function UserCtrl($$){
       })
     }
   )()
+});
+
+
+/***/ }),
+/* 47 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__templates_module__ = __webpack_require__(5);
+  // Create an app
+    const app = __webpack_require__(0)
+    const SQL = __webpack_require__(12)
+    const diet = __webpack_require__(6)
+    __webpack_require__(3)(global);
+    const m = __webpack_require__(10)
+    const render = __webpack_require__(11)
+    const crossOrigin = __webpack_require__(7)
+    const dietStatic = __webpack_require__(8)
+
+    var fs = __webpack_require__(9)
+    // app.module('a', function(){})
+    // app.module({'b' : function(){}})
+
+    const baseTemplate = fs.readFileSync('./bin/index.html', 'utf8')
+    
+
+    const server = diet()
+    server.header(crossOrigin({
+      defaults: {
+        origin: '*',
+        credentials: true
+      }
+    }))
+
+    const staticFiles = dietStatic({ path: server.path+'/../bin' })
+    console.log('SERVER PATH', server.path)
+    server.listen('http://localhost:8000')
+    server.footer(staticFiles)
+
+    const db = new SQL('postgres', 'postgres', 'qwerty', {
+      host: 'localhost',
+      dialect: 'postgres',
+
+      pool: {
+        max: 5,
+        min: 0,
+        idle: 10000
+      }
+    })
+
+    db.authenticate()
+
+    app
+      .config('server', server)
+      .config('Q', SQL)
+      .config('db', db)
+
+    // app.module('setup', function($){
+
+    app.config('m', m)
+    app.config('render', render)
+    app.config('baseTemplate', baseTemplate)
+
+    let components = app.store()
+    app.config('component', components.getOrSet)
+    app.config('components', components.getAll)
+    
+
+    let models = app.store()
+    app.config('model', models.getOrSet)
+    app.config('models', models.getAll)
+    let relations = app.store()
+    app.config('relation', relations.getOrSet)
+    app.config('relations', relations.getAll)
+    let controllers = app.store()
+    app.config('controller', controllers.getOrSet)
+    app.config('controllers', controllers.getAll)
+    let routes = app.store()
+    app.config('route', routes.getOrSet)
+    app.config('routes', routes.getAll)
+
+    app.config('chain', function(){
+	    return (init) => Array.prototype.reduce.call(arguments, (acc, x) => acc && acc.then ? acc.then(x) : x(acc), init)
+    })
+
+    app.modules()
+    app.run(function({server, routes}){
+      routes()
+      server.get('/', ($)=>{
+        $.data.message = 'Hello World!!!!'
+        $.data.context = this.constructor.name
+        $.data.r = Object.getOwnPropertyNames(routes)
+        $.data.app = app.constructor.name
+        render(m('div.asd.asd')).then((t)=>{
+          $.data.template = t
+          $.json()
+        })
+        // $.data.isEqual = $ === this
+        // $.json()
+      })
+    })
+
+      // .run(['models'], ($, models)=>{
+      //   $.run()
+      // })
+
+      // .then(() => {
+      //   console.log('Connection has been established successfully.')
+      // })
+      // .catch(err => {
+      //   console.error('Unable to connect to the database:', err)
+      // })
+
+
+// force: true will drop the table if it already exists
+
+
+/***/ }),
+/* 48 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function({m}){
+  return {
+    view: function(vnode) {
+      return m(
+        '.container', [
+          m(
+            'h1.punchline', "Browse our courses..."
+          ),
+          m('.row', vnode.children)
+        ]
+      )
+    }
+  }
+});
+
+
+/***/ }),
+/* 49 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__course_item_less__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__course_item_less___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__course_item_less__);
+
+/* harmony default export */ __webpack_exports__["a"] = (function({m}){
+  return {
+    view: function({attrs}) {
+      return m(
+        '.col-sm-6.col-md-4.col-lg-3', m(
+          '.course', [m(
+            'a.thumb', {bg: attrs.color, href:attrs.id}, [
+              m(".thumb-img", {
+                bg : attrs.color,
+                style : {
+                  backgroundImage : `url(/uploads/courses/${attrs.image})`
+                }
+              }),
+              m("h2.name",
+                m("span", attrs.title)
+              )
+            ]
+          ),
+          m(
+            '.inner', m(
+              'ul', [
+                m(
+                  "li.description",
+                  attrs.description
+                ),
+                m(
+                  "li.author",
+                  ['by ', m(
+                    'a', { href : attrs.author.id },`${attrs.author.firstName} ${attrs.author.lastName}`
+                  )]
+                ),
+                m(
+                  "li.level",
+                  `Level: ${attrs.level}`
+                )
+            ])
+          )
+        ])
+      )
+    }
+  }
+});
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function({
+  m, components : { Topbar, Content, CourseItem }
+}){
+  let Courses = {
+    list: [],
+    loadList: function() {
+      return m.request({
+        method: "POST",
+        url: "http://localhost:8000/courses",
+        withCredentials: false
+      })
+      .then(function(result) {
+        Courses.list = result.courses
+      })
+    },
+  }
+  return {
+    oninit: Courses.loadList,
+    view: function() {
+      return m('div', [
+        m(Topbar),
+        m(Content,
+          Courses.list.map(
+            ( course ) => m( CourseItem, course )
+          )
+        )
+      ])
+    }
+  }
+});
+
+
+/***/ }),
+/* 51 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function({
+  m, components : { Topbar, Content, CourseItem }
+}){
+  let Courses = {
+    list: []
+  }  
+  return {
+    // oninit: Courses.loadList,
+    view: function(vnode) {
+      // console.log(vnode.children)
+      return m('div', [
+        m(Topbar),
+        m(Content,
+          vnode.children.map(
+            ( course ) => m( CourseItem, course )
+          )
+        )
+      ])
+    }
+  }
+});
+
+
+/***/ }),
+/* 52 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__topbar_less__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__topbar_less___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__topbar_less__);
+
+/* harmony default export */ __webpack_exports__["a"] = (function({m}){
+  return {
+    view: function() {
+      return m("header#header",
+        m("div.container",
+          m("div.row", [
+            m("div.col-sm-3.logo",
+              m("a#logo", {href:"/"})
+            ),
+            m("div.col-sm-9.navigation",
+              m("nav", {role: "navigation"},
+                m("ul.menu",
+                  m("li.nav-item",
+                    m('a', {href : "/signin"}, 'Login')
+                  ),
+                  m("li.nav-item",
+                    m('a', {href : "/signup"}, 'Sign up')
+                  )
+                )
+              )
+            )
+          ])
+        )
+      )
+    }
+  }
 });
 
 

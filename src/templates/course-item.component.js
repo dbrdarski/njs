@@ -2,7 +2,6 @@ import './course-item.less'
 export default function({m}){
   return {
     view: function({attrs}) {
-      console.log(attrs)
       return m(
         '.col-sm-6.col-md-4.col-lg-3', m(
           '.course', [m(
@@ -10,7 +9,7 @@ export default function({m}){
               m(".thumb-img", {
                 bg : attrs.color,
                 style : {
-                  backgroundImage : `url(/bin/uploads/courses/${attrs.image})`
+                  backgroundImage : `url(/uploads/courses/${attrs.image})`
                 }
               }),
               m("h2.name",

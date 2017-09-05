@@ -1,8 +1,12 @@
-export default function CourseCtrl($){
-  let { Course } = $.models
+export default function CourseCtrl({
+  m, render, baseTemplate,
+  models: { Course },
+  components: { Page2 }
+}){
+  // let { Course } = $.models
   this.relations.Course
   return {
-    index : function($){
+    indexPost : function($){
       Course.findAll({
         include : Course.Author
       }).then(courses => {
@@ -10,6 +14,17 @@ export default function CourseCtrl($){
         $.data.courses = courses
         $.data.body = $.body
         $.json()
+      })
+    },
+    index : function($){
+      Course.findAll({
+        include : Course.Author
+      }).then(courses => {
+        return render(m(Page2, courses)).then((t)=>{
+          $.header('content-type', 'text/html')
+          $.send(baseTemplate.replace('<!--body-->', t))
+          $.end()
+        })
       })
     },
     new : function($){

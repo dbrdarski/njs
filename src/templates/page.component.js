@@ -5,7 +5,7 @@ export default function({
     list: [],
     loadList: function() {
       return m.request({
-        method: "GET",
+        method: "POST",
         url: "http://localhost:8000/courses",
         withCredentials: false
       })
