@@ -184,7 +184,7 @@ var _moduler = __webpack_require__(0);
 
 var _moduler2 = _interopRequireDefault(_moduler);
 
-var _topbar = __webpack_require__(10);
+var _topbar = __webpack_require__(9);
 
 var _topbar2 = _interopRequireDefault(_topbar);
 
@@ -200,10 +200,6 @@ var _page = __webpack_require__(8);
 
 var _page2 = _interopRequireDefault(_page);
 
-var _page3 = __webpack_require__(9);
-
-var _page4 = _interopRequireDefault(_page3);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _moduler2.default.module('templates', function ($) {
@@ -211,7 +207,7 @@ _moduler2.default.module('templates', function ($) {
   $.component({ Content: _content2.default });
   $.component({ CourseItem: _courseItem2.default });
   $.component({ Page: _page2.default });
-  $.component({ Page2: _page4.default });
+  $.route({ '/courses': _page2.default });
 });
 
 /***/ }),
@@ -1466,7 +1462,7 @@ m.vnode = Vnode
 if (true) module["exports"] = m
 else window.m = m
 }());
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15).setImmediate, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14).setImmediate, __webpack_require__(1)))
 
 /***/ }),
 /* 5 */
@@ -1492,13 +1488,59 @@ var components = app.store();
 app.config('component', components.getOrSet);
 app.config('components', components.getAll);
 
+var routes = app.store();
+app.config('group', function (route, fn) {
+  var instance = this;
+  var newInstance = Object.create(this);
+  Object.defineProperty(newInstance, 'route', {
+    get: function get() {
+      return (instance.route || "") + route;
+    }
+  });
+  fn.call(newInstance, newInstance);
+});
+// app.config('route', function(route, view){
+//   routes.getOrSet(this.route || "" + route, view)
+// })
+app.config('route', routes.getOrSet);
+app.config('routes', routes.getAll);
+
+var routeHandler = function routeHandler(route, view) {
+  var items = [];
+  return {
+    onmatch: function onmatch() {
+      return new Promise(function (resolve, reject) {
+        _mithril2.default.request(route, { method: "POST" }).then(function (data) {
+          items = data.items;
+          console.log(data.items);
+          resolve(view);
+        });
+      });
+    },
+    render: function render(vnode) {
+      console.log('AWESOME!!!!!!');
+      vnode.attrs.items = items;
+      return vnode;
+    }
+  };
+};
+
 app.run(['templates'], function (_ref) {
   var Page = _ref.components.Page;
 
-  console.log(Page);
-  _mithril2.default.mount(document.body, Page);
+  // console.log(Page)
+  // => m.request('route').then(()=>m.mount(...))
+  _mithril2.default.route.prefix("");
+
+  var routes = app.routes;
+  // let routes = app.routes()
+
+  _mithril2.default.route(document.body, '/courses', {
+    '/courses': routeHandler('/courses', routes['/courses'])
+  });
+  // m.mount(document.body, Page)
 });
-console.log(app);
+// console.log(app)
 
 // console.log(c, a)
 
@@ -1551,7 +1593,7 @@ exports.default = function (_ref) {
   };
 };
 
-__webpack_require__(11);
+__webpack_require__(10);
 
 /***/ }),
 /* 8 */
@@ -1571,22 +1613,9 @@ exports.default = function (_ref) {
       Content = _ref$components.Content,
       CourseItem = _ref$components.CourseItem;
 
-  var Courses = {
-    list: [],
-    loadList: function loadList() {
-      return m.request({
-        method: "POST",
-        url: "http://localhost:8000/courses",
-        withCredentials: false
-      }).then(function (result) {
-        Courses.list = result.courses;
-      });
-    }
-  };
   return {
-    oninit: Courses.loadList,
-    view: function view() {
-      return m('div', [m(Topbar), m(Content, Courses.list.map(function (course) {
+    view: function view(vnode) {
+      return m('div', [m(Topbar), m(Content, vnode.attrs.items.map(function (course) {
         return m(CourseItem, course);
       }))]);
     }
@@ -1595,38 +1624,6 @@ exports.default = function (_ref) {
 
 /***/ }),
 /* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (_ref) {
-  var m = _ref.m,
-      _ref$components = _ref.components,
-      Topbar = _ref$components.Topbar,
-      Content = _ref$components.Content,
-      CourseItem = _ref$components.CourseItem;
-
-  var Courses = {
-    list: []
-  };
-  return {
-    // oninit: Courses.loadList,
-    view: function view(vnode) {
-      // console.log(vnode.children)
-      return m('div', [m(Topbar), m(Content, vnode.children.map(function (course) {
-        return m(CourseItem, course);
-      }))]);
-    }
-  };
-};
-
-/***/ }),
-/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1646,7 +1643,13 @@ exports.default = function (_ref) {
   };
 };
 
-__webpack_require__(12);
+__webpack_require__(11);
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ }),
 /* 11 */
@@ -1656,12 +1659,6 @@ __webpack_require__(12);
 
 /***/ }),
 /* 12 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 13 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -1851,7 +1848,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -2041,10 +2038,10 @@ process.umask = function() { return 0; };
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(13)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(12)))
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var apply = Function.prototype.apply;
@@ -2097,7 +2094,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(14);
+__webpack_require__(13);
 exports.setImmediate = setImmediate;
 exports.clearImmediate = clearImmediate;
 

@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 47);
+/******/ 	return __webpack_require__(__webpack_require__.s = 42);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -165,10 +165,10 @@ module.exports = function(env) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__users_module__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__roles_permissions_module__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__courses_module__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lessions_module__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__users_module__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__roles_permissions_module__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__courses_module__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lessions_module__ = __webpack_require__(26);
 
 
 
@@ -181,12 +181,10 @@ module.exports = function(env) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__topbar_component__ = __webpack_require__(52);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__course_item_component__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__content_component__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_component__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_component2__ = __webpack_require__(51);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__topbar_component__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__course_item_component__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__content_component__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_component__ = __webpack_require__(45);
 
 
 
@@ -199,7 +197,7 @@ __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('templates', function($){
   $.component({Content: __WEBPACK_IMPORTED_MODULE_3__content_component__["a" /* default */]})
   $.component({CourseItem: __WEBPACK_IMPORTED_MODULE_2__course_item_component__["a" /* default */]})
   $.component({Page: __WEBPACK_IMPORTED_MODULE_4__page_component__["a" /* default */]})
-  $.component({Page2: __WEBPACK_IMPORTED_MODULE_5__page_component2__["a" /* default */]})
+  $.route({'/courses': __WEBPACK_IMPORTED_MODULE_4__page_component__["a" /* default */]})
 })
 
 
@@ -1139,32 +1137,15 @@ module.exports = function() {
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = CourseCtrl;
 function CourseCtrl({
-  m, render, baseTemplate,
-  models: { Course },
-  components: { Page2 }
+  models: { Course }
 }){
   // let { Course } = $.models
   this.relations.Course
   return {
-    indexPost : function($){
-      Course.findAll({
+    index : function(){
+      // console.log('qwerty')
+      return Course.findAll({
         include : Course.Author
-      }).then(courses => {
-        $.data.message = 'Hello World!!!!'
-        $.data.courses = courses
-        $.data.body = $.body
-        $.json()
-      })
-    },
-    index : function($){
-      Course.findAll({
-        include : Course.Author
-      }).then(courses => {
-        return render(m(Page2, courses)).then((t)=>{
-          $.header('content-type', 'text/html')
-          $.send(baseTemplate.replace('<!--body-->', t))
-          $.end()
-        })
       })
     },
     new : function($){
@@ -1244,56 +1225,40 @@ function CourseCtrl({
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function( { server, controllers :  { CourseCtrl }} ){
-  server
-    .get('/courses', CourseCtrl.index)
-    .post('/courses', CourseCtrl.indexPost)
-    .get('/course/new', CourseCtrl.new)
-    /*=>  /course/new.get
-          /course/new.post
-          /course/new.put
-    */
-
-
-
-    .get('/course/install', CourseCtrl.install)
-
-    // server.get('/:page', function($){
-    //     $.data.msg = $.params.page
-    //     $.json()
-    // })
-});
-
-
-/***/ }),
-/* 23 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__course_model__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__course_relations__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__course_routes__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__course_controller__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__course_controller__ = __webpack_require__(19);
 
 
 
 
 
-
+// import CourseRoutes from './course.routes'
 
 
 __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('courses', function($){
 	$.model({Course: __WEBPACK_IMPORTED_MODULE_1__course_model__["a" /* default */]})
 	$.relation({Course:__WEBPACK_IMPORTED_MODULE_2__course_relations__["a" /* default */]})
-	$.controller({CourseCtrl: __WEBPACK_IMPORTED_MODULE_4__course_controller__["a" /* default */]})
-	$.route({CourseRoutes: __WEBPACK_IMPORTED_MODULE_3__course_routes__["a" /* default */]})
+	$.controller({CourseCtrl: __WEBPACK_IMPORTED_MODULE_3__course_controller__["a" /* default */]})
+	// $.route({CourseRoutes}) 			// => this should be removed
+																// instead, user code snipped below
+	$.resolver('courses', function({
+		attach,
+		server,
+		controllers :  { CourseCtrl }
+	}){
+		attach('/courses', CourseCtrl.index)
+		server
+			.get('/course/new', CourseCtrl.new)
+			.get('/course/install', CourseCtrl.install)
+	})
 })
 
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1327,7 +1292,7 @@ function LessionCtrl({ models: { Lession }}){
 
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1362,7 +1327,7 @@ function LessionCtrl({ models: { Lession }}){
 
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1373,21 +1338,88 @@ function LessionCtrl({ models: { Lession }}){
 
 
 /***/ }),
+/* 26 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lession_model__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lession_relations__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lession_controller__ = __webpack_require__(23);
+
+
+
+
+
+// import LessionRoutes from './lession.routes'
+
+__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('lessions', function($){
+	$.model({Lession: __WEBPACK_IMPORTED_MODULE_1__lession_model__["a" /* default */]})
+	$.relation({Lession:__WEBPACK_IMPORTED_MODULE_2__lession_relations__["a" /* default */]})
+	$.controller({LessionCtrl: __WEBPACK_IMPORTED_MODULE_3__lession_controller__["a" /* default */]})
+	// $.route({LessionRoutes})
+	$.resolver({lessions: function({
+		server,
+		controllers : { LessionCtrl }
+	}){
+		  server
+		    .get('/lessions', LessionCtrl.index)
+		    .get('/lession/new', LessionCtrl.new)
+		    .get('/lession/install', LessionCtrl.install)
+		}
+	})
+})
+
+
+/***/ }),
 /* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function( { server, controllers : { LessionCtrl }} ){
-  server
-    .get('/lessions', LessionCtrl.index)
-    .get('/lession/new', LessionCtrl.new)
-    .get('/lession/install', LessionCtrl.install)
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__role_model__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__permission_model__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__roles_permissions_model__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__role_controller__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__permission_controller__ = __webpack_require__(28);
 
-    // server.get('/:page', function($){
-    //     $.data.msg = $.params.page
-    //     $.json()
-    // })
-});
+
+
+
+
+
+
+// import PermissionRoutes from './permission.routes'
+// import RoleRoutes from './role.routes'
+
+__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('admin', function($){
+	$.model({Role: __WEBPACK_IMPORTED_MODULE_1__role_model__["a" /* default */]})
+	$.model({Permission: __WEBPACK_IMPORTED_MODULE_2__permission_model__["a" /* default */]})
+	$.model({RolePermission: __WEBPACK_IMPORTED_MODULE_3__roles_permissions_model__["a" /* default */]})
+	$.relation('Role', __webpack_require__(34))
+	$.relation('Permission', __webpack_require__(30))
+	$.controller({RoleCtrl: __WEBPACK_IMPORTED_MODULE_4__role_controller__["a" /* default */]})
+	$.controller({PermissionCtrl: __WEBPACK_IMPORTED_MODULE_5__permission_controller__["a" /* default */]})
+	// $.route({RoleRoutes})
+	// $.route({PermissionRoutes})
+	$.resolver({'roles-and-permissions': function({
+		server,
+		controllers: { PermissionCtrl, RoleCtrl }
+	}){
+	  server
+	    .get('/permissions', PermissionCtrl.index)
+	    .get('/permission/new', PermissionCtrl.new)
+	    .get('/permission/install', PermissionCtrl.install)
+
+	    .get('/roles', RoleCtrl.index)
+	    .get('/role/new', RoleCtrl.new)
+	    .get('/role/install', RoleCtrl.install)
+		}
+	})
+	// console.log('ROUTES', $.routes.PermissionRoutes)
+})
 
 
 /***/ }),
@@ -1395,72 +1427,8 @@ function LessionCtrl({ models: { Lession }}){
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lession_model__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lession_routes__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lession_controller__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lession_relations__ = __webpack_require__(26);
-
-
-
-
-
-
-
-__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('lessions', function($){
-	$.model({Lession: __WEBPACK_IMPORTED_MODULE_1__lession_model__["a" /* default */]})
-	$.relation({Lession:__WEBPACK_IMPORTED_MODULE_4__lession_relations__["a" /* default */]})
-	$.controller({LessionCtrl: __WEBPACK_IMPORTED_MODULE_3__lession_controller__["a" /* default */]})
-	$.route({LessionRoutes: __WEBPACK_IMPORTED_MODULE_2__lession_routes__["a" /* default */]})
-})
-
-
-/***/ }),
-/* 29 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__role_model__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__permission_model__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__roles_permissions_model__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__role_controller__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__permission_controller__ = __webpack_require__(30);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__permission_routes__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__role_routes__ = __webpack_require__(38);
-
-
-
-
-
-
-
-
-
-
-__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('admin', function($){	
-	$.model({Role: __WEBPACK_IMPORTED_MODULE_1__role_model__["a" /* default */]})
-	$.model({Permission: __WEBPACK_IMPORTED_MODULE_2__permission_model__["a" /* default */]})
-	$.model({RolePermission: __WEBPACK_IMPORTED_MODULE_3__roles_permissions_model__["a" /* default */]})
-	$.relation('Role', __webpack_require__(37))
-	$.relation('Permission', __webpack_require__(32))
-	$.controller({RoleCtrl: __WEBPACK_IMPORTED_MODULE_4__role_controller__["a" /* default */]})
-	$.controller({PermissionCtrl: __WEBPACK_IMPORTED_MODULE_5__permission_controller__["a" /* default */]})
-	$.route({RoleRoutes: __WEBPACK_IMPORTED_MODULE_7__role_routes__["a" /* default */]})
-	$.route({PermissionRoutes: __WEBPACK_IMPORTED_MODULE_6__permission_routes__["a" /* default */]})
-	// console.log('ROUTES', $.routes.PermissionRoutes)
-})
-
-
-/***/ }),
-/* 30 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = PermissionCtrl;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__permission_seed__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__permission_seed__ = __webpack_require__(31);
 
 function PermissionCtrl({
     models: { Permission }  
@@ -1494,7 +1462,7 @@ function PermissionCtrl({
 
 
 /***/ }),
-/* 31 */
+/* 29 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1517,7 +1485,7 @@ function PermissionCtrl({
 
 
 /***/ }),
-/* 32 */
+/* 30 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1528,20 +1496,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 33 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function({ server, controllers : {PermissionCtrl}}){
-  server
-    .get('/permissions', PermissionCtrl.index)
-    .get('/permission/new', PermissionCtrl.new)
-    .get('/permission/install', PermissionCtrl.install)
-});
-
-
-/***/ }),
-/* 34 */
+/* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1562,12 +1517,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 35 */
+/* 32 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = RoleCtrl;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__role_seed__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__role_seed__ = __webpack_require__(35);
 
 function RoleCtrl({
     models: { Role },
@@ -1602,7 +1557,7 @@ function RoleCtrl({
 
 
 /***/ }),
-/* 36 */
+/* 33 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1625,7 +1580,7 @@ function RoleCtrl({
 
 
 /***/ }),
-/* 37 */
+/* 34 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1637,20 +1592,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 38 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function({ server, controllers : { RoleCtrl }}){
-  server
-    .get('/roles', RoleCtrl.index)
-    .get('/role/new', RoleCtrl.new)
-    .get('/role/install', RoleCtrl.install)
-});
-
-
-/***/ }),
-/* 39 */
+/* 35 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1671,7 +1613,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 40 */
+/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1695,38 +1637,49 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 41 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__user_model__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__user_routes__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__user_controller__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__user_relations__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__user_model__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__user_relations__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__user_controller__ = __webpack_require__(38);
 
 
 
 
 
-
+// import UserRoutes from './user.routes'
 
 __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('users', function($){
 	$.model({User: __WEBPACK_IMPORTED_MODULE_1__user_model__["a" /* default */]})
-	$.relation({User:__WEBPACK_IMPORTED_MODULE_4__user_relations__["a" /* default */]})
+	$.relation({User:__WEBPACK_IMPORTED_MODULE_2__user_relations__["a" /* default */]})
 	$.controller({UserCtrl: __WEBPACK_IMPORTED_MODULE_3__user_controller__["a" /* default */]})
-	$.route({UserRoutes: __WEBPACK_IMPORTED_MODULE_2__user_routes__["a" /* default */]})
+	// $.route({UserRoutes})
+
+	$.resolver({'users': function({
+	    server,
+	    controllers : { UserCtrl }
+	  }){
+	  server
+	    .get('/users', UserCtrl.index)
+	    .get('/user/new', UserCtrl.new)
+	    .get('/user/install', UserCtrl.install)
+		}
+	})
+
 })
 
 
 /***/ }),
-/* 42 */
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = UserCtrl;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__user_seed__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__user_seed__ = __webpack_require__(41);
 
 function UserCtrl($$){
   this.relations.User
@@ -1762,7 +1715,7 @@ function UserCtrl($$){
 
 
 /***/ }),
-/* 43 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1811,7 +1764,7 @@ function UserCtrl($$){
 
 
 /***/ }),
-/* 44 */
+/* 40 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1828,23 +1781,7 @@ function UserCtrl($$){
 
 
 /***/ }),
-/* 45 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function({
-    server,
-    controllers : { UserCtrl }
-  }){
-  server
-    .get('/users', UserCtrl.index)
-    .get('/user/new', UserCtrl.new)
-    .get('/user/install', UserCtrl.install)
-});
-
-
-/***/ }),
-/* 46 */
+/* 41 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2029,13 +1966,13 @@ function UserCtrl($$){
 
 
 /***/ }),
-/* 47 */
+/* 42 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__templates_module__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_module__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules__ = __webpack_require__(4);
   // Create an app
     const app = __webpack_require__(0)
     const SQL = __webpack_require__(12)
@@ -2051,6 +1988,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     // app.module({'b' : function(){}})
 
     const baseTemplate = fs.readFileSync('./bin/index.html', 'utf8')
+
+    
     
 
     const server = diet()
@@ -2087,13 +2026,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     // app.module('setup', function($){
 
     app.config('m', m)
-    app.config('render', render)
     app.config('baseTemplate', baseTemplate)
 
     let components = app.store()
     app.config('component', components.getOrSet)
     app.config('components', components.getAll)
-    
 
     let models = app.store()
     app.config('model', models.getOrSet)
@@ -2104,17 +2041,62 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     let controllers = app.store()
     app.config('controller', controllers.getOrSet)
     app.config('controllers', controllers.getAll)
+    let resolver = app.store()
+
+    app.config('resolver', resolver.getOrSet)
+    app.config('resolve', resolver.getAll)
+
+    app.config('group', function(route, fn){
+      var instance = this
+      var newInstance = Object.create(this);
+      Object.defineProperty(newInstance, 'route', {
+        get : ()=> (instance.route || "") + route
+      })
+      fn.call(newInstance, newInstance)
+    })
+
     let routes = app.store()
+    // app.config('route', function(route, view){
+    //   routes.getOrSet(this.route || "" + route, view)
+    // })
     app.config('route', routes.getOrSet)
     app.config('routes', routes.getAll)
+
+    app.config('view', (component, controller) => ($) => {
+      console.log('COMPONENT\n', component, '\n')
+      return controller().then(
+        (items) => render(
+          m(component, {items})
+        ).then((t) => {
+          $.header('content-type', 'text/html')
+          $.send(baseTemplate.replace('<!--body-->', t))
+          $.end()
+        })
+      )
+    })
+
+    app.config('json', controller => ($) => {
+      controller().then(
+      (items) => {
+        $.data.items = items
+        $.json()
+      })
+    })
+
+    app.config('attach', (routeName, controller) => {
+      // let a = new Promise((resolve)=>(server.get(routeName, controller).then(resolve))).then( app.view(app.routes[routeName]) )
+      console.log('\nROUTES\n', app.routes, '\n',app.routes[routeName],'\n')
+      server.get(routeName, app.view(app.routes[routeName], controller))
+      server.post(routeName, app.json(controller))      
+    })
 
     app.config('chain', function(){
 	    return (init) => Array.prototype.reduce.call(arguments, (acc, x) => acc && acc.then ? acc.then(x) : x(acc), init)
     })
 
     app.modules()
-    app.run(function({server, routes}){
-      routes()
+    app.run(function({server, resolve}){
+      resolve()
       server.get('/', ($)=>{
         $.data.message = 'Hello World!!!!'
         $.data.context = this.constructor.name
@@ -2124,8 +2106,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           $.data.template = t
           $.json()
         })
-        // $.data.isEqual = $ === this
-        // $.json()
       })
     })
 
@@ -2145,7 +2125,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 48 */
+/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2166,7 +2146,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 49 */
+/* 44 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2218,61 +2198,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 50 */
+/* 45 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony default export */ __webpack_exports__["a"] = (function({
   m, components : { Topbar, Content, CourseItem }
 }){
-  let Courses = {
-    list: [],
-    loadList: function() {
-      return m.request({
-        method: "POST",
-        url: "http://localhost:8000/courses",
-        withCredentials: false
-      })
-      .then(function(result) {
-        Courses.list = result.courses
-      })
-    },
-  }
   return {
-    oninit: Courses.loadList,
-    view: function() {
-      return m('div', [
-        m(Topbar),
-        m(Content,
-          Courses.list.map(
-            ( course ) => m( CourseItem, course )
-          )
-        )
-      ])
-    }
-  }
-});
-
-
-/***/ }),
-/* 51 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function({
-  m, components : { Topbar, Content, CourseItem }
-}){
-  let Courses = {
-    list: []
-  }  
-  return {
-    // oninit: Courses.loadList,
     view: function(vnode) {
-      // console.log(vnode.children)
       return m('div', [
         m(Topbar),
         m(Content,
-          vnode.children.map(
+          vnode.attrs.items.map(
             ( course ) => m( CourseItem, course )
           )
         )
@@ -2283,7 +2221,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 52 */
+/* 46 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
