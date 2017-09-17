@@ -1,7 +1,7 @@
 import './course-item.less'
 export default function({m}){
   return {
-    view: function({attrs}) {
+    view: function({attrs, children}) {
       return m(
         '.col-sm-6.col-md-4.col-lg-3', m(
           '.course', [m(

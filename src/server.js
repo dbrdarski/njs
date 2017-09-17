@@ -88,11 +88,11 @@
     app.config('routes', routes.getAll)
 
     app.config('view', (component, controller) => ($) => {
-      // console.log('COMPONENT\n', component, '\n')
-      return controller().then(
-        (items) => render(
-          m(component, {items})
-        ).then((t) => {
+      return controller($).then(
+        (data) => render(
+          m(component, {data})
+        )
+        .then((t) => {
           $.header('content-type', 'text/html')
           $.send(baseTemplate.replace('<!--body-->', t))
           $.end()
@@ -101,15 +101,14 @@
     })
 
     app.config('json', controller => ($) => {
-      controller().then(
-      (items) => {
-        $.data.items = items
+      controller($).then(
+      (data) => {
+        $.data.data = data
         $.json()
       })
     })
 
     app.config('attach', (routeName, controller) => {
-      // console.log('\nROUTES\n', app.routes, '\n',app.routes[routeName],'\n')
       server.get(routeName, app.view(app.routes[routeName], controller))
       server.post(routeName, app.json(controller))
     })

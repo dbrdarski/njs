@@ -5,9 +5,16 @@ export default function CourseCtrl({
   this.relations.Course
   return {
     index : function(){
-      // console.log('qwerty')
       return Course.findAll({
         include : Course.Author
+      })
+    },
+    edit : function($){
+      return Course.findOne({
+        where : {
+          slug : $.params.slug
+        },
+        include : [Course.Author]
       })
     },
     new : function($){

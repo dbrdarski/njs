@@ -27,37 +27,44 @@ app.config('routes', routes.getAll)
 
 
 let routeHandler = (route, view)=>{
-  var items = [];
+  var data = [];
   return {
     onmatch: () => new Promise((resolve, reject) => {
-      m.request(route, { method: "POST" }).then((data)=>{
-        items = data.items;
-        console.log(data.items)
+      m.request(window.location.href, { method: "POST" }).then((responseData)=>{
+        data = responseData.data;
+        // console.log(data)
         resolve(view)
       })
     }),
     render: vnode => {
-      console.log('AWESOME!!!!!!')
-      vnode.attrs.items = items;
+      vnode.attrs.data = data;
       return vnode
     }
   }
 }
 
 app.run(['templates'], function({
-  components: { Page }
+  components: { CoursesIndex }
 }){
-  // console.log(Page)
+  // console.log(CoursesIndex)
   // => m.request('route').then(()=>m.mount(...))
   m.route.prefix("")
 
-  let routes = app.routes
-  // let routes = app.routes()
+  let routes = app.routes()
+  let rs = {}
+  // Object.keys(routes).map(components, routes => )
+  for (let  r in routes){
+    rs[r] = routeHandler(r, routes[r])
+  }
+  // console.log(["ROUTES", routes()])
+  // // let routes = app.routes()
 
-  m.route(document.body, '/courses', {
-    '/courses' : routeHandler('/courses', routes['/courses'])
-  })
-  // m.mount(document.body, Page)
+  // m.route(document.body, '/courses', {
+  //   '/courses' : routeHandler('/courses', routes['/courses'])
+  // })
+  m.route(document.body, '/courses', rs)
+
+  // // m.mount(document.body, CoursesIndex)
 })
 // console.log(app)
 

@@ -89,7 +89,10 @@ var app = (function(){
     var store = function(){
         var storage = {};
         var modules = function modules(){
-          Object.getOwnPropertyNames(modules).map(function(x){return modules[x]})
+          return Object.getOwnPropertyNames(storage).reduce(function(acc, x){
+            acc[x] = modules[x];
+            return acc;
+          }, {})
         };
         var getDeps = function(deps, callerName){
             return deps.map(function(dep){
@@ -184,11 +187,11 @@ var _moduler = __webpack_require__(0);
 
 var _moduler2 = _interopRequireDefault(_moduler);
 
-var _topbar = __webpack_require__(9);
+var _topbar = __webpack_require__(10);
 
 var _topbar2 = _interopRequireDefault(_topbar);
 
-var _courseItem = __webpack_require__(7);
+var _courseItem = __webpack_require__(8);
 
 var _courseItem2 = _interopRequireDefault(_courseItem);
 
@@ -196,9 +199,13 @@ var _content = __webpack_require__(6);
 
 var _content2 = _interopRequireDefault(_content);
 
-var _page = __webpack_require__(8);
+var _courses = __webpack_require__(9);
 
-var _page2 = _interopRequireDefault(_page);
+var _courses2 = _interopRequireDefault(_courses);
+
+var _courseEdit = __webpack_require__(7);
+
+var _courseEdit2 = _interopRequireDefault(_courseEdit);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -206,8 +213,11 @@ _moduler2.default.module('templates', function ($) {
   $.component({ Topbar: _topbar2.default });
   $.component({ Content: _content2.default });
   $.component({ CourseItem: _courseItem2.default });
-  $.component({ Page: _page2.default });
-  $.route({ '/courses': _page2.default });
+  $.component({ CoursesIndex: _courses2.default });
+  $.component({ CourseEdit: _courseEdit2.default });
+  $.route({ '/courses': _courses2.default });
+  $.route({ '/course/:slug': _courseEdit2.default });
+  $.route({ '/course/new': _courseEdit2.default });
 });
 
 /***/ }),
@@ -1462,7 +1472,7 @@ m.vnode = Vnode
 if (true) module["exports"] = m
 else window.m = m
 }());
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14).setImmediate, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15).setImmediate, __webpack_require__(1)))
 
 /***/ }),
 /* 5 */
@@ -1506,39 +1516,46 @@ app.config('route', routes.getOrSet);
 app.config('routes', routes.getAll);
 
 var routeHandler = function routeHandler(route, view) {
-  var items = [];
+  var data = [];
   return {
     onmatch: function onmatch() {
       return new Promise(function (resolve, reject) {
-        _mithril2.default.request(route, { method: "POST" }).then(function (data) {
-          items = data.items;
-          console.log(data.items);
+        _mithril2.default.request(window.location.href, { method: "POST" }).then(function (responseData) {
+          data = responseData.data;
+          // console.log(data)
           resolve(view);
         });
       });
     },
     render: function render(vnode) {
-      console.log('AWESOME!!!!!!');
-      vnode.attrs.items = items;
+      vnode.attrs.data = data;
       return vnode;
     }
   };
 };
 
 app.run(['templates'], function (_ref) {
-  var Page = _ref.components.Page;
+  var CoursesIndex = _ref.components.CoursesIndex;
 
-  // console.log(Page)
+  // console.log(CoursesIndex)
   // => m.request('route').then(()=>m.mount(...))
   _mithril2.default.route.prefix("");
 
-  var routes = app.routes;
-  // let routes = app.routes()
+  var routes = app.routes();
+  var rs = {};
+  // Object.keys(routes).map(components, routes => )
+  for (var r in routes) {
+    rs[r] = routeHandler(r, routes[r]);
+  }
+  // console.log(["ROUTES", routes()])
+  // // let routes = app.routes()
 
-  _mithril2.default.route(document.body, '/courses', {
-    '/courses': routeHandler('/courses', routes['/courses'])
-  });
-  // m.mount(document.body, Page)
+  // m.route(document.body, '/courses', {
+  //   '/courses' : routeHandler('/courses', routes['/courses'])
+  // })
+  _mithril2.default.route(document.body, '/courses', rs);
+
+  // // m.mount(document.body, CoursesIndex)
 });
 // console.log(app)
 
@@ -1577,11 +1594,37 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (_ref) {
+  var m = _ref.m,
+      _ref$components = _ref.components,
+      Topbar = _ref$components.Topbar,
+      Content = _ref$components.Content,
+      CourseItem = _ref$components.CourseItem;
+
+  return {
+    view: function view(vnode) {
+      return m('div', [m(Topbar), m(Content, m(CourseItem, vnode.attrs.data))]);
+    }
+  };
+};
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (_ref) {
   var m = _ref.m;
 
   return {
     view: function view(_ref2) {
-      var attrs = _ref2.attrs;
+      var attrs = _ref2.attrs,
+          children = _ref2.children;
 
       return m('.col-sm-6.col-md-4.col-lg-3', m('.course', [m('a.thumb', { bg: attrs.color, href: attrs.id }, [m(".thumb-img", {
         bg: attrs.color,
@@ -1593,10 +1636,10 @@ exports.default = function (_ref) {
   };
 };
 
-__webpack_require__(10);
+__webpack_require__(11);
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1615,7 +1658,8 @@ exports.default = function (_ref) {
 
   return {
     view: function view(vnode) {
-      return m('div', [m(Topbar), m(Content, vnode.attrs.items.map(function (course) {
+      console.log(vnode.attrs);
+      return m('div', [m(Topbar), m(Content, vnode.attrs.data.map(function (course) {
         return m(CourseItem, course);
       }))]);
     }
@@ -1623,7 +1667,7 @@ exports.default = function (_ref) {
 };
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1643,13 +1687,7 @@ exports.default = function (_ref) {
   };
 };
 
-__webpack_require__(11);
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
+__webpack_require__(12);
 
 /***/ }),
 /* 11 */
@@ -1659,6 +1697,12 @@ __webpack_require__(11);
 
 /***/ }),
 /* 12 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 13 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -1848,7 +1892,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -2038,10 +2082,10 @@ process.umask = function() { return 0; };
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(12)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(13)))
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var apply = Function.prototype.apply;
@@ -2094,7 +2138,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(13);
+__webpack_require__(14);
 exports.setImmediate = setImmediate;
 exports.clearImmediate = clearImmediate;
 

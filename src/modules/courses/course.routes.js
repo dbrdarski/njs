@@ -4,6 +4,7 @@ export default function({
   controllers :  { CourseCtrl }
 }){
   attach('/courses', CourseCtrl.index)
+  attach('/course/:slug', CourseCtrl.edit)
 
   server
     // .get('/courses/:id', CourseCtrl.show)

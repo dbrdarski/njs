@@ -181,10 +181,12 @@ module.exports = function(env) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__topbar_component__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__course_item_component__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__topbar_component__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__course_item_component__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__content_component__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_component__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__courses_template__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__course_edit_template__ = __webpack_require__(44);
+
 
 
 
@@ -196,8 +198,11 @@ __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('templates', function($){
   $.component({Topbar: __WEBPACK_IMPORTED_MODULE_1__topbar_component__["a" /* default */]})
   $.component({Content: __WEBPACK_IMPORTED_MODULE_3__content_component__["a" /* default */]})
   $.component({CourseItem: __WEBPACK_IMPORTED_MODULE_2__course_item_component__["a" /* default */]})
-  $.component({Page: __WEBPACK_IMPORTED_MODULE_4__page_component__["a" /* default */]})
-  $.route({'/courses': __WEBPACK_IMPORTED_MODULE_4__page_component__["a" /* default */]})
+  $.component({CoursesIndex: __WEBPACK_IMPORTED_MODULE_4__courses_template__["a" /* default */]})
+  $.component({CourseEdit: __WEBPACK_IMPORTED_MODULE_5__course_edit_template__["a" /* default */]})
+  $.route({'/courses': __WEBPACK_IMPORTED_MODULE_4__courses_template__["a" /* default */]})
+  $.route({'/course/:slug': __WEBPACK_IMPORTED_MODULE_5__course_edit_template__["a" /* default */]})
+  $.route({'/course/new': __WEBPACK_IMPORTED_MODULE_5__course_edit_template__["a" /* default */]})
 })
 
 
@@ -1143,9 +1148,16 @@ function CourseCtrl({
   this.relations.Course
   return {
     index : function(){
-      // console.log('qwerty')
       return Course.findAll({
         include : Course.Author
+      })
+    },
+    edit : function($){
+      return Course.findOne({
+        where : {
+          slug : $.params.slug
+        },
+        include : [Course.Author]
       })
     },
     new : function($){
@@ -1216,7 +1228,7 @@ function CourseCtrl({
 /* harmony default export */ __webpack_exports__["a"] = (function({models: { User, Course, Lession }}){
   Course.Author = Course.belongsTo(User, {as: 'author'})		// owner (lecturer)
 	// Course.Student = Course.belongsToMany(User, { through: User })	// students
-  Course.hasMany(Lession)
+  Course.Lession = Course.hasMany(Lession)
 });
 
 
@@ -1250,6 +1262,7 @@ __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('courses', function($){
 		controllers :  { CourseCtrl }
 	}){
 		attach('/courses', CourseCtrl.index)
+		attach('/course/:slug', CourseCtrl.edit)
 		server
 			.get('/course/new', CourseCtrl.new)
 			.get('/course/install', CourseCtrl.install)
@@ -2001,7 +2014,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }))
 
     const staticFiles = dietStatic({ path: server.path+'/../bin' })
-    console.log('SERVER PATH', server.path)
+    // console.log('SERVER PATH', server.path)
     server.listen('http://localhost:8000')
     server.footer(staticFiles)
 
@@ -2063,11 +2076,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     app.config('routes', routes.getAll)
 
     app.config('view', (component, controller) => ($) => {
-      console.log('COMPONENT\n', component, '\n')
-      return controller().then(
-        (items) => render(
-          m(component, {items})
-        ).then((t) => {
+      return controller($).then(
+        (data) => render(
+          m(component, {data})
+        )
+        .then((t) => {
           $.header('content-type', 'text/html')
           $.send(baseTemplate.replace('<!--body-->', t))
           $.end()
@@ -2076,18 +2089,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     })
 
     app.config('json', controller => ($) => {
-      controller().then(
-      (items) => {
-        $.data.items = items
+      controller($).then(
+      (data) => {
+        $.data.data = data
         $.json()
       })
     })
 
     app.config('attach', (routeName, controller) => {
-      // let a = new Promise((resolve)=>(server.get(routeName, controller).then(resolve))).then( app.view(app.routes[routeName]) )
-      console.log('\nROUTES\n', app.routes, '\n',app.routes[routeName],'\n')
       server.get(routeName, app.view(app.routes[routeName], controller))
-      server.post(routeName, app.json(controller))      
+      server.post(routeName, app.json(controller))
     })
 
     app.config('chain', function(){
@@ -2150,12 +2161,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function({
+  m, components : { Topbar, Content, CourseItem }
+}){
+  return {
+    view: function(vnode) {
+      return m('div', [
+        m(Topbar),
+        m(Content,
+          m( CourseItem, vnode.attrs.data )
+        )
+      ])
+    }
+  }
+});
+
+
+/***/ }),
+/* 45 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__course_item_less__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__course_item_less___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__course_item_less__);
 
 /* harmony default export */ __webpack_exports__["a"] = (function({m}){
   return {
-    view: function({attrs}) {
+    view: function({attrs, children}) {
       return m(
         '.col-sm-6.col-md-4.col-lg-3', m(
           '.course', [m(
@@ -2198,7 +2230,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2207,10 +2239,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 }){
   return {
     view: function(vnode) {
+      console.log(vnode.attrs);
       return m('div', [
         m(Topbar),
         m(Content,
-          vnode.attrs.items.map(
+          vnode.attrs.data.map(
             ( course ) => m( CourseItem, course )
           )
         )
@@ -2221,7 +2254,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

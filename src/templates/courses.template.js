@@ -3,10 +3,11 @@ export default function({
 }){
   return {
     view: function(vnode) {
+      console.log(vnode.attrs);
       return m('div', [
         m(Topbar),
         m(Content,
-          vnode.attrs.items.map(
+          vnode.attrs.data.map(
             ( course ) => m( CourseItem, course )
           )
         )

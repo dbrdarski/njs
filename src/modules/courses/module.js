@@ -18,6 +18,7 @@ $.module('courses', function($){
 		controllers :  { CourseCtrl }
 	}){
 		attach('/courses', CourseCtrl.index)
+		attach('/course/:slug', CourseCtrl.edit)
 		server
 			.get('/course/new', CourseCtrl.new)
 			.get('/course/install', CourseCtrl.install)
