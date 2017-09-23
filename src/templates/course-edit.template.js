@@ -22,12 +22,10 @@ export default function({
       get: () => state.customSlug || slugify(state.title)
     })
     return state
-  })
-  console.log('Component init!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+  })  
   return {
     view: function(vnode) {
       let item = stateModel(vnode.attrs.data);
-      console.log('Component render!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
       return m('div', [
         m(Topbar),
         m(Content, {
