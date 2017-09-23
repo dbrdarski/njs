@@ -6,9 +6,15 @@ export default function({
       console.log(vnode.attrs);
       return m('div', [
         m(Topbar),
-        m(Content,
+        m(
+          Content, {
+            title: "Browse our courses..."
+          },
           vnode.attrs.data.map(
-            ( course ) => m( CourseItem, course )
+            ( course ) => m(
+              '.col-sm-6.col-md-4.col-lg-3',
+              m( CourseItem, course )
+            )
           )
         )
       ])

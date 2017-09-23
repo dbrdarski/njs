@@ -4,7 +4,7 @@ export default function({m}){
       return m(
         '.container', [
           m(
-            'h1.punchline', "Browse our courses..."
+            'h1.punchline', vnode.attrs.title
           ),
           m('.row', vnode.children)
         ]
