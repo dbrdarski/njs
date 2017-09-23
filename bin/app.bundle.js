@@ -6240,7 +6240,7 @@ exports.default = function (_ref) {
       customSlug: data.slug,
       description: data.description,
       setDescription: function setDescription(v) {
-        this.description = v;
+        state.description = v;
       },
       setTitle: function setTitle(v) {
         state.title = v;
@@ -6256,9 +6256,11 @@ exports.default = function (_ref) {
     });
     return state;
   });
+  console.log('Component init!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
   return {
     view: function view(vnode) {
       var item = stateModel(vnode.attrs.data);
+      console.log('Component render!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
       return m('div', [m(Topbar), m(Content, {
         title: "Edit course"
       }, [m('#main-panel.col-md-9', [m('input[type="text"].form-control.form-control-lg[id="title"][name="title"][aria-describedby="couseTitle"][placeholder="Title"]', {
@@ -6267,16 +6269,16 @@ exports.default = function (_ref) {
       }), m('small#couseTitle.form-text.text-muted', "We'll never share your email with anyone else."), m('input[type="text"].form-control.form-control-sm', {
         value: item.slug,
         onchange: m.withAttr("value", item.setSlug)
-      }), m('.form-section-meta', [m('.form-group', [m('label[for="description"]'), m('textarea#description.form-control[name="description"][aria-describedby="couseTitle"][placeholder="Short description"][rows="3"]', {
-        oninput: m.withAttr("value", item.setDescription),
-        value: item.description
+      }), m('.form-section-meta', [m('.form-group', [m('label[for="description"]', 'Description'), m('textarea#description.form-control[name="description"]', {
+        value: item.description,
+        oninput: m.withAttr("value", item.setDescription)
       })]), m('.row', [m('.col-md-4', m('select.form-control', ['Beginner', 'Intermediate', 'Advanced'].map(function (items) {
         return m('option', items);
       }))), m('.col-md-4', m('select.form-control', ['Red', 'Orange', 'Blue'].map(function (items) {
         return m('option', items);
-      }))), m('.col-md-4', m('input[type="text"].form-control'))])]), m('a.btn.btn-lg[href="/courses"]', {
+      }))), m('.col-md-4', m('input[type="text"].form-control'))])]), m('a.btn.btn-primary.btn-lg[href="/courses"]', {
         oncreate: m.route.link
-      })]), m('#side-panel.col-md-3', m(CourseItem, vnode.attrs.data))])]);
+      }, 'Click here!!!!')]), m('#side-panel.col-md-3', m(CourseItem, vnode.attrs.data))])]);
     }
   };
 };
@@ -6302,7 +6304,7 @@ exports.default = function (_ref) {
 
       return m('.course', [m('a.thumb', {
         bg: attrs.color,
-        href: '/course/' + attrs.id,
+        href: '/course/' + attrs.slug,
         oncreate: m.route.link
       }, [m(".thumb-img", {
         bg: attrs.color,

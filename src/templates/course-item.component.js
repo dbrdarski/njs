@@ -6,7 +6,7 @@ export default function({m}){
         '.course', [m(
           'a.thumb', {
             bg: attrs.color,
-            href:'/course/' + attrs.id,
+            href:'/course/' + attrs.slug,
             oncreate: m.route.link
           }, [
             m(".thumb-img", {

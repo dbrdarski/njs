@@ -9,7 +9,7 @@ export default function({
       customSlug: data.slug,
       description: data.description,
       setDescription: function(v){
-        this.description = v
+        state.description = v
       },
       setTitle: function(v) {
         state.title = v
@@ -23,9 +23,11 @@ export default function({
     })
     return state
   })
+  console.log('Component init!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
   return {
     view: function(vnode) {
-      let item = stateModel(vnode.attrs.data)
+      let item = stateModel(vnode.attrs.data);
+      console.log('Component render!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
       return m('div', [
         m(Topbar),
         m(Content, {
@@ -43,10 +45,10 @@ export default function({
             }),
             m('.form-section-meta', [
               m('.form-group', [
-                m('label[for="description"]'),
-                m('textarea#description.form-control[name="description"][aria-describedby="couseTitle"][placeholder="Short description"][rows="3"]',{
-                  onchange: m.withAttr("value", item.setDescription),
-                  value: item.description
+                m('label[for="description"]', 'Description'),
+                m('textarea#description.form-control[name="description"]', {
+                  value: item.description,
+                  oninput: m.withAttr("value", item.setDescription)
                 }),
               ]),
               m('.row',[
@@ -61,9 +63,9 @@ export default function({
                 )
               ])
             ]),
-            m('a.btn.btn-lg[href="/courses"]', {
+            m('a.btn.btn-primary.btn-lg[href="/courses"]', {
               oncreate: m.route.link
-            })
+            }, 'Click here!!!!')
           ]),
           m('#side-panel.col-md-3',
             m( CourseItem, vnode.attrs.data )
