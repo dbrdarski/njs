@@ -22,7 +22,7 @@ export default function({
       get: () => state.customSlug || slugify(state.title)
     })
     return state
-  })  
+  })
   return {
     view: function(vnode) {
       let item = stateModel(vnode.attrs.data);

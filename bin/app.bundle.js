@@ -6256,11 +6256,9 @@ exports.default = function (_ref) {
     });
     return state;
   });
-  console.log('Component init!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
   return {
     view: function view(vnode) {
       var item = stateModel(vnode.attrs.data);
-      console.log('Component render!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
       return m('div', [m(Topbar), m(Content, {
         title: "Edit course"
       }, [m('#main-panel.col-md-9', [m('input[type="text"].form-control.form-control-lg[id="title"][name="title"][aria-describedby="couseTitle"][placeholder="Title"]', {

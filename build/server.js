@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 43);
+/******/ 	return __webpack_require__(__webpack_require__.s = 37);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -138,14 +138,59 @@ module.exports = function parseURL(url, root) {
 
 /***/ }),
 /* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__users_module__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__roles_permissions_module__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__courses_module__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lessions_module__ = __webpack_require__(21);
+
+
+
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__topbar_component__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__course_item_component__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__content_component__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__courses_template__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__course_edit_template__ = __webpack_require__(39);
+
+
+
+
+
+
+
+
+__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('templates', function ($) {
+  $.component({ Topbar: __WEBPACK_IMPORTED_MODULE_1__topbar_component__["a" /* default */] });
+  $.component({ Content: __WEBPACK_IMPORTED_MODULE_3__content_component__["a" /* default */] });
+  $.component({ CourseItem: __WEBPACK_IMPORTED_MODULE_2__course_item_component__["a" /* default */] });
+  $.component({ CoursesIndex: __WEBPACK_IMPORTED_MODULE_4__courses_template__["a" /* default */] });
+  $.component({ CourseEdit: __WEBPACK_IMPORTED_MODULE_5__course_edit_template__["a" /* default */] });
+  $.route({ '/courses': __WEBPACK_IMPORTED_MODULE_4__courses_template__["a" /* default */] });
+  $.route({ '/course/:slug': __WEBPACK_IMPORTED_MODULE_5__course_edit_template__["a" /* default */] });
+  $.route({ '/course/new': __WEBPACK_IMPORTED_MODULE_5__course_edit_template__["a" /* default */] });
+});
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var pushStateMock = __webpack_require__(18)
-var domMock = __webpack_require__(17)
-var xhrMock = __webpack_require__(19)
+var pushStateMock = __webpack_require__(47)
+var domMock = __webpack_require__(46)
+var xhrMock = __webpack_require__(48)
 
 module.exports = function(env) {
 	env = env || {}
@@ -159,52 +204,6 @@ module.exports = function(env) {
 
 	return $window
 }
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__users_module__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__roles_permissions_module__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__courses_module__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lessions_module__ = __webpack_require__(27);
-
-
-
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__topbar_component__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__course_item_component__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__content_component__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__courses_template__ = __webpack_require__(47);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__course_edit_template__ = __webpack_require__(45);
-
-
-
-
-
-
-
-
-__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('templates', function($){
-  $.component({Topbar: __WEBPACK_IMPORTED_MODULE_1__topbar_component__["a" /* default */]})
-  $.component({Content: __WEBPACK_IMPORTED_MODULE_3__content_component__["a" /* default */]})
-  $.component({CourseItem: __WEBPACK_IMPORTED_MODULE_2__course_item_component__["a" /* default */]})
-  $.component({CoursesIndex: __WEBPACK_IMPORTED_MODULE_4__courses_template__["a" /* default */]})
-  $.component({CourseEdit: __WEBPACK_IMPORTED_MODULE_5__course_edit_template__["a" /* default */]})
-  $.route({'/courses': __WEBPACK_IMPORTED_MODULE_4__courses_template__["a" /* default */]})
-  $.route({'/course/:slug': __WEBPACK_IMPORTED_MODULE_5__course_edit_template__["a" /* default */]})
-  $.route({'/course/new': __WEBPACK_IMPORTED_MODULE_5__course_edit_template__["a" /* default */]})
-})
-
 
 /***/ }),
 /* 6 */
@@ -256,18 +255,1221 @@ module.exports = require("sequelize");
 
 /***/ }),
 /* 14 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = CourseCtrl;
+function CourseCtrl({
+  models: { Course }
+}) {
+  // let { Course } = $.models
+  this.relations.Course;
+  return {
+    index: function () {
+      return Course.findAll({
+        include: Course.Author
+      });
+    },
+    edit: function ($) {
+      return Course.findOne({
+        where: {
+          slug: $.params.slug
+        },
+        include: [Course.Author]
+      });
+    },
+    new: function ($) {
+      var course = Course.build($.query);
+      $.data.msg = $.query;
+      course.save();
+      $.json();
+    },
+    install: function ($) {
+      Course.sync({ force: true });
+      $.data.msg = { installed: 'courses table' };
+      $.json();
+    }
+  };
+}
 
 /***/ }),
 /* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function ({ Q, db }) {
+  return db.define('course', {
+    id: {
+      type: Q.UUID,
+      primaryKey: true,
+      defaultValue: Q.UUIDV1
+    },
+    title: {
+      type: Q.STRING
+    },
+    slug: {
+      type: Q.STRING
+    },
+    description: {
+      type: Q.TEXT
+    },
+    video: {
+      type: Q.STRING
+    },
+    image: {
+      type: Q.STRING
+    },
+    color: {
+      type: Q.ENUM,
+      values: ['default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue'],
+      defaultValue: 'default'
+    },
+    level: {
+      type: Q.ENUM,
+      values: ['Beginner', 'Intermediate', 'Advanced'],
+      defaultValue: 'Beginner'
+    },
+    active: {
+      type: Q.BOOLEAN,
+      defaultValue: false
+    }
+  });
+});
+
+/***/ }),
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function ({ models: { User, Course, Lession } }) {
+  Course.Author = Course.belongsTo(User, { as: 'author' }); // owner (lecturer)
+  // Course.Student = Course.belongsToMany(User, { through: User })	// students
+  Course.Lession = Course.hasMany(Lession);
+});
+
+/***/ }),
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__course_model__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__course_relations__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__course_controller__ = __webpack_require__(14);
+
+
+
+
+
+// import CourseRoutes from './course.routes'
+
+
+__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('courses', function ($) {
+	$.model({ Course: __WEBPACK_IMPORTED_MODULE_1__course_model__["a" /* default */] });
+	$.relation({ Course: __WEBPACK_IMPORTED_MODULE_2__course_relations__["a" /* default */] });
+	$.controller({ CourseCtrl: __WEBPACK_IMPORTED_MODULE_3__course_controller__["a" /* default */] });
+	// $.route({CourseRoutes}) 			// => this should be removed
+	// instead, user code snipped below
+	$.resolver('courses', function ({
+		attach,
+		server,
+		controllers: { CourseCtrl }
+	}) {
+		attach('/courses', CourseCtrl.index);
+		attach('/course/:slug', CourseCtrl.edit);
+		server.get('/course/new', CourseCtrl.new).get('/course/install', CourseCtrl.install);
+	});
+});
+
+/***/ }),
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = LessionCtrl;
+function LessionCtrl({ models: { Lession } }) {
+  this.relations.Lession;
+  return {
+    index: function ($) {
+      Lession.findAll().then(lession => {
+        $.data.message = 'Hello World!!!!';
+        $.data.lession = lession;
+        $.data.body = $.body;
+        $.json();
+      });
+    },
+    new: function ($) {
+      var lession = Lession.build($.query);
+      $.data.msg = $.query;
+      lession.save();
+      $.json();
+    },
+    install: function ($) {
+      Lession.sync({ force: true });
+      $.data.msg = { installed: 'lession table' };
+      $.json();
+    }
+  };
+}
+
+/***/ }),
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function ({ Q, db }) {
+  return db.define('lession', {
+    id: {
+      type: Q.UUID,
+      primaryKey: true,
+      defaultValue: Q.UUIDV1
+    },
+    title: {
+      type: Q.STRING
+    },
+    slug: {
+      type: Q.STRING
+    },
+    description: {
+      type: Q.TEXT
+    },
+    video: {
+      type: Q.STRING
+    },
+    image: {
+      type: Q.STRING
+    },
+    grade: Q.INTEGER,
+    complete: {
+      type: Q.BOOLEAN
+    }
+  });
+});
+
+/***/ }),
+/* 20 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function ({ models: { Lession, User, Course, LessionUser } }) {
+  Lession.belongsTo(Course);
+  // Lession.belongsToMany(User)
+});
+
+/***/ }),
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lession_model__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lession_relations__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lession_controller__ = __webpack_require__(18);
+
+
+
+
+
+// import LessionRoutes from './lession.routes'
+
+__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('lessions', function ($) {
+	$.model({ Lession: __WEBPACK_IMPORTED_MODULE_1__lession_model__["a" /* default */] });
+	$.relation({ Lession: __WEBPACK_IMPORTED_MODULE_2__lession_relations__["a" /* default */] });
+	$.controller({ LessionCtrl: __WEBPACK_IMPORTED_MODULE_3__lession_controller__["a" /* default */] });
+	// $.route({LessionRoutes})
+	$.resolver({ lessions: function ({
+			server,
+			controllers: { LessionCtrl }
+		}) {
+			server.get('/lessions', LessionCtrl.index).get('/lession/new', LessionCtrl.new).get('/lession/install', LessionCtrl.install);
+		}
+	});
+});
+
+/***/ }),
+/* 22 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__role_model__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__permission_model__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__roles_permissions_model__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__role_controller__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__permission_controller__ = __webpack_require__(23);
+
+
+
+
+
+
+
+// import PermissionRoutes from './permission.routes'
+// import RoleRoutes from './role.routes'
+
+__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('admin', function ($) {
+	$.model({ Role: __WEBPACK_IMPORTED_MODULE_1__role_model__["a" /* default */] });
+	$.model({ Permission: __WEBPACK_IMPORTED_MODULE_2__permission_model__["a" /* default */] });
+	$.model({ RolePermission: __WEBPACK_IMPORTED_MODULE_3__roles_permissions_model__["a" /* default */] });
+	$.relation('Role', __webpack_require__(29));
+	$.relation('Permission', __webpack_require__(25));
+	$.controller({ RoleCtrl: __WEBPACK_IMPORTED_MODULE_4__role_controller__["a" /* default */] });
+	$.controller({ PermissionCtrl: __WEBPACK_IMPORTED_MODULE_5__permission_controller__["a" /* default */] });
+	// $.route({RoleRoutes})
+	// $.route({PermissionRoutes})
+	$.resolver({ 'roles-and-permissions': function ({
+			server,
+			controllers: { PermissionCtrl, RoleCtrl }
+		}) {
+			server.get('/permissions', PermissionCtrl.index).get('/permission/new', PermissionCtrl.new).get('/permission/install', PermissionCtrl.install).get('/roles', RoleCtrl.index).get('/role/new', RoleCtrl.new).get('/role/install', RoleCtrl.install);
+		}
+	});
+	// console.log('ROUTES', $.routes.PermissionRoutes)
+});
+
+/***/ }),
+/* 23 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = PermissionCtrl;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__permission_seed__ = __webpack_require__(26);
+
+function PermissionCtrl({
+  models: { Permission }
+}) {
+  // relations.Permission
+  return {
+    index: function ($) {
+      Permission.findAll().then(permissions => {
+        $.data.message = 'Hello World!!!!';
+        $.data.permissions = permissions;
+        $.json();
+      });
+    },
+    new: function ($) {
+      $.data.msg = $.query;
+      var permission = Permission.build($.query);
+      permission.save();
+      $.json();
+    },
+    install: function ($) {
+      Permission.sync({ force: true }).then(() => {
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__permission_seed__["a" /* default */])(Permission);
+        $.data.msg = { installed: 'permissions table' };
+        $.json();
+      });
+    }
+  };
+}
+
+/***/ }),
+/* 24 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function ({ Q, db }) {
+  return db.define('permission', {
+    id: {
+      type: Q.UUID,
+      primaryKey: true,
+      defaultValue: Q.UUIDV1
+    },
+    name: {
+      type: Q.STRING,
+      unique: true
+    },
+    description: {
+      type: Q.STRING
+    }
+  });
+});
+
+/***/ }),
+/* 25 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = (function ({ models: { Role, Permission, RolePermission } }) {
+	Permission.Role = Permission.belongsToMany(Role, { through: RolePermission });
+});
+
+/***/ }),
+/* 26 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function (Permission) {
+	Permission.create({
+		name: 'manageUsers',
+		description: 'Manage Users'
+	});
+	Permission.create({
+		name: 'manageCourses',
+		description: 'Manage Courses'
+	});
+	Permission.create({
+		name: 'listenCourses',
+		description: 'Listen Courses'
+	});
+});
+
+/***/ }),
+/* 27 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = RoleCtrl;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__role_seed__ = __webpack_require__(30);
+
+function RoleCtrl({
+  models: { Role },
+  relations: { RoleRel }
+}) {
+  return {
+    index: function ($) {
+      Role.findAll().then(roles => {
+        $.data.message = 'Hello World!!!!';
+        $.data.roles = roles;
+        $.json();
+      });
+    },
+    new: function ($) {
+      $.data.msg = $.query;
+      let role = Role.build($.query);
+      role.save();
+      $.json();
+    },
+    install: function ($) {
+      Role.sync({ force: true }).then(() => {
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__role_seed__["a" /* default */])(Role);
+        $.data.msg = { installed: 'roles table' };
+        $.json();
+      });
+    }
+  };
+}
+
+/***/ }),
+/* 28 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function ({ Q, db }) {
+  return db.define('role', {
+    id: {
+      type: Q.UUID,
+      primaryKey: true,
+      defaultValue: Q.UUIDV1
+    },
+    name: {
+      type: Q.STRING,
+      unique: true
+    },
+    description: {
+      type: Q.STRING
+    }
+  });
+});
+
+/***/ }),
+/* 29 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = (function ({ models: { Role, User, Permission, RolePermission } }) {
+	Role.Permission = Role.belongsToMany(Permission, { through: RolePermission });
+	Role.User = Role.hasMany(User);
+});
+
+/***/ }),
+/* 30 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function (Role) {
+	// Role.create({
+	// 	name : 'admin',
+	// 	description : 'Administrator'
+	// })
+	// Role.create({
+	// 	name : 'lecturer',
+	// 	description : 'Lecturer'
+	// })
+	// Role.create({
+	// 	name : 'student',
+	// 	description : 'Student'
+	// })
+});
+
+/***/ }),
+/* 31 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function ({ Q, db }) {
+  return db.define('role-permission', {
+    id: {
+      type: Q.UUID,
+      primaryKey: true,
+      defaultValue: Q.UUIDV1
+      // },
+      // roleId : {
+      //   type: Q.UUID,
+      //   allowNull: false
+      // },
+      // permissionId : {
+      //   type: Q.UUID,
+      //   allowNull: false
+    }
+  });
+});
+
+/***/ }),
+/* 32 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__user_model__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__user_relations__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__user_controller__ = __webpack_require__(33);
+
+
+
+
+
+// import UserRoutes from './user.routes'
+
+__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('users', function ($) {
+	$.model({ User: __WEBPACK_IMPORTED_MODULE_1__user_model__["a" /* default */] });
+	$.relation({ User: __WEBPACK_IMPORTED_MODULE_2__user_relations__["a" /* default */] });
+	$.controller({ UserCtrl: __WEBPACK_IMPORTED_MODULE_3__user_controller__["a" /* default */] });
+	// $.route({UserRoutes})
+
+	$.resolver({ 'users': function ({
+			server,
+			controllers: { UserCtrl }
+		}) {
+			server.get('/users', UserCtrl.index).get('/user/new', UserCtrl.new).get('/user/install', UserCtrl.install);
+		}
+	});
+});
+
+/***/ }),
+/* 33 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = UserCtrl;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__user_seed__ = __webpack_require__(36);
+
+function UserCtrl($$) {
+  this.relations.User;
+  let User = this.models.User;
+
+  return {
+    index: function ($) {
+      User.findAll().then(users => {
+        $.data.message = 'Hello World!!!!';
+        $.data.users = users;
+        $.data.body = $.body;
+        $.json();
+      });
+    },
+    new: function ($) {
+      var user = User.build($.query);
+      $.data.msg = $.query;
+      user.save();
+      $.json();
+    },
+    install: function ($) {
+      User.sync({ force: true }).then(() => {
+        $.data.msg = { installed: 'users table' };
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__user_seed__["a" /* default */])($$);
+        $.json();
+      });
+    }
+  };
+}
+
+/***/ }),
+/* 34 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function ({ Q, db }) {
+  return db.define('user', {
+    id: {
+      type: Q.UUID,
+      primaryKey: true,
+      defaultValue: Q.UUIDV1
+    },
+    username: {
+      type: Q.STRING,
+      unique: true
+    },
+    email: {
+      type: Q.STRING,
+      unique: true
+    },
+    password: {
+      type: Q.STRING.BINARY
+    },
+    firstName: {
+      type: Q.STRING
+    },
+    lastName: {
+      type: Q.STRING
+    },
+    image: {
+      type: Q.STRING
+    },
+    description: {
+      type: Q.TEXT
+    },
+    state: {
+      type: Q.INTEGER,
+      defaultValue: 0
+      // }, {
+      //   defaultScope: {
+      //     where: {
+      //       state: 1
+      //     }
+      //   }
+    } });
+});
+
+/***/ }),
+/* 35 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function ({
+  models: { User, Course, Role }
+}) {
+  User.Courses = User.hasMany(Course, {
+    as: 'author'
+  });
+  User.Role = User.belongsTo(Role, {
+    as: "role"
+  });
+});
+
+/***/ }),
+/* 36 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function ($) {
+  let { User, Role, Course } = $.models;
+
+  $.chain(() => Role.build({
+    name: 'admin',
+    description: 'Administrator'
+  }).save(), administrator => {
+    var admin = new User();
+    admin.setRole(administrator, { save: false });
+    admin.username = 'admin';
+    admin.email = 'admin@course.plus';
+    admin.firstName = 'Dane';
+    admin.lastName = 'Brdarski';
+    admin.password = 'qwertybanana';
+    admin.image = 'dane.jpg';
+    admin.description = 'All-seeing, All-knowing. The Admin.';
+    admin.save();
+  })();
+  $.chain(() => Role.build({
+    name: 'student',
+    description: 'Student'
+  }).save(), student => {
+    let pepe = new User();
+    pepe.setRole(student, { save: false });
+    pepe.username = 'student';
+    pepe.email = 'student@course.plus';
+    pepe.firstName = 'Pepe';
+    pepe.lastName = 'Biserov';
+    pepe.password = 'qwertybanana';
+    pepe.save();
+  })();
+  $.chain(() => Role.build({
+    name: 'lecturer',
+    description: 'Lecturer'
+  }).save(), lecturer => {
+    let dane = new User();
+    dane.setRole(lecturer, { save: false });
+    dane.username = 'dane';
+    dane.email = 'dane@course.plus';
+    dane.firstName = 'Dane';
+    dane.lastName = 'Brdarski';
+    dane.password = 'qwertybanana';
+    dane.image = 'dane.jpg';
+    dane.description = 'Dane is a front end developer at Schilling and the author of this awesome app. His expertese ranges from design, HTML, CSS, JavaScript, Angular and more recently some PHP.';
+    dane.save();
+
+    let alex = new User();
+    alex.setRole(lecturer, { save: false });
+    alex.username = 'alex';
+    alex.email = 'alex@course.plus';
+    alex.firstName = 'Alex';
+    alex.lastName = 'Pffeipher';
+    alex.password = 'qwertybanana';
+    alex.image = 'alex.jpg';
+    alex.description = 'Alex is the Founder & CEO of Wayward Wild, a media incubator and content studio helping young websites, podcasts, web series, and publications stay true to their DNA.';
+    alex.save().then(alex => {
+      let laravel = new Course();
+      laravel.setAuthor(alex, { save: false });
+      laravel.title = 'Laravel 101', laravel.slug = 'laravel-101', laravel.description = 'Dive into the Laravel essentials with this laravel by one of the core contributors.', laravel.level = 'Beginner', laravel.color = 'red', laravel.image = 'laravel.png', laravel.video = 'lnf1GdNxDbc';
+      laravel.save();
+      let lara401 = new Course();
+      lara401.setAuthor(alex, { save: false });
+      lara401.title = 'Laravel 401';
+      lara401.slug = 'laravel-401';
+      lara401.description = 'Dive into the Laravel essentials with this course by one of the core contributors.';
+      lara401.level = 'Intermediate';
+      lara401.color = 'orange';
+      lara401.image = 'grunt.png';
+      lara401.save();
+    });
+
+    let kirby = new User();
+    kirby.setRole(lecturer, { save: false });
+    kirby.username = 'kirby';
+    kirby.email = 'kirby@course.plus';
+    kirby.firstName = 'Kirby';
+    kirby.lastName = 'Jones';
+    kirby.password = 'qwertybanana';
+    kirby.image = 'kirby.jpg';
+    kirby.description = 'Kirby Jones is a San Francisco based fine artist whose projects have received international attention. The 1000 Journals Project, launched in 2000, has been exhibited at the San Francisco Museum of Modern Art and the Skirball Cultural Center in Los Angeles.';
+    kirby.save().then(kirby => {
+      let sass = new Course();
+      sass.setAuthor(kirby, { save: false });
+      sass.title = 'SaSS is awesome!';
+      sass.slug = 'sass-is-awesome';
+      sass.description = 'Build responsive websites with one of the most advanced front end mobile frameworks.';
+      sass.level = 'Intermediate';
+      sass.color = 'violet';
+      sass.image = 'sass.png';
+      sass.save();
+      let zurb = new Course();
+      zurb.setAuthor(kirby, { save: false });
+      zurb.title = 'ZURB Foudation Fundamentals';
+      zurb.slug = 'zurb-foudation-fundamentals';
+      zurb.description = 'Build responsive websites with one of the most advanced front end mobile frameworks.';
+      zurb.level = 'Beginner';
+      zurb.color = 'cyan';
+      zurb.image = 'zurb.png';
+      zurb.save();
+    });
+
+    let larry = new User();
+    larry.setRole(lecturer, { save: false });
+    larry.username = 'larry';
+    larry.email = 'larry@course.plus';
+    larry.firstName = 'Kirby';
+    larry.lastName = 'Jones';
+    larry.password = 'qwertybanana';
+    larry.image = 'larry.jpg';
+    larry.description = 'Larry Smith is a veteran software developer and designer. Once upon a time, he was the co-founder and CEO of Virb (2007-2013), a DIY website builder for creatives which was acquired by GoDaddy in late 2013. He’s on twitter at @LarryTheSmith.';
+    larry.save().then(() => {
+      let ng = new Course();
+      ng.setAuthor(jack, { save: false });
+      ng.title = 'Angular Pet Shop';
+      ng.slug = 'angular-pet-shop';
+      ng.description = 'Build your first Angular app. Dive into the most popular application framework developed by Google.';
+      ng.level = 'Advanced';
+      ng.color = 'orange';
+      ng.image = 'angular.png';
+      ng.save();
+      let ng2 = new Course();
+      ng2.setAuthor(jack, { save: false });
+      ng2.title = 'Advanced Angular Directives';
+      ng2.slug = 'advanced-angular-directives';
+      ng2.description = 'This course will teach you everything you need to know about directives in Angular.';
+      ng2.level = 'Advanced';
+      ng2.color = 'yellow';
+      ng2.image = 'angular.png';
+      ng2.save();
+    });
+
+    let jack = new User();
+    jack.setRole(lecturer, { save: false });
+    jack.username = 'jack';
+    jack.email = 'jack@course.plus';
+    jack.firstName = 'Kirby';
+    jack.lastName = 'Jones';
+    jack.password = 'qwertybanana';
+    jack.image = 'jack.jpg';
+    jack.description = 'Larry Smith is a veteran software developer and designer. Once upon a time, he was the co-founder and CEO of Virb (2007-2013), a DIY website builder for creatives which was acquired by GoDaddy in late 2013. He’s on twitter at @LarryTheSmith.';
+    jack.save().then(jack => {
+      let laravel = new Course();
+      laravel.setAuthor(jack, { save: false });
+      laravel.title = 'Laravel Database Essentials';
+      laravel.slug = 'laravel-database-essentials';
+      laravel.description = 'Learn how take advantage of Laravel\'s built in model classes, schema builder and migration manager.';
+      laravel.level = 'Intermediate';
+      laravel.color = 'yellow';
+      laravel.image = 'database.png';
+      laravel.save();
+      let temps = new Course();
+      temps.setAuthor(jack, { save: false });
+      temps.title = 'Laravel Templates';
+      temps.slug = 'laravel-templates';
+      temps.description = 'Laravel templating done right. Authored by the godfather of Laravel\'s own Blade templating engine.';
+      temps.level = 'Intermediate';
+      temps.color = 'violet';
+      temps.image = 'laravel.png';
+      temps.save();
+    });
+  })();
+});
+
+/***/ }),
+/* 37 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_module__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules__ = __webpack_require__(3);
+function _initDefineProp(target, property, descriptor, context) {
+  if (!descriptor) return;
+  Object.defineProperty(target, property, {
+    enumerable: descriptor.enumerable,
+    configurable: descriptor.configurable,
+    writable: descriptor.writable,
+    value: descriptor.initializer ? descriptor.initializer.call(context) : void 0
+  });
+}
+
+function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
+  var desc = {};
+  Object['ke' + 'ys'](descriptor).forEach(function (key) {
+    desc[key] = descriptor[key];
+  });
+  desc.enumerable = !!desc.enumerable;
+  desc.configurable = !!desc.configurable;
+
+  if ('value' in desc || desc.initializer) {
+    desc.writable = true;
+  }
+
+  desc = decorators.slice().reverse().reduce(function (desc, decorator) {
+    return decorator(target, property, desc) || desc;
+  }, desc);
+
+  if (context && desc.initializer !== void 0) {
+    desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
+    desc.initializer = undefined;
+  }
+
+  if (desc.initializer === void 0) {
+    Object['define' + 'Property'](target, property, desc);
+    desc = null;
+  }
+
+  return desc;
+}
+
+function _initializerWarningHelper(descriptor, context) {
+  throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
+}
+
+// Create an app
+const app = __webpack_require__(0);
+const SQL = __webpack_require__(13);
+const diet = __webpack_require__(6);
+__webpack_require__(5)(global);
+const m = __webpack_require__(10);
+const render = __webpack_require__(11);
+const crossOrigin = __webpack_require__(7);
+const dietStatic = __webpack_require__(8);
+const r = __webpack_require__(12);
+
+var fs = __webpack_require__(9);
+// app.module('a', function(){})
+// app.module({'b' : function(){}})
+
+const baseTemplate = fs.readFileSync('./bin/index.html', 'utf8');
+
+
+
+
+const server = diet();
+server.header(crossOrigin({
+  defaults: {
+    origin: '*',
+    credentials: true
+  }
+}));
+
+const staticFiles = dietStatic({ path: server.path + '/../bin' });
+// console.log('SERVER PATH', server.path)
+server.listen('http://localhost:8000');
+server.footer(staticFiles);
+
+const db = new SQL('postgres', 'postgres', 'qwerty', {
+  host: 'localhost',
+  dialect: 'postgres',
+
+  pool: {
+    max: 5,
+    min: 0,
+    idle: 10000
+  }
+});
+
+db.authenticate();
+
+app.config('server', server).config('Q', SQL).config('db', db).config('_', r);
+
+// app.module('setup', function($){
+
+app.config('m', m);
+app.config('baseTemplate', baseTemplate);
+
+app.config('slugify', function (st) {
+  st = st.toLowerCase();
+  st = st.replace(/[\u00C0-\u00C5]/ig, 'a');
+  st = st.replace(/[\u00C8-\u00CB]/ig, 'e');
+  st = st.replace(/[\u00CC-\u00CF]/ig, 'i');
+  st = st.replace(/[\u00D2-\u00D6]/ig, 'o');
+  st = st.replace(/[\u00D9-\u00DC]/ig, 'u');
+  st = st.replace(/[\u00D1]/ig, 'n');
+  st = st.replace(/[\-]/g, ' ');
+  // st = st.replace(/[^a-z0-9 ]+/gi,'')
+  st = st.trim().replace(/ /g, '-');
+  st = st.replace(/[\-]{2,}/g, '-');
+  st = st.replace(/^[^a-z]+/g, '');
+  return st.replace(/[^a-z0-9\- ]*/gi, '');
+});
+
+let components = app.store();
+app.config('component', components.getOrSet);
+app.config('components', components.getAll);
+
+let models = app.store();
+app.config('model', models.getOrSet);
+app.config('models', models.getAll);
+let relations = app.store();
+app.config('relation', relations.getOrSet);
+app.config('relations', relations.getAll);
+let controllers = app.store();
+app.config('controller', controllers.getOrSet);
+app.config('controllers', controllers.getAll);
+let resolver = app.store();
+
+app.config('resolver', resolver.getOrSet);
+app.config('resolve', resolver.getAll);
+
+app.config('group', function (route, fn) {
+  var instance = this;
+  var newInstance = Object.create(this);
+  Object.defineProperty(newInstance, 'route', {
+    get: () => (instance.route || "") + route
+  });
+  fn.call(newInstance, newInstance);
+});
+
+let routes = app.store();
+// app.config('route', function(route, view){
+//   routes.getOrSet(this.route || "" + route, view)
+// })
+app.config('route', routes.getOrSet);
+app.config('routes', routes.getAll);
+
+app.config('view', (component, controller) => $ => {
+  return controller($).then(data => render(m(component, { data })).then(t => {
+    $.header('content-type', 'text/html');
+    $.send(baseTemplate.replace('<!--body-->', t));
+    $.end();
+  }));
+});
+
+app.config('json', controller => $ => {
+  controller($).then(data => {
+    $.data.data = data;
+    $.json();
+  });
+});
+
+app.config('attach', (routeName, controller) => {
+  server.get(routeName, app.view(app.routes[routeName], controller));
+  server.post(routeName, app.json(controller));
+});
+
+app.config('chain', function () {
+  return init => Array.prototype.reduce.call(arguments, (acc, x) => acc && acc.then ? acc.then(x) : x(acc), init);
+});
+
+app.modules();
+app.run(function ({ server, resolve }) {
+  var _dec, _dec2, _dec3, _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6;
+
+  resolve();
+  function model(target, prop, descriptor) {
+    console.log('@model');
+    console.log(target);
+    console.log(prop);
+    console.log(descriptor);
+  }
+  // function Enum(target, prop, descriptor){
+  //   target.prototype[prop] = 'enum'
+  //   return function()
+  // }
+  function decorator(fn) {
+    return function (...params) {
+      let descriptor = params[params.length - 1];
+      if (typeof descriptor === 'object' && descriptor.hasOwnProperty('enumerable') && descriptor.hasOwnProperty('initializer') && descriptor.hasOwnProperty('configurable')) {
+        return fn([], ...params);
+      } else {
+        return fn.bind(null, params);
+      }
+    };
+  }
+  let Number = decorator(([options], target, prop, descriptor) => {
+    if (!options) {
+      descriptor.initializer = () => 'Number';
+    } else {
+      options.type = 'Number';
+      descriptor.initializer = () => options;
+    }
+    return descriptor;
+  });
+  let jimmy = decorator(([one, two, three], target, property, descriptor) => {
+    if (one != null) {
+      descriptor.initializer = () => one + two + three;
+    } else {
+      descriptor.initializer = () => 'nothing';
+    }
+  });
+  let belongsTo = decorator(([options], target, prop, descriptor) => {
+    descriptor.initializer = () => i;
+    let i = {};
+    let t = i.model = target.name; // let t = $.model[target.name]
+    if (!options) {
+      let r = i.target = prop; // $.model[prop]
+      // t[prop] = t.belongsTo(r)
+      i.option = 'belongsTo';
+    } else {
+      let alias = options.useModel;
+      if (alias) {
+        options.as = prop;
+        delete options.useModel;
+      }
+      let r = i.target = alias || prop;
+      // r = i.target = $.model[alias || prop]
+      options.relation = 'belongsTo';
+      i.options = options;
+    }
+  });
+
+  let Course = (_dec = Number({
+    mothaFucka: true
+  }), _dec2 = belongsTo({ useModel: 'user' }), _dec3 = jimmy(1, 2, 3), (_class = class Course {
+    constructor() {
+      _initDefineProp(this, 'prop', _descriptor, this);
+
+      _initDefineProp(this, 'prop2', _descriptor2, this);
+
+      _initDefineProp(this, 'Degen', _descriptor3, this);
+
+      _initDefineProp(this, 'Author', _descriptor4, this);
+
+      _initDefineProp(this, 'a', _descriptor5, this);
+
+      _initDefineProp(this, 'aa', _descriptor6, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'prop', [Number], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, 'prop2', [_dec], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'Degen', [belongsTo], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, 'Author', [_dec2], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, 'a', [jimmy], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'aa', [_dec3], {
+    enumerable: true,
+    initializer: null
+  })), _class));
+  server.get('/', $ => {
+    $.data.message = 'Hello World!!!!';
+    $.data.context = this.constructor.name;
+    $.data.r = Object.getOwnPropertyNames(routes);
+    $.data.app = app.constructor.name;
+    render(m('div.asd.asd')).then(t => {
+      $.data.template = t;
+      $.data.class = new Course();
+      $.json();
+    });
+  });
+});
+
+// .run(['models'], ($, models)=>{
+//   $.run()
+// })
+
+// .then(() => {
+//   console.log('Connection has been established successfully.')
+// })
+// .catch(err => {
+//   console.error('Unable to connect to the database:', err)
+// })
+
+
+// force: true will drop the table if it already exists
+
+/***/ }),
+/* 38 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function ({ m }) {
+  return {
+    view: function (vnode) {
+      return m('.container', [m('h1.punchline', vnode.attrs.title), m('.row', vnode.children)]);
+    }
+  };
+});
+
+/***/ }),
+/* 39 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function ({
+  _, m, slugify,
+  components: { Topbar, Content, CourseItem }
+}) {
+  var stateModel = _.once(data => {
+    console.log(data);
+    let state = {
+      title: data.title,
+      customSlug: data.slug,
+      description: data.description,
+      setDescription: function (v) {
+        state.description = v;
+      },
+      setTitle: function (v) {
+        state.title = v;
+      },
+      setSlug: function (v) {
+        state.customSlug = slugify(v);
+      }
+    };
+    Object.defineProperty(state, 'slug', {
+      get: () => state.customSlug || slugify(state.title)
+    });
+    return state;
+  });
+  return {
+    view: function (vnode) {
+      let item = stateModel(vnode.attrs.data);
+      return m('div', [m(Topbar), m(Content, {
+        title: "Edit course"
+      }, [m('#main-panel.col-md-9', [m('input[type="text"].form-control.form-control-lg[id="title"][name="title"][aria-describedby="couseTitle"][placeholder="Title"]', {
+        oninput: m.withAttr("value", item.setTitle),
+        value: item.title
+      }), m('small#couseTitle.form-text.text-muted', "We'll never share your email with anyone else."), m('input[type="text"].form-control.form-control-sm', {
+        value: item.slug,
+        onchange: m.withAttr("value", item.setSlug)
+      }), m('.form-section-meta', [m('.form-group', [m('label[for="description"]', 'Description'), m('textarea#description.form-control[name="description"]', {
+        value: item.description,
+        oninput: m.withAttr("value", item.setDescription)
+      })]), m('.row', [m('.col-md-4', m('select.form-control', ['Beginner', 'Intermediate', 'Advanced'].map(items => m('option', items)))), m('.col-md-4', m('select.form-control', ['Red', 'Orange', 'Blue'].map(items => m('option', items)))), m('.col-md-4', m('input[type="text"].form-control'))])]), m('a.btn.btn-primary.btn-lg[href="/courses"]', {
+        oncreate: m.route.link
+      }, 'Click here!!!!')]), m('#side-panel.col-md-3', m(CourseItem, vnode.attrs.data))])]);
+    }
+  };
+});
+
+/***/ }),
+/* 40 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__course_item_less__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__course_item_less___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__course_item_less__);
+
+/* harmony default export */ __webpack_exports__["a"] = (function ({ m }) {
+  return {
+    view: function ({ attrs, children }) {
+      return m('.course', [m('a.thumb', {
+        bg: attrs.color,
+        href: '/course/' + attrs.slug,
+        oncreate: m.route.link
+      }, [m(".thumb-img", {
+        bg: attrs.color,
+        style: {
+          backgroundImage: `url(/uploads/courses/${attrs.image})`
+        }
+      }), m("h2.name", m("span", attrs.title))]), m('.inner', m('ul', [m("li.description", attrs.description), m("li.author", ['by ', m('a', { href: attrs.author.id }, `${attrs.author.firstName} ${attrs.author.lastName}`)]), m("li.level", `Level: ${attrs.level}`)]))]);
+    }
+  };
+});
+
+/***/ }),
+/* 41 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function ({
+  m, components: { Topbar, Content, CourseItem }
+}) {
+  return {
+    view: function (vnode) {
+      console.log(vnode.attrs);
+      return m('div', [m(Topbar), m(Content, {
+        title: "Browse our courses..."
+      }, vnode.attrs.data.map(course => m('.col-sm-6.col-md-4.col-lg-3', m(CourseItem, course))))]);
+    }
+  };
+});
+
+/***/ }),
+/* 42 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__topbar_less__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__topbar_less___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__topbar_less__);
+
+/* harmony default export */ __webpack_exports__["a"] = (function ({ m }) {
+  return {
+    view: function () {
+      return m("header#header", m("div.container", m("div.row", [m("div.col-sm-3.logo", m("a#logo", { href: "/" })), m("div.col-sm-9.navigation", m("nav", { role: "navigation" }, m("ul.menu", m("li.nav-item", m('a', { href: "/signin" }, 'Login')), m("li.nav-item", m('a', { href: "/signup" }, 'Sign up')))))])));
+    }
+  };
+});
+
+/***/ }),
+/* 43 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 16 */
+/* 44 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -309,7 +1511,7 @@ module.exports = function(string) {
 
 
 /***/ }),
-/* 17 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -847,7 +2049,7 @@ module.exports = function(options) {
 
 
 /***/ }),
-/* 18 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1045,7 +2247,7 @@ module.exports = function(options) {
 
 
 /***/ }),
-/* 19 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1053,7 +2255,7 @@ module.exports = function(options) {
 
 var callAsync = __webpack_require__(1)
 var parseURL = __webpack_require__(2)
-var parseQueryString = __webpack_require__(16)
+var parseQueryString = __webpack_require__(45)
 
 module.exports = function() {
 	var routes = {}
@@ -1139,1250 +2341,6 @@ module.exports = function() {
 	}
 	return $window
 }
-
-
-/***/ }),
-/* 20 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = CourseCtrl;
-function CourseCtrl({
-  models: { Course }
-}){
-  // let { Course } = $.models
-  this.relations.Course
-  return {
-    index : function(){
-      return Course.findAll({
-        include : Course.Author
-      })
-    },
-    edit : function($){
-      return Course.findOne({
-        where : {
-          slug : $.params.slug
-        },
-        include : [Course.Author]
-      })
-    },
-    new : function($){
-      var course = Course.build($.query)
-      $.data.msg = $.query
-      course.save()
-      $.json()
-    },
-    install : function($){
-      Course.sync({force: true})
-      $.data.msg = {installed: 'courses table'}
-      $.json()
-    }
-  }
-}
-
-
-/***/ }),
-/* 21 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function({Q, db}){
-  return db.define('course', {
-    id : {
-      type: Q.UUID,
-      primaryKey: true,
-      defaultValue : Q.UUIDV1
-    },
-    title : {
-      type: Q.STRING
-    },
-    slug : {
-      type: Q.STRING
-    },
-    description : {
-      type: Q.TEXT
-    },
-    video : {
-      type: Q.STRING
-    },
-    image : {
-      type: Q.STRING
-    },
-    color : {
-      type: Q.ENUM,
-      values: [ 'default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue' ],
-      defaultValue: 'default'
-    },
-    level : {
-      type: Q.ENUM,
-      values : [ 'Beginner', 'Intermediate', 'Advanced' ],
-      defaultValue: 'Beginner'
-    },
-    active : {
-      type : Q.BOOLEAN,
-      defaultValue : false
-    }
-  })
-});
-
-
-/***/ }),
-/* 22 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function({models: { User, Course, Lession }}){
-  Course.Author = Course.belongsTo(User, {as: 'author'})		// owner (lecturer)
-	// Course.Student = Course.belongsToMany(User, { through: User })	// students
-  Course.Lession = Course.hasMany(Lession)
-});
-
-
-/***/ }),
-/* 23 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__course_model__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__course_relations__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__course_controller__ = __webpack_require__(20);
-
-
-
-
-
-// import CourseRoutes from './course.routes'
-
-
-__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('courses', function($){
-	$.model({Course: __WEBPACK_IMPORTED_MODULE_1__course_model__["a" /* default */]})
-	$.relation({Course:__WEBPACK_IMPORTED_MODULE_2__course_relations__["a" /* default */]})
-	$.controller({CourseCtrl: __WEBPACK_IMPORTED_MODULE_3__course_controller__["a" /* default */]})
-	// $.route({CourseRoutes}) 			// => this should be removed
-																// instead, user code snipped below
-	$.resolver('courses', function({
-		attach,
-		server,
-		controllers :  { CourseCtrl }
-	}){
-		attach('/courses', CourseCtrl.index)
-		attach('/course/:slug', CourseCtrl.edit)
-		server
-			.get('/course/new', CourseCtrl.new)
-			.get('/course/install', CourseCtrl.install)
-	})
-})
-
-
-/***/ }),
-/* 24 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = LessionCtrl;
-function LessionCtrl({ models: { Lession }}){
-  this.relations.Lession
-  return {
-    index : function($){
-      Lession
-        .findAll()
-        .then(lession => {
-          $.data.message = 'Hello World!!!!'
-          $.data.lession = lession
-          $.data.body = $.body
-          $.json()
-      })
-    },
-    new : function($){
-      var lession = Lession.build($.query)
-      $.data.msg = $.query
-      lession.save()
-      $.json()
-    },
-    install : function($){
-      Lession.sync({force: true})
-      $.data.msg = {installed: 'lession table'}
-      $.json()
-    }
-  }
-}
-
-
-/***/ }),
-/* 25 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function({Q, db}){
-  return db.define('lession', {
-    id : {
-      type: Q.UUID,
-      primaryKey: true,
-      defaultValue : Q.UUIDV1
-    },
-    title : {
-      type: Q.STRING
-    },
-    slug : {
-      type: Q.STRING
-    },
-    description : {
-      type: Q.TEXT
-    },
-    video : {
-      type: Q.STRING
-    },
-    image : {
-      type: Q.STRING
-    },
-    grade : Q.INTEGER,
-    complete : {
-      type : Q.BOOLEAN
-    }
-  })
-});
-
-
-/***/ }),
-/* 26 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function({models: { Lession, User, Course, LessionUser }}){
-	Lession.belongsTo(Course)
-  // Lession.belongsToMany(User)
-});
-
-
-/***/ }),
-/* 27 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lession_model__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lession_relations__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lession_controller__ = __webpack_require__(24);
-
-
-
-
-
-// import LessionRoutes from './lession.routes'
-
-__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('lessions', function($){
-	$.model({Lession: __WEBPACK_IMPORTED_MODULE_1__lession_model__["a" /* default */]})
-	$.relation({Lession:__WEBPACK_IMPORTED_MODULE_2__lession_relations__["a" /* default */]})
-	$.controller({LessionCtrl: __WEBPACK_IMPORTED_MODULE_3__lession_controller__["a" /* default */]})
-	// $.route({LessionRoutes})
-	$.resolver({lessions: function({
-		server,
-		controllers : { LessionCtrl }
-	}){
-		  server
-		    .get('/lessions', LessionCtrl.index)
-		    .get('/lession/new', LessionCtrl.new)
-		    .get('/lession/install', LessionCtrl.install)
-		}
-	})
-})
-
-
-/***/ }),
-/* 28 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__role_model__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__permission_model__ = __webpack_require__(30);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__roles_permissions_model__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__role_controller__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__permission_controller__ = __webpack_require__(29);
-
-
-
-
-
-
-
-// import PermissionRoutes from './permission.routes'
-// import RoleRoutes from './role.routes'
-
-__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('admin', function($){
-	$.model({Role: __WEBPACK_IMPORTED_MODULE_1__role_model__["a" /* default */]})
-	$.model({Permission: __WEBPACK_IMPORTED_MODULE_2__permission_model__["a" /* default */]})
-	$.model({RolePermission: __WEBPACK_IMPORTED_MODULE_3__roles_permissions_model__["a" /* default */]})
-	$.relation('Role', __webpack_require__(35))
-	$.relation('Permission', __webpack_require__(31))
-	$.controller({RoleCtrl: __WEBPACK_IMPORTED_MODULE_4__role_controller__["a" /* default */]})
-	$.controller({PermissionCtrl: __WEBPACK_IMPORTED_MODULE_5__permission_controller__["a" /* default */]})
-	// $.route({RoleRoutes})
-	// $.route({PermissionRoutes})
-	$.resolver({'roles-and-permissions': function({
-		server,
-		controllers: { PermissionCtrl, RoleCtrl }
-	}){
-	  server
-	    .get('/permissions', PermissionCtrl.index)
-	    .get('/permission/new', PermissionCtrl.new)
-	    .get('/permission/install', PermissionCtrl.install)
-
-	    .get('/roles', RoleCtrl.index)
-	    .get('/role/new', RoleCtrl.new)
-	    .get('/role/install', RoleCtrl.install)
-		}
-	})
-	// console.log('ROUTES', $.routes.PermissionRoutes)
-})
-
-
-/***/ }),
-/* 29 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = PermissionCtrl;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__permission_seed__ = __webpack_require__(32);
-
-function PermissionCtrl({
-    models: { Permission }  
-  }){
-  // relations.Permission
-  return {
-    index : function($){
-      Permission
-        .findAll()
-        .then(permissions => {
-          $.data.message = 'Hello World!!!!'
-          $.data.permissions = permissions
-          $.json()
-      })
-    },
-    new : function($){
-      $.data.msg = $.query
-      var permission = Permission.build($.query)
-      permission.save()
-      $.json()
-    },
-    install : function($){
-      Permission.sync({force: true}).then(()=>{
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__permission_seed__["a" /* default */])(Permission)
-        $.data.msg = {installed: 'permissions table'}
-        $.json()
-      })
-    }
-  }
-}
-
-
-/***/ }),
-/* 30 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function({Q, db}){
-	return db.define('permission', {
-    id : {
-      type: Q.UUID,
-      primaryKey: true,
-      defaultValue: Q.UUIDV1
-    },
-    name : {
-      type: Q.STRING,
-      unique: true
-    },
-    description : {
-      type: Q.STRING
-    }
-  })
-});
-
-
-/***/ }),
-/* 31 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony default export */ __webpack_exports__["default"] = (function({models: { Role, Permission, RolePermission }}){
-	Permission.Role = Permission.belongsToMany(Role, { through: RolePermission })
-});
-
-
-/***/ }),
-/* 32 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function( Permission ){
-	Permission.create({
-		name : 'manageUsers',
-		description : 'Manage Users'
-	})
-	Permission.create({
-		name : 'manageCourses',
-		description : 'Manage Courses'
-	})
-	Permission.create({
-		name : 'listenCourses',
-		description : 'Listen Courses'
-	})
-});
-
-
-/***/ }),
-/* 33 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = RoleCtrl;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__role_seed__ = __webpack_require__(36);
-
-function RoleCtrl({
-    models: { Role },
-    relations : { RoleRel }
-  }){
-  return {
-    index : function($){
-      Role
-        .findAll()
-        .then(roles => {
-          $.data.message = 'Hello World!!!!'
-          $.data.roles = roles
-          $.json()
-      })
-    },
-    new : function($){
-      $.data.msg = $.query
-      let role = Role.build($.query)
-      role.save()
-      $.json()
-    },
-    install : function($){
-      Role.sync({force: true}).then(()=>{
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__role_seed__["a" /* default */])(Role)
-        $.data.msg = {installed: 'roles table'}
-        $.json()
-      })
-
-    }
-  }
-}
-
-
-/***/ }),
-/* 34 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function({Q, db}){
-  return  db.define('role', {
-    id : {
-      type: Q.UUID,
-      primaryKey: true,
-      defaultValue: Q.UUIDV1,      
-    },
-    name : {
-      type: Q.STRING,
-      unique: true
-    },
-    description : {
-      type: Q.STRING
-    }
-  })
-});
-
-
-/***/ }),
-/* 35 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony default export */ __webpack_exports__["default"] = (function({models: { Role, User, Permission, RolePermission }}){
-	Role.Permission = Role.belongsToMany(Permission, { through: RolePermission })
-	Role.User = Role.hasMany(User)
-});
-
-
-/***/ }),
-/* 36 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function( Role ){
-	// Role.create({
-	// 	name : 'admin',
-	// 	description : 'Administrator'
-	// })
-	// Role.create({
-	// 	name : 'lecturer',
-	// 	description : 'Lecturer'
-	// })
-	// Role.create({
-	// 	name : 'student',
-	// 	description : 'Student'
-	// })
-});
-
-
-/***/ }),
-/* 37 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function({Q, db}){
-  return db.define('role-permission', {
-    id : {
-      type: Q.UUID,
-      primaryKey: true,
-      defaultValue: Q.UUIDV1
-    // },
-    // roleId : {
-    //   type: Q.UUID,
-    //   allowNull: false
-    // },
-    // permissionId : {
-    //   type: Q.UUID,
-    //   allowNull: false
-    }
-  })
-});
-
-
-/***/ }),
-/* 38 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__user_model__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__user_relations__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__user_controller__ = __webpack_require__(39);
-
-
-
-
-
-// import UserRoutes from './user.routes'
-
-__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('users', function($){
-	$.model({User: __WEBPACK_IMPORTED_MODULE_1__user_model__["a" /* default */]})
-	$.relation({User:__WEBPACK_IMPORTED_MODULE_2__user_relations__["a" /* default */]})
-	$.controller({UserCtrl: __WEBPACK_IMPORTED_MODULE_3__user_controller__["a" /* default */]})
-	// $.route({UserRoutes})
-
-	$.resolver({'users': function({
-	    server,
-	    controllers : { UserCtrl }
-	  }){
-	  server
-	    .get('/users', UserCtrl.index)
-	    .get('/user/new', UserCtrl.new)
-	    .get('/user/install', UserCtrl.install)
-		}
-	})
-
-})
-
-
-/***/ }),
-/* 39 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = UserCtrl;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__user_seed__ = __webpack_require__(42);
-
-function UserCtrl($$){
-  this.relations.User
-  let User = this.models.User
-
-  return {
-    index : function($){
-      User
-        .findAll()
-        .then(users => {
-          $.data.message = 'Hello World!!!!'
-          $.data.users = users
-          $.data.body = $.body
-          $.json()
-        })
-
-    },
-    new : function($){
-      var user = User.build($.query)
-      $.data.msg = $.query
-      user.save()
-      $.json()
-    },
-    install : function($){
-      User.sync({force: true}).then(()=>{
-        $.data.msg = {installed: 'users table'}
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__user_seed__["a" /* default */])($$)
-        $.json()
-      })
-    }
-  }
-}
-
-
-/***/ }),
-/* 40 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function({Q, db}){
-  return db.define('user', {
-    id : {
-      type: Q.UUID,
-      primaryKey: true,
-      defaultValue: Q.UUIDV1
-    },
-    username : {
-      type: Q.STRING,
-      unique: true
-    },
-    email : {
-      type: Q.STRING,
-      unique: true
-    },
-    password : {
-      type: Q.STRING.BINARY
-    },
-    firstName : {
-      type: Q.STRING
-    },
-    lastName : {
-      type: Q.STRING
-    },
-    image : {
-      type: Q.STRING
-    },
-    description : {
-      type: Q.TEXT
-    },
-    state : {
-      type : Q.INTEGER,
-      defaultValue : 0
-    }
-  // }, {
-  //   defaultScope: {
-  //     where: {
-  //       state: 1
-  //     }
-  //   }
-  })
-});
-
-
-/***/ }),
-/* 41 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function({
-  models: { User, Course, Role }
-}){
-  User.Courses = User.hasMany(Course, {
-    as: 'author'
-  })
-  User.Role = User.belongsTo(Role, {
-    as: "role"
-  })
-});
-
-
-/***/ }),
-/* 42 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function( $ ){
-  let { User, Role, Course } = $.models;
-
-  $.chain(
-    ( ) => ( Role.build({
-  		name : 'admin',
-  		description : 'Administrator'
-  	}).save() ),
-    (administrator) => {
-      var admin = new User
-      admin.setRole(administrator, {save: false})
-      admin.username = 'admin'
-      admin.email = 'admin@course.plus'
-      admin.firstName = 'Dane'
-      admin.lastName = 'Brdarski'
-      admin.password = 'qwertybanana'
-      admin.image = 'dane.jpg'
-      admin.description = 'All-seeing, All-knowing. The Admin.'
-      admin.save()
-  	}
-  )()
-  $.chain(
-    () => ( Role.build({
-  		name : 'student',
-  		description : 'Student'
-  	}).save() ),
-    (student) => {
-      let pepe = new User
-      pepe.setRole(student, {save: false})
-      pepe.username = 'student'
-      pepe.email = 'student@course.plus'
-      pepe.firstName = 'Pepe'
-      pepe.lastName = 'Biserov'
-      pepe.password = 'qwertybanana'
-      pepe.save()
-    }
-  )()
-  $.chain(
-    () => ( Role.build({
-      name : 'lecturer',
-      description : 'Lecturer'
-    }).save() ),
-    (lecturer) => {
-      let dane = new User
-      dane.setRole(lecturer, {save: false})
-      dane.username = 'dane'
-      dane.email = 'dane@course.plus'
-      dane.firstName = 'Dane'
-      dane.lastName = 'Brdarski'
-      dane.password = 'qwertybanana'
-      dane.image = 'dane.jpg'
-      dane.description = 'Dane is a front end developer at Schilling and the author of this awesome app. His expertese ranges from design, HTML, CSS, JavaScript, Angular and more recently some PHP.'
-      dane.save()
-
-      let alex = new User
-      alex.setRole(lecturer, {save: false})
-      alex.username = 'alex'
-      alex.email = 'alex@course.plus'
-      alex.firstName = 'Alex'
-      alex.lastName = 'Pffeipher'
-      alex.password = 'qwertybanana'
-      alex.image = 'alex.jpg'
-      alex.description = 'Alex is the Founder & CEO of Wayward Wild, a media incubator and content studio helping young websites, podcasts, web series, and publications stay true to their DNA.'
-      alex.save()
-        .then((alex)=>{
-          let laravel = new Course
-          laravel.setAuthor(alex, {save: false})
-          laravel.title = 'Laravel 101',
-          laravel.slug = 'laravel-101',
-          laravel.description = 'Dive into the Laravel essentials with this laravel by one of the core contributors.',
-          laravel.level = 'Beginner',
-          laravel.color = 'red',
-          laravel.image = 'laravel.png',
-          laravel.video = 'lnf1GdNxDbc'
-          laravel.save()
-          let lara401 = new Course
-          lara401.setAuthor(alex, {save: false})
-          lara401.title = 'Laravel 401'
-          lara401.slug = 'laravel-401'
-          lara401.description = 'Dive into the Laravel essentials with this course by one of the core contributors.'
-          lara401.level = 'Intermediate'
-          lara401.color = 'orange'
-          lara401.image = 'grunt.png'
-          lara401.save()
-        })
-
-      let kirby = new User
-      kirby.setRole(lecturer, {save: false})
-      kirby.username = 'kirby'
-      kirby.email = 'kirby@course.plus'
-      kirby.firstName = 'Kirby'
-      kirby.lastName = 'Jones'
-      kirby.password = 'qwertybanana'
-      kirby.image = 'kirby.jpg'
-      kirby.description = 'Kirby Jones is a San Francisco based fine artist whose projects have received international attention. The 1000 Journals Project, launched in 2000, has been exhibited at the San Francisco Museum of Modern Art and the Skirball Cultural Center in Los Angeles.'
-      kirby.save().then((kirby)=>{
-        let sass = new Course
-        sass.setAuthor(kirby, {save: false})
-        sass.title = 'SaSS is awesome!'
-        sass.slug = 'sass-is-awesome'
-        sass.description = 'Build responsive websites with one of the most advanced front end mobile frameworks.'
-        sass.level = 'Intermediate'
-        sass.color = 'violet'
-        sass.image = 'sass.png'
-        sass.save()
-        let zurb = new Course
-        zurb.setAuthor(kirby, {save: false})
-        zurb.title = 'ZURB Foudation Fundamentals'
-        zurb.slug = 'zurb-foudation-fundamentals'
-        zurb.description = 'Build responsive websites with one of the most advanced front end mobile frameworks.'
-        zurb.level = 'Beginner'
-        zurb.color = 'cyan'
-        zurb.image = 'zurb.png'
-        zurb.save()
-      })
-
-      let larry = new User
-      larry.setRole(lecturer, {save: false})
-      larry.username = 'larry'
-      larry.email = 'larry@course.plus'
-      larry.firstName = 'Kirby'
-      larry.lastName = 'Jones'
-      larry.password = 'qwertybanana'
-      larry.image = 'larry.jpg'
-      larry.description = 'Larry Smith is a veteran software developer and designer. Once upon a time, he was the co-founder and CEO of Virb (2007-2013), a DIY website builder for creatives which was acquired by GoDaddy in late 2013. He’s on twitter at @LarryTheSmith.'
-      larry.save().then(()=>{
-        let ng = new Course
-        ng.setAuthor(jack, {save: false})
-        ng.title = 'Angular Pet Shop'
-        ng.slug = 'angular-pet-shop'
-        ng.description = 'Build your first Angular app. Dive into the most popular application framework developed by Google.'
-        ng.level = 'Advanced'
-        ng.color = 'orange'
-        ng.image = 'angular.png'
-        ng.save()
-        let ng2 = new Course
-        ng2.setAuthor(jack, {save: false})
-        ng2.title = 'Advanced Angular Directives'
-        ng2.slug = 'advanced-angular-directives'
-        ng2.description = 'This course will teach you everything you need to know about directives in Angular.'
-        ng2.level = 'Advanced'
-        ng2.color = 'yellow'
-        ng2.image = 'angular.png'
-        ng2.save()
-      })
-
-      let jack = new User
-      jack.setRole(lecturer, {save: false})
-      jack.username = 'jack'
-      jack.email = 'jack@course.plus'
-      jack.firstName = 'Kirby'
-      jack.lastName = 'Jones'
-      jack.password = 'qwertybanana'
-      jack.image = 'jack.jpg'
-      jack.description = 'Larry Smith is a veteran software developer and designer. Once upon a time, he was the co-founder and CEO of Virb (2007-2013), a DIY website builder for creatives which was acquired by GoDaddy in late 2013. He’s on twitter at @LarryTheSmith.'
-      jack.save().then((jack)=>{
-        let laravel = new Course
-        laravel.setAuthor(jack, {save: false})
-        laravel.title='Laravel Database Essentials'
-        laravel.slug='laravel-database-essentials'
-        laravel.description='Learn how take advantage of Laravel\'s built in model classes, schema builder and migration manager.'
-        laravel.level='Intermediate'
-        laravel.color='yellow'
-        laravel.image='database.png'
-        laravel.save()
-        let temps = new Course
-        temps.setAuthor(jack, {save: false})
-        temps.title = 'Laravel Templates'
-        temps.slug = 'laravel-templates'
-        temps.description = 'Laravel templating done right. Authored by the godfather of Laravel\'s own Blade templating engine.'
-        temps.level = 'Intermediate'
-        temps.color = 'violet'
-        temps.image = 'laravel.png'
-        temps.save()
-      })
-    }
-  )()
-});
-
-
-/***/ }),
-/* 43 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_module__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules__ = __webpack_require__(4);
-  // Create an app
-    const app = __webpack_require__(0)
-    const SQL = __webpack_require__(13)
-    const diet = __webpack_require__(6)
-    __webpack_require__(3)(global);
-    const m = __webpack_require__(10)
-    const render = __webpack_require__(11)
-    const crossOrigin = __webpack_require__(7)
-    const dietStatic = __webpack_require__(8)
-    const r = __webpack_require__(12)
-
-    var fs = __webpack_require__(9)
-    // app.module('a', function(){})
-    // app.module({'b' : function(){}})
-
-    const baseTemplate = fs.readFileSync('./bin/index.html', 'utf8')
-
-    
-    
-
-    const server = diet()
-    server.header(crossOrigin({
-      defaults: {
-        origin: '*',
-        credentials: true
-      }
-    }))
-
-    const staticFiles = dietStatic({ path: server.path+'/../bin' })
-    // console.log('SERVER PATH', server.path)
-    server.listen('http://localhost:8000')
-    server.footer(staticFiles)
-
-    const db = new SQL('postgres', 'postgres', 'qwerty', {
-      host: 'localhost',
-      dialect: 'postgres',
-
-      pool: {
-        max: 5,
-        min: 0,
-        idle: 10000
-      }
-    })
-
-    db.authenticate()
-
-    app
-      .config('server', server)
-      .config('Q', SQL)
-      .config('db', db)
-      .config('_', r)
-
-    // app.module('setup', function($){
-
-    app.config('m', m)
-    app.config('baseTemplate', baseTemplate)
-
-    app.config('slugify', function(st){
-        st = st.toLowerCase()
-        st = st.replace(/[\u00C0-\u00C5]/ig,'a');
-        st = st.replace(/[\u00C8-\u00CB]/ig,'e');
-        st = st.replace(/[\u00CC-\u00CF]/ig,'i');
-        st = st.replace(/[\u00D2-\u00D6]/ig,'o');
-        st = st.replace(/[\u00D9-\u00DC]/ig,'u');
-        st = st.replace(/[\u00D1]/ig,'n');
-        st = st.replace(/[\-]/g,' ');
-        // st = st.replace(/[^a-z0-9 ]+/gi,'')
-        st = st.trim().replace(/ /g,'-');
-        st = st.replace(/[\-]{2,}/g,'-');
-        st = st.replace(/^[^a-z]+/g,'');
-        return (st.replace(/[^a-z0-9\- ]*/gi,''));
-    })
-
-    let components = app.store()
-    app.config('component', components.getOrSet)
-    app.config('components', components.getAll)
-
-    let models = app.store()
-    app.config('model', models.getOrSet)
-    app.config('models', models.getAll)
-    let relations = app.store()
-    app.config('relation', relations.getOrSet)
-    app.config('relations', relations.getAll)
-    let controllers = app.store()
-    app.config('controller', controllers.getOrSet)
-    app.config('controllers', controllers.getAll)
-    let resolver = app.store()
-
-    app.config('resolver', resolver.getOrSet)
-    app.config('resolve', resolver.getAll)
-
-    app.config('group', function(route, fn){
-      var instance = this
-      var newInstance = Object.create(this);
-      Object.defineProperty(newInstance, 'route', {
-        get : ()=> (instance.route || "") + route
-      })
-      fn.call(newInstance, newInstance)
-    })
-
-    let routes = app.store()
-    // app.config('route', function(route, view){
-    //   routes.getOrSet(this.route || "" + route, view)
-    // })
-    app.config('route', routes.getOrSet)
-    app.config('routes', routes.getAll)
-
-    app.config('view', (component, controller) => ($) => {
-      return controller($).then(
-        (data) => render(
-          m(component, {data})
-        )
-        .then((t) => {
-          $.header('content-type', 'text/html')
-          $.send(baseTemplate.replace('<!--body-->', t))
-          $.end()
-        })
-      )
-    })
-
-    app.config('json', controller => ($) => {
-      controller($).then(
-      (data) => {
-        $.data.data = data
-        $.json()
-      })
-    })
-
-    app.config('attach', (routeName, controller) => {
-      server.get(routeName, app.view(app.routes[routeName], controller))
-      server.post(routeName, app.json(controller))
-    })
-
-    app.config('chain', function(){
-	    return (init) => Array.prototype.reduce.call(arguments, (acc, x) => acc && acc.then ? acc.then(x) : x(acc), init)
-    })
-
-    app.modules()
-    app.run(function({server, resolve}){
-      resolve()
-      server.get('/', ($)=>{
-        $.data.message = 'Hello World!!!!'
-        $.data.context = this.constructor.name
-        $.data.r = Object.getOwnPropertyNames(routes)
-        $.data.app = app.constructor.name
-        render(m('div.asd.asd')).then((t)=>{
-          $.data.template = t
-          $.json()
-        })
-      })
-    })
-
-      // .run(['models'], ($, models)=>{
-      //   $.run()
-      // })
-
-      // .then(() => {
-      //   console.log('Connection has been established successfully.')
-      // })
-      // .catch(err => {
-      //   console.error('Unable to connect to the database:', err)
-      // })
-
-
-// force: true will drop the table if it already exists
-
-
-/***/ }),
-/* 44 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function({m}){
-  return {
-    view: function(vnode) {
-      return m(
-        '.container', [
-          m(
-            'h1.punchline', vnode.attrs.title
-          ),
-          m('.row', vnode.children)
-        ]
-      )
-    }
-  }
-});
-
-
-/***/ }),
-/* 45 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function({
-  _, m, slugify,
-  components : { Topbar, Content, CourseItem }
-}){
-  var stateModel = _.once((data)=>{
-    console.log(data)
-    let state = {
-      title: data.title,
-      customSlug: data.slug,
-      description: data.description,
-      setDescription: function(v){
-        state.description = v
-      },
-      setTitle: function(v) {
-        state.title = v
-      },
-      setSlug: function(v) {
-        state.customSlug = slugify(v)
-      }
-    }
-    Object.defineProperty(state, 'slug', {
-      get: () => state.customSlug || slugify(state.title)
-    })
-    return state
-  })
-  console.log('Component init!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-  return {
-    view: function(vnode) {
-      let item = stateModel(vnode.attrs.data);
-      console.log('Component render!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-      return m('div', [
-        m(Topbar),
-        m(Content, {
-            title: "Edit course"
-          }, [
-          m('#main-panel.col-md-9', [
-            m('input[type="text"].form-control.form-control-lg[id="title"][name="title"][aria-describedby="couseTitle"][placeholder="Title"]', {
-              oninput: m.withAttr("value", item.setTitle),
-              value: item.title
-            }),
-            m('small#couseTitle.form-text.text-muted', "We'll never share your email with anyone else."),
-            m('input[type="text"].form-control.form-control-sm', {
-              value: item.slug,
-              onchange: m.withAttr("value", item.setSlug)
-            }),
-            m('.form-section-meta', [
-              m('.form-group', [
-                m('label[for="description"]', 'Description'),
-                m('textarea#description.form-control[name="description"]', {
-                  value: item.description,
-                  oninput: m.withAttr("value", item.setDescription)
-                }),
-              ]),
-              m('.row',[
-                m('.col-md-4',
-                  m('select.form-control', ['Beginner', 'Intermediate', 'Advanced'].map((items)=>m('option', items)))
-                ),
-                m('.col-md-4',
-                  m('select.form-control', ['Red', 'Orange', 'Blue'].map((items)=>m('option', items)))
-                ),
-                m('.col-md-4',
-                  m('input[type="text"].form-control')
-                )
-              ])
-            ]),
-            m('a.btn.btn-primary.btn-lg[href="/courses"]', {
-              oncreate: m.route.link
-            }, 'Click here!!!!')
-          ]),
-          m('#side-panel.col-md-3',
-            m( CourseItem, vnode.attrs.data )
-          )
-        ])
-      ])
-    }
-  }
-});
-
-
-/***/ }),
-/* 46 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__course_item_less__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__course_item_less___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__course_item_less__);
-
-/* harmony default export */ __webpack_exports__["a"] = (function({m}){
-  return {
-    view: function({attrs, children}) {
-      return m(
-        '.course', [m(
-          'a.thumb', {
-            bg: attrs.color,
-            href:'/course/' + attrs.slug,
-            oncreate: m.route.link
-          }, [
-            m(".thumb-img", {
-              bg : attrs.color,
-              style : {
-                backgroundImage : `url(/uploads/courses/${attrs.image})`
-              }
-            }),
-            m("h2.name",
-              m("span", attrs.title)
-            )
-          ]
-        ),
-        m(
-          '.inner', m(
-            'ul', [
-              m(
-                "li.description",
-                attrs.description
-              ),
-              m(
-                "li.author",
-                ['by ', m(
-                  'a', { href : attrs.author.id },`${attrs.author.firstName} ${attrs.author.lastName}`
-                )]
-              ),
-              m(
-                "li.level",
-                `Level: ${attrs.level}`
-              )
-          ])
-        )
-      ])
-    }
-  }
-});
-
-
-/***/ }),
-/* 47 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function({
-  m, components : { Topbar, Content, CourseItem }
-}){
-  return {
-    view: function(vnode) {
-      console.log(vnode.attrs);
-      return m('div', [
-        m(Topbar),
-        m(
-          Content, {
-            title: "Browse our courses..."
-          },
-          vnode.attrs.data.map(
-            ( course ) => m(
-              '.col-sm-6.col-md-4.col-lg-3',
-              m( CourseItem, course )
-            )
-          )
-        )
-      ])
-    }
-  }
-});
-
-
-/***/ }),
-/* 48 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__topbar_less__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__topbar_less___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__topbar_less__);
-
-/* harmony default export */ __webpack_exports__["a"] = (function({m}){
-  return {
-    view: function() {
-      return m("header#header",
-        m("div.container",
-          m("div.row", [
-            m("div.col-sm-3.logo",
-              m("a#logo", {href:"/"})
-            ),
-            m("div.col-sm-9.navigation",
-              m("nav", {role: "navigation"},
-                m("ul.menu",
-                  m("li.nav-item",
-                    m('a', {href : "/signin"}, 'Login')
-                  ),
-                  m("li.nav-item",
-                    m('a', {href : "/signup"}, 'Sign up')
-                  )
-                )
-              )
-            )
-          ])
-        )
-      )
-    }
-  }
-});
 
 
 /***/ })

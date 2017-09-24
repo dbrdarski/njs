@@ -136,8 +136,88 @@
     })
 
     app.modules()
-    app.run(function({server, resolve}){
+    app.run(function({server, resolve}) {
       resolve()
+      function model(target, prop, descriptor) {
+        console.log('@model')
+        console.log(target)
+        console.log(prop)
+        console.log(descriptor)
+      }
+      // function Enum(target, prop, descriptor){
+      //   target.prototype[prop] = 'enum'
+      //   return function()
+      // }
+      function decorator(fn){
+        return function(...params) {
+          let descriptor = params[params.length - 1]
+          if (
+              typeof descriptor === 'object'
+                && descriptor.hasOwnProperty('enumerable')
+                && descriptor.hasOwnProperty('initializer')
+                && descriptor.hasOwnProperty('configurable')
+             )
+          {
+            return fn([], ...params)
+          } else {
+            return fn.bind(null, params)
+          }
+        }
+      }
+      let Number = decorator(([options], target, prop, descriptor) => {
+        if(!options) {
+          descriptor.initializer = () => 'Number'
+        } else {
+          options.type = 'Number'
+          descriptor.initializer = () => options
+        }
+        return descriptor
+      })
+      let jimmy = decorator(([one, two, three], target, property, descriptor)=>{
+        if(one != null){
+          descriptor.initializer = () => one + two + three
+        } else {
+          descriptor.initializer = () => 'nothing'
+        }
+      })
+      let belongsTo = decorator(([options], target, prop, descriptor) => {
+        descriptor.initializer = () => i
+        let i = {}
+        let t = i.model = target.name // let t = $.model[target.name]
+        if(!options){
+          let r = i.target = prop // $.model[prop]
+          // t[prop] = t.belongsTo(r)
+          i.option = 'belongsTo'
+        } else {
+          let alias = options.useModel
+          if(alias){
+            options.as = prop
+            delete options.useModel
+          }
+          let r = i.target = alias || prop
+          // r = i.target = $.model[alias || prop]
+          options.relation = 'belongsTo'
+          i.options = options
+        }
+      })
+
+      let Course = class Course{
+        @Number
+        prop
+        @Number({
+          mothaFucka : true
+        })
+        prop2
+        @belongsTo
+        Degen
+        @belongsTo({useModel: 'user'})
+        Author
+
+        @jimmy
+        a
+        @jimmy(1,2,3)
+        aa
+      }
       server.get('/', ($)=>{
         $.data.message = 'Hello World!!!!'
         $.data.context = this.constructor.name
@@ -145,6 +225,7 @@
         $.data.app = app.constructor.name
         render(m('div.asd.asd')).then((t)=>{
           $.data.template = t
+          $.data.class = new Course
           $.json()
         })
       })

@@ -63,6 +63,15 @@ module.exports = [{
     ],
     module: {
         rules: [{
+            test: /\.js$/,
+            exclude: /node_modules/,
+            loader: 'babel-loader',
+            options: {
+                // presets: ["es2017"],
+                plugins: ["transform-decorators-legacy", "transform-class-properties"]
+            }
+        },
+        {
             test: /\.less$/,
             exclude: '/node_modules/',
             loader: 'ignore-loader'
