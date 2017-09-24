@@ -152,7 +152,8 @@
         return function(...params) {
           let descriptor = params[params.length - 1]
           if (
-              typeof descriptor === 'object'
+              params.length === 3
+                && typeof descriptor === 'object'
                 && descriptor.hasOwnProperty('enumerable')
                 && descriptor.hasOwnProperty('initializer')
                 && descriptor.hasOwnProperty('configurable')

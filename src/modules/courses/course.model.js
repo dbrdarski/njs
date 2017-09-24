@@ -1,3 +1,25 @@
+// export default @model Course {
+//   @uuid ({
+//     primaryKey : true
+//   }) id
+//   @string title
+//   @string slug
+//   @text description
+//   @string video
+//   @string image
+//   @enum ({
+//     values: [ 'default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue' ],
+//     defaultValue: 'default'
+//   }) color
+//   @enum ({
+//     values : [ 'Beginner', 'Intermediate', 'Advanced' ],
+//     defaultValue: 'Beginner'
+//   }) level
+//   @boolean ({
+//     defaultValue : false
+//   }) active
+// }
+
 export default function({Q, db}){
   return db.define('course', {
     id : {
