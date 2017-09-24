@@ -200,8 +200,16 @@
           i.options = options
         }
       })
+      function Model (target) {
+        return function() {
+          return {
+            gay: true
+          }
+        }
+      }
 
-      let Course = class Course{
+      @Model
+      class Course {
         @Number
         prop
         @Number({

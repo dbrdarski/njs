@@ -1210,7 +1210,7 @@ app.config('chain', function () {
 
 app.modules();
 app.run(function ({ server, resolve }) {
-  var _dec, _dec2, _dec3, _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6;
+  var _dec, _dec2, _dec3, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6;
 
   resolve();
   function model(target, prop, descriptor) {
@@ -1269,10 +1269,17 @@ app.run(function ({ server, resolve }) {
       i.options = options;
     }
   });
+  function Model(target) {
+    return function () {
+      return {
+        gay: true
+      };
+    };
+  }
 
   let Course = (_dec = Number({
     mothaFucka: true
-  }), _dec2 = belongsTo({ useModel: 'user' }), _dec3 = jimmy(1, 2, 3), (_class = class Course {
+  }), _dec2 = belongsTo({ useModel: 'user' }), _dec3 = jimmy(1, 2, 3), Model(_class = (_class2 = class Course {
     constructor() {
       _initDefineProp(this, 'prop', _descriptor, this);
 
@@ -1287,25 +1294,26 @@ app.run(function ({ server, resolve }) {
       _initDefineProp(this, 'aa', _descriptor6, this);
     }
 
-  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'prop', [Number], {
+  }, (_descriptor = _applyDecoratedDescriptor(_class2.prototype, 'prop', [Number], {
     enumerable: true,
     initializer: null
-  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, 'prop2', [_dec], {
+  }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, 'prop2', [_dec], {
     enumerable: true,
     initializer: null
-  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'Degen', [belongsTo], {
+  }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, 'Degen', [belongsTo], {
     enumerable: true,
     initializer: null
-  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, 'Author', [_dec2], {
+  }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, 'Author', [_dec2], {
     enumerable: true,
     initializer: null
-  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, 'a', [jimmy], {
+  }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, 'a', [jimmy], {
     enumerable: true,
     initializer: null
-  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'aa', [_dec3], {
+  }), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, 'aa', [_dec3], {
     enumerable: true,
     initializer: null
-  })), _class));
+  })), _class2)) || _class);
+
   server.get('/', $ => {
     $.data.message = 'Hello World!!!!';
     $.data.context = this.constructor.name;
