@@ -6,7 +6,7 @@ export default function CourseCtrl({
   return {
     index : function(){
       return Course.findAll({
-        include : Course.Author
+        include : [Course.Author]
       })
     },
     edit : function($){
@@ -18,10 +18,11 @@ export default function CourseCtrl({
       })
     },
     new : function($){
+      return new Promise((resolve, reject) => resolve(new Course))
+    },
+    create : function($){
       var course = Course.build($.query)
-      $.data.msg = $.query
-      course.save()
-      $.json()
+      return course.save()
     },
     install : function($){
       Course.sync({force: true})

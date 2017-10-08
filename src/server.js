@@ -98,12 +98,66 @@
       fn.call(newInstance, newInstance)
     })
 
+    const serializer = (options) => (data) => {
+      if (options.with) {
+        data = options.with.reduce( (obj, prop) => {
+          obj[prop] = data[prop]
+          return obj
+        }, {})
+      }
+      if (options.without) {
+        options.without.forEach( prop => {
+          if (data[prop]) {
+            delete data[prop]
+          }
+        })
+      }
+	    return data
+    }
+
+    const publicUser = serializer({
+      without : [ 'password' ],
+      with: [
+        'id',
+        'username',
+        'firstName',
+        'lastName',
+        'description',
+      ]
+    })
+
+    const api = (options = {}) => {
+      let config = {
+        route: options.route
+      }
+      let dataHandler = ($, data) => {
+        $.data.data = data
+        $.json()
+      }
+      let json = controller => ($) => {
+        // fetchData  then  handleData
+        controller($).then( dataHandler.bind(null, $) )
+      }
+      api.method = (method) => (route, controller) => server[method](options.route + route, json(controller))
+      return {
+        get: api.method('get'),
+        post: api.method('post'),
+        put: api.method('put'),
+        delete: api.method('delete'),
+        patch: api.method('patch')
+      }
+    }
+
     let routes = app.store()
     // app.config('route', function(route, view){
     //   routes.getOrSet(this.route || "" + route, view)
     // })
     app.config('route', routes.getOrSet)
     app.config('routes', routes.getAll)
+
+    app.config('api', api({
+      route: '/api'
+    }))
 
     app.config('view', (component, controller) => ($) => {
       return controller($).then(
@@ -174,13 +228,34 @@
         }
         return descriptor
       })
-      let jimmy = decorator(([one, two, three], target, property, descriptor)=>{
-        if(one != null){
-          descriptor.initializer = () => one + two + three
+
+      let dataType = (type) => (options, target, property, descriptor) => {
+        if(!options) {
+          descriptor.initializer = () => type
         } else {
-          descriptor.initializer = () => 'nothing'
+          // options.type = type
+          let o = {}
+          o[type] = options
+          descriptor.initializer = () => o
         }
-      })
+        return descriptor
+      }
+
+      let dataDecorator = (type) => decorator(dataType(type))
+
+      let Enum = dataDecorator('ENUM')
+
+      let Uuid = dataDecorator('UUID')
+      let Str = dataDecorator('STRING')
+      let Text = dataDecorator('TEXT')
+      let Bool = dataDecorator("BOOLEAN")
+      let Int = dataDecorator('INTEGER')
+      let bigInt = dataDecorator('BIGINT')
+      let Float = dataDecorator('FLOAT')
+      let Real = dataDecorator('REAL')
+      let Dbl = dataDecorator('DOUBLE')
+      let Dec = dataDecorator('DECIMAL')
+
       let belongsTo = decorator(([options], target, prop, descriptor) => {
         descriptor.initializer = () => i
         let i = {}
@@ -209,30 +284,49 @@
         }
       }
 
-      @Model
+      // @Model
       class Course {
-        @Number
-        prop
-        @Number({
-          mothaFucka : true
-        })
-        prop2
-        @belongsTo
-        Degen
-        @belongsTo({useModel: 'user'})
-        Author
-
-        @jimmy
-        a
-        @jimmy(1,2,3)
-        aa
+        @Uuid({
+          primaryKey : true
+        }) id
+        @Str title
+        @Str slug
+        @Text description
+        @Str video
+        @Str image
+        @Enum({
+          values: [ 'default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue' ],
+          defaultValue: 'default'
+        }) color
+        @Enum({
+          values : [ 'Beginner', 'Intermediate', 'Advanced' ],
+          defaultValue: 'Beginner'
+        }) level
+        @Bool({
+          defaultValue : false
+        }) active
+        @Float(11, 12)
+        TestFloat
       }
-      server.get('/', ($)=>{
+      // @Model
+      // class Course {
+      //   @Number
+      //   prop
+      //   @Number({
+      //     mothaFucka : true
+      //   })
+      //   prop2
+      //   @belongsTo
+      //   Degen
+      //   @belongsTo({useModel: 'user'})
+      //   Author
+      // }
+      server.get('/', ($) => {
         $.data.message = 'Hello World!!!!'
         $.data.context = this.constructor.name
         $.data.r = Object.getOwnPropertyNames(routes)
         $.data.app = app.constructor.name
-        render(m('div.asd.asd')).then((t)=>{
+        render(m('div.asd.asd')).then((t) => {
           $.data.template = t
           $.data.class = new Course
           $.json()
@@ -240,7 +334,7 @@
       })
     })
 
-      // .run(['models'], ($, models)=>{
+      // .run(['models'], ($, models) => {
       //   $.run()
       // })
 

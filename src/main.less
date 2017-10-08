@@ -20,8 +20,24 @@ body{
 }
 
 #main-panel{
-  
+
 }
+
+
+.buttons{
+  .clearfix;
+  padding-bottom: 30px;
+  text-align: right;
+  .btn{
+    display: block;
+    float: left;
+    width: auto;
+    & + .btn{
+      margin-left: 10px;
+    }
+  }
+}
+
 // #header {
 //   position: fixed;
 //   width: 100%;

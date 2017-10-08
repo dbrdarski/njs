@@ -1,21 +1,21 @@
 // export default @model Course {
-//   @uuid ({
+//   @uuid({
 //     primaryKey : true
 //   }) id
-//   @string title
-//   @string slug
+//   @str title
+//   @str slug
 //   @text description
-//   @string video
-//   @string image
-//   @enum ({
+//   @str video
+//   @str image
+//   @enum({
 //     values: [ 'default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue' ],
 //     defaultValue: 'default'
 //   }) color
-//   @enum ({
+//   @enum({
 //     values : [ 'Beginner', 'Intermediate', 'Advanced' ],
 //     defaultValue: 'Beginner'
 //   }) level
-//   @boolean ({
+//   @bool({
 //     defaultValue : false
 //   }) active
 // }

@@ -10,17 +10,27 @@ $.module('courses', function($){
 	$.model({Course})
 	$.relation({Course:CourseRelations})
 	$.controller({CourseCtrl})
-	// $.route({CourseRoutes}) 			// => this should be removed
+
+	// $.route({CourseRoutes}) 		// => this should be removed
 																// instead, user code snipped below
+
 	$.resolver('courses', function({
+		api,
 		attach,
 		server,
 		controllers :  { CourseCtrl }
 	}){
+
 		attach('/courses', CourseCtrl.index)
 		attach('/course/:slug', CourseCtrl.edit)
+
+		api.get('/courses', CourseCtrl.index)
+	  api.get('/course/:slug', CourseCtrl.edit)
+	  api.get('/course/new', CourseCtrl.new)
+
 		server
 			.get('/course/new', CourseCtrl.new)
 			.get('/course/install', CourseCtrl.install)
+
 	})
 })

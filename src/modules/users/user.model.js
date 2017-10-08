@@ -32,11 +32,11 @@ export default function({Q, db}){
       type : Q.INTEGER,
       defaultValue : 0
     }
-  // }, {
-  //   defaultScope: {
-  //     where: {
-  //       state: 1
-  //     }
-  //   }
+  }, {
+    defaultScope: {
+      attributes: {
+        exclude: ['password']
+      }
+    }
   })
 }

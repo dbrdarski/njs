@@ -4571,8 +4571,8 @@ _moduler2.default.module('templates', function ($) {
   $.component({ CoursesIndex: _courses2.default });
   $.component({ CourseEdit: _courseEdit2.default });
   $.route({ '/courses': _courses2.default });
-  $.route({ '/course/:slug': _courseEdit2.default });
   $.route({ '/course/new': _courseEdit2.default });
+  $.route({ '/course/:slug': _courseEdit2.default });
 });
 
 /***/ }),
@@ -6147,7 +6147,7 @@ app.config('route', routes.getOrSet);
 app.config('routes', routes.getAll);
 
 var routeHandler = function routeHandler(route, view) {
-  var data = [];
+  var data;
   return {
     onmatch: function onmatch() {
       return new Promise(function (resolve, reject) {
@@ -6160,6 +6160,23 @@ var routeHandler = function routeHandler(route, view) {
     },
     render: function render(vnode) {
       vnode.attrs.data = data;
+      // let state = {
+      //   title: data.title,
+      //   customSlug: data.slug,
+      //   description: data.description,
+      //   setTitle: function(v) {
+      //     state.title = v
+      //   },
+      //   setSlug: function(v) {
+      //     state.customSlug = slugify(v)
+      //   },
+      //   setDescription: function(v){
+      //     state.description = v
+      //   }
+      // }
+      // Object.defineProperty(state, 'slug', {
+      //   get: () => state.customSlug || slugify(state.title)
+      // })
       return vnode;
     }
   };
@@ -6233,21 +6250,54 @@ exports.default = function (_ref) {
       Content = _ref$components.Content,
       CourseItem = _ref$components.CourseItem;
 
+  var xetter = function xetter(state) {
+    return function (prop, xettings) {
+      return function (value) {
+        if (value != null) {
+          state[prop] = value;
+        }
+        return state[prop];
+      };
+    };
+  };
+  var model = _.once(function (data) {
+    var x = xetter(data);
+    return {
+      title: x('title'),
+      slug: x('slug', {
+        // set: [ slugify ],
+        // get: [ ( state ) => state.slug || slugify( state.title() ) ]
+      }),
+      description: x('description'),
+      num: x('num')
+    };
+  });
   var stateModel = _.once(function (data) {
     console.log(data);
     var state = {
+      $: {
+        colors: ['Red', 'Orange', 'Blue'],
+        levels: ['Beginner', 'Intermediate', 'Advanced']
+      },
+      $$: {
+        title: function title(v) {
+          state.title = v;
+        },
+        slug: function slug(v) {
+          state.customSlug = slugify(v);
+        },
+        description: function description(v) {
+          state.description = v;
+        },
+        num: function num(v) {
+          console.log([v]);
+          state.num = v;
+        }
+      },
       title: data.title,
       customSlug: data.slug,
       description: data.description,
-      setDescription: function setDescription(v) {
-        state.description = v;
-      },
-      setTitle: function setTitle(v) {
-        state.title = v;
-      },
-      setSlug: function setSlug(v) {
-        state.customSlug = slugify(v);
-      }
+      num: null
     };
     Object.defineProperty(state, 'slug', {
       get: function get() {
@@ -6258,25 +6308,29 @@ exports.default = function (_ref) {
   });
   return {
     view: function view(vnode) {
-      var item = stateModel(vnode.attrs.data);
+      var item2 = stateModel(vnode.attrs.data);
+      var item = model(vnode.attrs.data);
       return m('div', [m(Topbar), m(Content, {
         title: "Edit course"
       }, [m('#main-panel.col-md-9', [m('input[type="text"].form-control.form-control-lg[id="title"][name="title"][aria-describedby="couseTitle"][placeholder="Title"]', {
-        oninput: m.withAttr("value", item.setTitle),
-        value: item.title
+        value: item.title(),
+        oninput: m.withAttr("value", item.title)
       }), m('small#couseTitle.form-text.text-muted', "We'll never share your email with anyone else."), m('input[type="text"].form-control.form-control-sm', {
-        value: item.slug,
-        onchange: m.withAttr("value", item.setSlug)
+        value: item.slug(),
+        onchange: m.withAttr("value", item.slug)
       }), m('.form-section-meta', [m('.form-group', [m('label[for="description"]', 'Description'), m('textarea#description.form-control[name="description"]', {
-        value: item.description,
-        oninput: m.withAttr("value", item.setDescription)
-      })]), m('.row', [m('.col-md-4', m('select.form-control', ['Beginner', 'Intermediate', 'Advanced'].map(function (items) {
+        value: item.description(),
+        oninput: m.withAttr("value", item.description)
+      })]), m('.row', [m('.col-md-4', m('select.form-control', item2.$.levels.map(function (items) {
         return m('option', items);
-      }))), m('.col-md-4', m('select.form-control', ['Red', 'Orange', 'Blue'].map(function (items) {
+      }))), m('.col-md-4', m('select.form-control', item2.$.colors.map(function (items) {
         return m('option', items);
-      }))), m('.col-md-4', m('input[type="text"].form-control'))])]), m('a.btn.btn-primary.btn-lg[href="/courses"]', {
+      }))), m('.col-md-4', m('input[type="text"].form-control', {
+        value: item.num(),
+        oninput: m.withAttr("value", item.num)
+      }))])]), m('a.btn.btn-primary.btn-lg[href="/courses"]', {
         oncreate: m.route.link
-      }, 'Click here!!!!')]), m('#side-panel.col-md-3', m(CourseItem, vnode.attrs.data))])]);
+      }, 'Click here!!!!')]), m('#side-panel.col-md-3', [m('.buttons', [m('.btn.btn-primary.btn-alt.btn-lg', "Save"), m('.btn.btn-primary.btn-lg', "Unpublish")]), m(CourseItem, vnode.attrs.data)])])]);
     }
   };
 };

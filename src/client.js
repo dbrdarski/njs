@@ -45,18 +45,35 @@ app.config('route', routes.getOrSet)
 app.config('routes', routes.getAll)
 
 
-let routeHandler = (route, view)=>{
-  var data = [];
+let routeHandler = (route, view) => {
+  var data;
   return {
     onmatch: () => new Promise((resolve, reject) => {
-      m.request(window.location.href, { method: "POST" }).then((responseData)=>{
+      m.request(window.location.href, { method: "POST" }).then((responseData) => {
         data = responseData.data;
         // console.log(data)
         resolve(view)
       })
     }),
     render: vnode => {
-      vnode.attrs.data = data;
+      vnode.attrs.data = data
+      // let state = {
+      //   title: data.title,
+      //   customSlug: data.slug,
+      //   description: data.description,
+      //   setTitle: function(v) {
+      //     state.title = v
+      //   },
+      //   setSlug: function(v) {
+      //     state.customSlug = slugify(v)
+      //   },
+      //   setDescription: function(v){
+      //     state.description = v
+      //   }
+      // }
+      // Object.defineProperty(state, 'slug', {
+      //   get: () => state.customSlug || slugify(state.title)
+      // })
       return vnode
     }
   }

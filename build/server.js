@@ -177,8 +177,8 @@ __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('templates', function ($)
   $.component({ CoursesIndex: __WEBPACK_IMPORTED_MODULE_4__courses_template__["a" /* default */] });
   $.component({ CourseEdit: __WEBPACK_IMPORTED_MODULE_5__course_edit_template__["a" /* default */] });
   $.route({ '/courses': __WEBPACK_IMPORTED_MODULE_4__courses_template__["a" /* default */] });
-  $.route({ '/course/:slug': __WEBPACK_IMPORTED_MODULE_5__course_edit_template__["a" /* default */] });
   $.route({ '/course/new': __WEBPACK_IMPORTED_MODULE_5__course_edit_template__["a" /* default */] });
+  $.route({ '/course/:slug': __WEBPACK_IMPORTED_MODULE_5__course_edit_template__["a" /* default */] });
 });
 
 /***/ }),
@@ -267,7 +267,7 @@ function CourseCtrl({
   return {
     index: function () {
       return Course.findAll({
-        include: Course.Author
+        include: [Course.Author]
       });
     },
     edit: function ($) {
@@ -279,10 +279,11 @@ function CourseCtrl({
       });
     },
     new: function ($) {
+      return new Promise((resolve, reject) => resolve(new Course()));
+    },
+    create: function ($) {
       var course = Course.build($.query);
-      $.data.msg = $.query;
-      course.save();
-      $.json();
+      return course.save();
     },
     install: function ($) {
       Course.sync({ force: true });
@@ -297,6 +298,28 @@ function CourseCtrl({
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+// export default @model Course {
+//   @uuid({
+//     primaryKey : true
+//   }) id
+//   @str title
+//   @str slug
+//   @text description
+//   @str video
+//   @str image
+//   @enum({
+//     values: [ 'default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue' ],
+//     defaultValue: 'default'
+//   }) color
+//   @enum({
+//     values : [ 'Beginner', 'Intermediate', 'Advanced' ],
+//     defaultValue: 'Beginner'
+//   }) level
+//   @bool({
+//     defaultValue : false
+//   }) active
+// }
+
 /* harmony default export */ __webpack_exports__["a"] = (function ({ Q, db }) {
   return db.define('course', {
     id: {
@@ -369,15 +392,24 @@ __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('courses', function ($) {
 	$.model({ Course: __WEBPACK_IMPORTED_MODULE_1__course_model__["a" /* default */] });
 	$.relation({ Course: __WEBPACK_IMPORTED_MODULE_2__course_relations__["a" /* default */] });
 	$.controller({ CourseCtrl: __WEBPACK_IMPORTED_MODULE_3__course_controller__["a" /* default */] });
-	// $.route({CourseRoutes}) 			// => this should be removed
+
+	// $.route({CourseRoutes}) 		// => this should be removed
 	// instead, user code snipped below
+
 	$.resolver('courses', function ({
+		api,
 		attach,
 		server,
 		controllers: { CourseCtrl }
 	}) {
+
 		attach('/courses', CourseCtrl.index);
 		attach('/course/:slug', CourseCtrl.edit);
+
+		api.get('/courses', CourseCtrl.index);
+		api.get('/course/:slug', CourseCtrl.edit);
+		api.get('/course/new', CourseCtrl.new);
+
 		server.get('/course/new', CourseCtrl.new).get('/course/install', CourseCtrl.install);
 	});
 });
@@ -837,13 +869,14 @@ function UserCtrl($$) {
     state: {
       type: Q.INTEGER,
       defaultValue: 0
-      // }, {
-      //   defaultScope: {
-      //     where: {
-      //       state: 1
-      //     }
-      //   }
-    } });
+    }
+  }, {
+    defaultScope: {
+      attributes: {
+        exclude: ['password']
+      }
+    }
+  });
 });
 
 /***/ }),
@@ -1177,12 +1210,60 @@ app.config('group', function (route, fn) {
   fn.call(newInstance, newInstance);
 });
 
+const serializer = options => data => {
+  if (options.with) {
+    data = options.with.reduce((obj, prop) => {
+      obj[prop] = data[prop];
+      return obj;
+    }, {});
+  }
+  if (options.without) {
+    options.without.forEach(prop => {
+      if (data[prop]) {
+        delete data[prop];
+      }
+    });
+  }
+  return data;
+};
+
+const publicUser = serializer({
+  without: ['password'],
+  with: ['id', 'username', 'firstName', 'lastName', 'description']
+});
+
+const api = (options = {}) => {
+  let config = {
+    route: options.route
+  };
+  let dataHandler = ($, data) => {
+    $.data.data = data;
+    $.json();
+  };
+  let json = controller => $ => {
+    // fetchData  then  handleData
+    controller($).then(dataHandler.bind(null, $));
+  };
+  api.method = method => (route, controller) => server[method](options.route + route, json(controller));
+  return {
+    get: api.method('get'),
+    post: api.method('post'),
+    put: api.method('put'),
+    delete: api.method('delete'),
+    patch: api.method('patch')
+  };
+};
+
 let routes = app.store();
 // app.config('route', function(route, view){
 //   routes.getOrSet(this.route || "" + route, view)
 // })
 app.config('route', routes.getOrSet);
 app.config('routes', routes.getAll);
+
+app.config('api', api({
+  route: '/api'
+}));
 
 app.config('view', (component, controller) => $ => {
   return controller($).then(data => render(m(component, { data })).then(t => {
@@ -1210,7 +1291,7 @@ app.config('chain', function () {
 
 app.modules();
 app.run(function ({ server, resolve }) {
-  var _dec, _dec2, _dec3, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10;
 
   resolve();
   function model(target, prop, descriptor) {
@@ -1226,7 +1307,7 @@ app.run(function ({ server, resolve }) {
   function decorator(fn) {
     return function (...params) {
       let descriptor = params[params.length - 1];
-      if (typeof descriptor === 'object' && descriptor.hasOwnProperty('enumerable') && descriptor.hasOwnProperty('initializer') && descriptor.hasOwnProperty('configurable')) {
+      if (params.length === 3 && typeof descriptor === 'object' && descriptor.hasOwnProperty('enumerable') && descriptor.hasOwnProperty('initializer') && descriptor.hasOwnProperty('configurable')) {
         return fn([], ...params);
       } else {
         return fn.bind(null, params);
@@ -1242,13 +1323,34 @@ app.run(function ({ server, resolve }) {
     }
     return descriptor;
   });
-  let jimmy = decorator(([one, two, three], target, property, descriptor) => {
-    if (one != null) {
-      descriptor.initializer = () => one + two + three;
+
+  let dataType = type => (options, target, property, descriptor) => {
+    if (!options) {
+      descriptor.initializer = () => type;
     } else {
-      descriptor.initializer = () => 'nothing';
+      // options.type = type
+      let o = {};
+      o[type] = options;
+      descriptor.initializer = () => o;
     }
-  });
+    return descriptor;
+  };
+
+  let dataDecorator = type => decorator(dataType(type));
+
+  let Enum = dataDecorator('ENUM');
+
+  let Uuid = dataDecorator('UUID');
+  let Str = dataDecorator('STRING');
+  let Text = dataDecorator('TEXT');
+  let Bool = dataDecorator("BOOLEAN");
+  let Int = dataDecorator('INTEGER');
+  let bigInt = dataDecorator('BIGINT');
+  let Float = dataDecorator('FLOAT');
+  let Real = dataDecorator('REAL');
+  let Dbl = dataDecorator('DOUBLE');
+  let Dec = dataDecorator('DECIMAL');
+
   let belongsTo = decorator(([options], target, prop, descriptor) => {
     descriptor.initializer = () => i;
     let i = {};
@@ -1277,42 +1379,84 @@ app.run(function ({ server, resolve }) {
     };
   }
 
-  let Course = (_dec = Number({
-    mothaFucka: true
-  }), _dec2 = belongsTo({ useModel: 'user' }), _dec3 = jimmy(1, 2, 3), Model(_class = (_class2 = class Course {
+  // @Model
+  let Course = (_dec = Uuid({
+    primaryKey: true
+  }), _dec2 = Enum({
+    values: ['default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue'],
+    defaultValue: 'default'
+  }), _dec3 = Enum({
+    values: ['Beginner', 'Intermediate', 'Advanced'],
+    defaultValue: 'Beginner'
+  }), _dec4 = Bool({
+    defaultValue: false
+  }), _dec5 = Float(11, 12), (_class = class Course {
     constructor() {
-      _initDefineProp(this, 'prop', _descriptor, this);
+      _initDefineProp(this, 'id', _descriptor, this);
 
-      _initDefineProp(this, 'prop2', _descriptor2, this);
+      _initDefineProp(this, 'title', _descriptor2, this);
 
-      _initDefineProp(this, 'Degen', _descriptor3, this);
+      _initDefineProp(this, 'slug', _descriptor3, this);
 
-      _initDefineProp(this, 'Author', _descriptor4, this);
+      _initDefineProp(this, 'description', _descriptor4, this);
 
-      _initDefineProp(this, 'a', _descriptor5, this);
+      _initDefineProp(this, 'video', _descriptor5, this);
 
-      _initDefineProp(this, 'aa', _descriptor6, this);
+      _initDefineProp(this, 'image', _descriptor6, this);
+
+      _initDefineProp(this, 'color', _descriptor7, this);
+
+      _initDefineProp(this, 'level', _descriptor8, this);
+
+      _initDefineProp(this, 'active', _descriptor9, this);
+
+      _initDefineProp(this, 'TestFloat', _descriptor10, this);
     }
 
-  }, (_descriptor = _applyDecoratedDescriptor(_class2.prototype, 'prop', [Number], {
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'id', [_dec], {
     enumerable: true,
     initializer: null
-  }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, 'prop2', [_dec], {
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, 'title', [Str], {
     enumerable: true,
     initializer: null
-  }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, 'Degen', [belongsTo], {
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'slug', [Str], {
     enumerable: true,
     initializer: null
-  }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, 'Author', [_dec2], {
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, 'description', [Text], {
     enumerable: true,
     initializer: null
-  }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, 'a', [jimmy], {
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, 'video', [Str], {
     enumerable: true,
     initializer: null
-  }), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, 'aa', [_dec3], {
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'image', [Str], {
     enumerable: true,
     initializer: null
-  })), _class2)) || _class);
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, 'color', [_dec2], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, 'level', [_dec3], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, 'active', [_dec4], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, 'TestFloat', [_dec5], {
+    enumerable: true,
+    initializer: null
+  })), _class));
+  // @Model
+  // class Course {
+  //   @Number
+  //   prop
+  //   @Number({
+  //     mothaFucka : true
+  //   })
+  //   prop2
+  //   @belongsTo
+  //   Degen
+  //   @belongsTo({useModel: 'user'})
+  //   Author
+  // }
 
   server.get('/', $ => {
     $.data.message = 'Hello World!!!!';
@@ -1327,7 +1471,7 @@ app.run(function ({ server, resolve }) {
   });
 });
 
-// .run(['models'], ($, models)=>{
+// .run(['models'], ($, models) => {
 //   $.run()
 // })
 
@@ -1363,21 +1507,50 @@ app.run(function ({ server, resolve }) {
   _, m, slugify,
   components: { Topbar, Content, CourseItem }
 }) {
+  var xetter = state => (prop, xettings) => value => {
+    if (value != null) {
+      state[prop] = value;
+    }
+    return state[prop];
+  };
+  var model = _.once(data => {
+    let x = xetter(data);
+    return {
+      title: x('title'),
+      slug: x('slug', {
+        // set: [ slugify ],
+        // get: [ ( state ) => state.slug || slugify( state.title() ) ]
+      }),
+      description: x('description'),
+      num: x('num')
+    };
+  });
   var stateModel = _.once(data => {
     console.log(data);
     let state = {
+      $: {
+        colors: ['Red', 'Orange', 'Blue'],
+        levels: ['Beginner', 'Intermediate', 'Advanced']
+      },
+      $$: {
+        title: function (v) {
+          state.title = v;
+        },
+        slug: function (v) {
+          state.customSlug = slugify(v);
+        },
+        description: function (v) {
+          state.description = v;
+        },
+        num: function (v) {
+          console.log([v]);
+          state.num = v;
+        }
+      },
       title: data.title,
       customSlug: data.slug,
       description: data.description,
-      setDescription: function (v) {
-        state.description = v;
-      },
-      setTitle: function (v) {
-        state.title = v;
-      },
-      setSlug: function (v) {
-        state.customSlug = slugify(v);
-      }
+      num: null
     };
     Object.defineProperty(state, 'slug', {
       get: () => state.customSlug || slugify(state.title)
@@ -1386,21 +1559,25 @@ app.run(function ({ server, resolve }) {
   });
   return {
     view: function (vnode) {
-      let item = stateModel(vnode.attrs.data);
+      let item2 = stateModel(vnode.attrs.data);
+      let item = model(vnode.attrs.data);
       return m('div', [m(Topbar), m(Content, {
         title: "Edit course"
       }, [m('#main-panel.col-md-9', [m('input[type="text"].form-control.form-control-lg[id="title"][name="title"][aria-describedby="couseTitle"][placeholder="Title"]', {
-        oninput: m.withAttr("value", item.setTitle),
-        value: item.title
+        value: item.title(),
+        oninput: m.withAttr("value", item.title)
       }), m('small#couseTitle.form-text.text-muted', "We'll never share your email with anyone else."), m('input[type="text"].form-control.form-control-sm', {
-        value: item.slug,
-        onchange: m.withAttr("value", item.setSlug)
+        value: item.slug(),
+        onchange: m.withAttr("value", item.slug)
       }), m('.form-section-meta', [m('.form-group', [m('label[for="description"]', 'Description'), m('textarea#description.form-control[name="description"]', {
-        value: item.description,
-        oninput: m.withAttr("value", item.setDescription)
-      })]), m('.row', [m('.col-md-4', m('select.form-control', ['Beginner', 'Intermediate', 'Advanced'].map(items => m('option', items)))), m('.col-md-4', m('select.form-control', ['Red', 'Orange', 'Blue'].map(items => m('option', items)))), m('.col-md-4', m('input[type="text"].form-control'))])]), m('a.btn.btn-primary.btn-lg[href="/courses"]', {
+        value: item.description(),
+        oninput: m.withAttr("value", item.description)
+      })]), m('.row', [m('.col-md-4', m('select.form-control', item2.$.levels.map(items => m('option', items)))), m('.col-md-4', m('select.form-control', item2.$.colors.map(items => m('option', items)))), m('.col-md-4', m('input[type="text"].form-control', {
+        value: item.num(),
+        oninput: m.withAttr("value", item.num)
+      }))])]), m('a.btn.btn-primary.btn-lg[href="/courses"]', {
         oncreate: m.route.link
-      }, 'Click here!!!!')]), m('#side-panel.col-md-3', m(CourseItem, vnode.attrs.data))])]);
+      }, 'Click here!!!!')]), m('#side-panel.col-md-3', [m('.buttons', [m('.btn.btn-primary.btn-alt.btn-lg', "Save"), m('.btn.btn-primary.btn-lg', "Unpublish")]), m(CourseItem, vnode.attrs.data)])])]);
     }
   };
 });

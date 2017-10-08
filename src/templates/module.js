@@ -13,6 +13,6 @@ $.module('templates', function($){
   $.component({CoursesIndex})
   $.component({CourseEdit})
   $.route({'/courses': CoursesIndex})
-  $.route({'/course/:slug': CourseEdit})
   $.route({'/course/new': CourseEdit})
+  $.route({'/course/:slug': CourseEdit})
 })

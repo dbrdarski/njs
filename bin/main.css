@@ -8181,7 +8181,12 @@ a.text-dark:focus, a.text-dark:hover {
 
 .invisible {
   visibility: hidden !important;
-}body {
+}.clearfix:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+body {
   background: #ecf0f1;
 }
 .punchline {
@@ -8192,6 +8197,23 @@ a.text-dark:focus, a.text-dark:hover {
   font-weight: 500;
   font-size: 36px;
   margin-bottom: 5px;
+}
+.buttons {
+  padding-bottom: 30px;
+  text-align: right;
+}
+.buttons:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.buttons .btn {
+  display: block;
+  float: left;
+  width: auto;
+}
+.buttons .btn + .btn {
+  margin-left: 10px;
 }
 *[bg="primary"] {
   background-color: #9e150e !important;

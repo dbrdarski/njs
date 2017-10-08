@@ -1,16 +1,22 @@
 export default function({
+  api,
   server,
   attach,
   controllers :  { CourseCtrl }
 }){
   attach('/courses', CourseCtrl.index)
   attach('/course/:slug', CourseCtrl.edit)
+  attach('/course/new', CourseCtrl.new)
+
+  api.get('/courses', CourseCtrl.index)
+  api.get('/course/:slug', CourseCtrl.edit)
+  api.get('/course/new', CourseCtrl.new)
 
   server
     // .get('/courses/:id', CourseCtrl.show)
     // .delete('/courses/:id', CourseCtrl.delete)
     // .patch('/courses/:id', CourseCtrl.update)
-    .get('/course/new', CourseCtrl.new)
+    .get('/course/create', CourseCtrl.create)
     .get('/course/install', CourseCtrl.install)
 
     /*
