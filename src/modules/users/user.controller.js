@@ -5,15 +5,19 @@ export default function UserCtrl($$){
 
   return {
     index : function($){
-      User
-        .findAll()
-        .then(users => {
-          $.data.message = 'Hello World!!!!'
-          $.data.users = users
-          $.data.body = $.body
+      return User.findAll()
+    },
+    single : function($){
+      return User.findOne({
+        where : {
+          username : $.params.username
+        },
+        include : [User.Courses]
+      })
+    },
+    signin : function($){
+          $.data.response = 'To Do!!!!!!'
           $.json()
-        })
-
     },
     new : function($){
       var user = User.build($.query)

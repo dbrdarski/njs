@@ -12,9 +12,15 @@ $.module('users', function($){
 	// $.route({UserRoutes})
 
 	$.resolver({'users': function({
+			api,
 	    server,
 	    controllers : { UserCtrl }
 	  }){
+
+
+		api.get('/users', UserCtrl.index)
+		api.get('/user/:username', UserCtrl.single)
+
 	  server
 	    .get('/users', UserCtrl.index)
 	    .get('/user/new', UserCtrl.new)

@@ -786,9 +786,14 @@ __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('users', function ($) {
 	// $.route({UserRoutes})
 
 	$.resolver({ 'users': function ({
+			api,
 			server,
 			controllers: { UserCtrl }
 		}) {
+
+			api.get('/users', UserCtrl.index);
+			api.get('/user/:username', UserCtrl.single);
+
 			server.get('/users', UserCtrl.index).get('/user/new', UserCtrl.new).get('/user/install', UserCtrl.install);
 		}
 	});
@@ -808,12 +813,19 @@ function UserCtrl($$) {
 
   return {
     index: function ($) {
-      User.findAll().then(users => {
-        $.data.message = 'Hello World!!!!';
-        $.data.users = users;
-        $.data.body = $.body;
-        $.json();
+      return User.findAll();
+    },
+    single: function ($) {
+      return User.findOne({
+        where: {
+          username: $.params.username
+        },
+        include: [User.Courses]
       });
+    },
+    signin: function ($) {
+      $.data.response = 'To Do!!!!!!';
+      $.json();
     },
     new: function ($) {
       var user = User.build($.query);
@@ -888,7 +900,7 @@ function UserCtrl($$) {
   models: { User, Course, Role }
 }) {
   User.Courses = User.hasMany(Course, {
-    as: 'author'
+    as: 'courses', foreignKey: 'authorId'
   });
   User.Role = User.belongsTo(Role, {
     as: "role"
