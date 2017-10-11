@@ -17,6 +17,7 @@
     "css-loader": "^0.28.2",
     "diet": "^0.16.0",
     "diet-cross-origin": "^0.2.3",
+    "diet-session": "0.0.3",
     "diet-static": "^2.2.0",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.11.2",
