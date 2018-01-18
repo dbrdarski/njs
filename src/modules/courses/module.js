@@ -7,9 +7,19 @@ import CourseCtrl from './course.controller'
 
 
 $.module('courses', function($){
+
+	$.config('color', [ 'default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue' ])
+	$.config('level', [ 'Beginner', 'Intermediate', 'Advanced' ])
 	$.model({Course})
-	$.relation({Course:CourseRelations})
+	$.relation('Course', CourseRelations)
 	$.controller({CourseCtrl})
+
+	// @belongsTo({model: User}) Author
+	// Course.Author = Course.belongsTo(User, {as: 'Author'})
+
+
+	// @hasMany Lession
+	// Course.Lession = Course.hasMany(Lession)
 
 	// $.route({CourseRoutes}) 		// => this should be removed
 																// instead, user code snipped below

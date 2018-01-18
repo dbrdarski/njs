@@ -16,6 +16,7 @@
     const baseTemplate = fs.readFileSync('./bin/index.html', 'utf8')
 
     import './templates/module'
+    import './view-models/module'
     import './modules'
 
     const server = diet()
