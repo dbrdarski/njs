@@ -1,4 +1,4 @@
-export default function LessionCtrl({ models: { Lession }}){
+export default function LessionCtrl({ schemas: { Lession }}){
   this.relations.Lession
   return {
     index : function($){

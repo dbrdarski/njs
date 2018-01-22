@@ -1,6 +1,6 @@
 import seed from './permission.seed'
 export default function PermissionCtrl({
-    models: { Permission }  
+    schemas: { Permission }
   }){
   // relations.Permission
   return {

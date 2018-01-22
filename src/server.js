@@ -8,6 +8,8 @@
     const crossOrigin = require('diet-cross-origin')
     const dietStatic = require('diet-static')
     const r = require('ramda')
+    const jsonapi = require('jsonapi-serializer').Serializer
+    app.config('jsonapi', jsonapi)
 
     var fs = require('fs')
     // app.module('a', function(){})
@@ -51,41 +53,60 @@
       .config('db', db)
       .config('_', r)
 
+    const courseSerializer = new jsonapi('course', {
+        attributes: ['id','title','slug','description','video','image','color','level','author'],
+        author:{
+          ref: 'id',
+          attributes: ['id', 'username', 'email', 'firstName', 'lastName', 'image', 'description']
+        }
+    })
+
+      // .register('author', {
+      //   relationships: {
+      //     course: {
+      //       type: '<course></course>'
+      //     }
+      //   }
+      // })
+
     // app.module('setup', function($){
 
     app.config('m', m)
     app.config('baseTemplate', baseTemplate)
 
-    app.config('slugify', function(st){
-        st = st.toLowerCase()
-        st = st.replace(/[\u00C0-\u00C5]/ig,'a');
-        st = st.replace(/[\u00C8-\u00CB]/ig,'e');
-        st = st.replace(/[\u00CC-\u00CF]/ig,'i');
-        st = st.replace(/[\u00D2-\u00D6]/ig,'o');
-        st = st.replace(/[\u00D9-\u00DC]/ig,'u');
-        st = st.replace(/[\u00D1]/ig,'n');
-        st = st.replace(/[\-]/g,' ');
-        // st = st.replace(/[^a-z0-9 ]+/gi,'')
-        st = st.trim().replace(/ /g,'-');
-        st = st.replace(/[\-]{2,}/g,'-');
-        st = st.replace(/^[^a-z]+/g,'');
-        return (st.replace(/[^a-z0-9\- ]*/gi,''));
-    })
+    const components = app.store()
 
-    let components = app.store()
     app.config('component', components.getOrSet)
     app.config('components', components.getAll)
 
-    let models = app.store()
-    app.config('model', models.getOrSet)
-    app.config('models', models.getAll)
-    let relations = app.store()
+    const schemas = app.store()
+    app.config('schema', schemas.getOrSet)
+    app.config('schemas', schemas.getAll)
+    const relations = app.store()
     app.config('relation', relations.getOrSet)
     app.config('relations', relations.getAll)
-    let controllers = app.store()
+    const model = (nameOrBoth, maybeModel) => {
+      let name, model
+      const hasSeparateModel = typeof maybeModel === 'function'
+      if(hasSeparateModel && typeof nameOrBoth === 'string'){
+        name = nameOrBoth
+        model = maybeModel
+      } else if (typeof maybeModel === 'object'){
+        name = Object.keys(nameOrBoth)[0],
+        model = nameOrBoth[name]
+      }
+      console.log(`REGISTER MODEL ${name}`)
+      // console.log(app.decorators.sequelizeAttributeDecorators)
+      app.schema(name, () => {
+        return model(app.decorators.sequelizeAttributeDecorators)
+      })
+      app.relation(name, () => model(app.decorators.sequelizeRelationshipDecorators))
+    }
+    app.config('model', model)
+    const controllers = app.store()
     app.config('controller', controllers.getOrSet)
     app.config('controllers', controllers.getAll)
-    let resolver = app.store()
+    const resolver = app.store()
 
     app.config('resolver', resolver.getOrSet)
     app.config('resolve', resolver.getAll)
@@ -132,7 +153,8 @@
         route: options.route
       }
       let dataHandler = ($, data) => {
-        $.data.data = data
+        // $.data.data = data;
+        $.data = courseSerializer.serialize(data)
         $.json()
       }
       let json = controller => ($) => {
@@ -191,151 +213,23 @@
     })
 
     app.modules()
-    app.run(function({server, resolve}) {
+    app.run(function({utils, server, resolve}) {
       resolve()
-      function model(target, prop, descriptor) {
-        console.log('@model')
-        console.log(target)
-        console.log(prop)
-        console.log(descriptor)
-      }
-      // function Enum(target, prop, descriptor){
-      //   target.prototype[prop] = 'enum'
-      //   return function()
-      // }
-      function decorator(fn){
-        return function(...params) {
-          let descriptor = params[params.length - 1]
-          if (
-              params.length === 3
-                && typeof descriptor === 'object'
-                && descriptor.hasOwnProperty('enumerable')
-                && descriptor.hasOwnProperty('initializer')
-                && descriptor.hasOwnProperty('configurable')
-             )
-          {
-            return fn([], ...params)
-          } else {
-            return fn.bind(null, params)
-          }
-        }
-      }
-      let Number = decorator(([options], target, prop, descriptor) => {
-        if(!options) {
-          descriptor.initializer = () => 'Number'
-        } else {
-          options.type = 'Number'
-          descriptor.initializer = () => options
-        }
-        return descriptor
-      })
 
-      let dataType = (type) => (options, target, property, descriptor) => {
-        if(!options) {
-          descriptor.initializer = () => type
-        } else {
-          // options.type = type
-          let o = {}
-          o[type] = options
-          descriptor.initializer = () => o
-        }
-        return descriptor
-      }
-
-      let dataDecorator = (type) => decorator(dataType(type))
-
-      let Enum = dataDecorator('ENUM')
-
-      let Uuid = dataDecorator('UUID')
-      let Str = dataDecorator('STRING')
-      let Text = dataDecorator('TEXT')
-      let Bool = dataDecorator("BOOLEAN")
-      let Int = dataDecorator('INTEGER')
-      let bigInt = dataDecorator('BIGINT')
-      let Float = dataDecorator('FLOAT')
-      let Real = dataDecorator('REAL')
-      let Dbl = dataDecorator('DOUBLE')
-      let Dec = dataDecorator('DECIMAL')
-
-      let belongsTo = decorator(([options], target, prop, descriptor) => {
-        descriptor.initializer = () => i
-        let i = {}
-        let t = i.model = target.name // let t = $.model[target.name]
-        if(!options){
-          let r = i.target = prop // $.model[prop]
-          // t[prop] = t.belongsTo(r)
-          i.option = 'belongsTo'
-        } else {
-          let alias = options.useModel
-          if(alias){
-            options.as = prop
-            delete options.useModel
-          }
-          let r = i.target = alias || prop
-          // r = i.target = $.model[alias || prop]
-          options.relation = 'belongsTo'
-          i.options = options
-        }
-      })
-      function Model (target) {
-        return function() {
-          return {
-            gay: true
-          }
-        }
-      }
-
-      // @Model
-      class Course {
-        @Uuid({
-          primaryKey : true
-        }) id
-        @Str title
-        @Str slug
-        @Text description
-        @Str video
-        @Str image
-        @Enum({
-          values: [ 'default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue' ],
-          defaultValue: 'default'
-        }) color
-        @Enum({
-          values : [ 'Beginner', 'Intermediate', 'Advanced' ],
-          defaultValue: 'Beginner'
-        }) level
-        @Bool({
-          defaultValue : false
-        }) active
-        @Float(11, 12)
-        TestFloat
-      }
-      // @Model
-      // class Course {
-      //   @Number
-      //   prop
-      //   @Number({
-      //     mothaFucka : true
-      //   })
-      //   prop2
-      //   @belongsTo
-      //   Degen
-      //   @belongsTo({useModel: 'user'})
-      //   Author
-      // }
       server.get('/', ($) => {
-        $.data.message = 'Hello World!!!!'
-        $.data.context = this.constructor.name
-        $.data.r = Object.getOwnPropertyNames(routes)
-        $.data.app = app.constructor.name
+        // $.data.message = 'Hello World!!!!'
+        // $.data.context = this.constructor.name
+        // $.data.r = Object.getOwnPropertyNames(routes)
+        // $.data.app = app.constructor.name
         render(m('div.asd.asd')).then((t) => {
-          $.data.template = t
-          $.data.class = new Course
+          // $.data.template = t
+          $.data.class = app.Course
           $.json()
         })
       })
     })
 
-      // .run(['models'], ($, models) => {
+      // .run(['schemas'], ($, schemas) => {
       //   $.run()
       // })
 

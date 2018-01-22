@@ -1,4 +1,4 @@
-import './users/module'
-import './roles-permissions/module'
+import './utils/utils.module'
+import './admin/admin.module'
 import './courses/module'
 import './lessions/module'

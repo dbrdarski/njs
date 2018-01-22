@@ -1,6 +1,6 @@
 export default function({
   chain,
-  models: { User, Role, Course, Permission, Lession },
+  schemas: { User, Role, Course, Permission, Lession },
   relations
 }, $){
   relations()
@@ -198,7 +198,7 @@ export default function({
     laravelDB.setAuthor(jack, {save: false})
     laravelDB.title='Laravel Database Essentials'
     laravelDB.slug='laravel-database-essentials'
-    laravelDB.description='Learn how take advantage of Laravel\'s built in model classes, schema builder and migration manager.'
+    laravelDB.description='Learn how take advantage of Laravel\'s built in model classes, model builder and migration manager.'
     laravelDB.level='Intermediate'
     laravelDB.color='yellow'
     laravelDB.image='database.png'

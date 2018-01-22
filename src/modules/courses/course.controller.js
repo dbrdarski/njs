@@ -1,7 +1,7 @@
 export default function CourseCtrl({
-  models: { Course }
+  schemas: { Course }
 }){
-  // let { Course } = $.models
+  // let { Course } = $.schemas
   this.relations.Course
   return {
     index : function(){

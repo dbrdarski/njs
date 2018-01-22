@@ -14,7 +14,8 @@ import './templates/module'
 
 let routes = app.store()
 
-app.config('slugify', function(st){
+app.config('str', {
+  slugify: function(st){
     st = st.toLowerCase()
     st = st.replace(/[\u00C0-\u00C5]/ig,'a');
     st = st.replace(/[\u00C8-\u00CB]/ig,'e');
@@ -28,6 +29,7 @@ app.config('slugify', function(st){
     st = st.replace(/[\-]{2,}/g,'-');
     st = st.replace(/^[^a-z]+/g,'');
     return (st.replace(/[^a-z0-9\- ]*/gi,''));
+  }
 })
 
 app.config('group', function(route, fn){
@@ -65,14 +67,14 @@ let routeHandler = (route, view) => {
       //     state.title = v
       //   },
       //   setSlug: function(v) {
-      //     state.customSlug = slugify(v)
+      //     state.customSlug = str.slugify(v)
       //   },
       //   setDescription: function(v){
       //     state.description = v
       //   }
       // }
       // Object.defineProperty(state, 'slug', {
-      //   get: () => state.customSlug || slugify(state.title)
+      //   get: () => state.customSlug || str.slugify(state.title)
       // })
       return vnode
     }

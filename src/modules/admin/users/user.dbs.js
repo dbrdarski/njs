@@ -1,5 +1,5 @@
 export default function( $ ){
-  let { User, Role, Course } = $.models;
+  let { User, Role, Course } = $.schemas;
 
   $.chain(
     ( ) => ( Role.build({
@@ -158,7 +158,7 @@ export default function( $ ){
         laravel.setAuthor(jack, {save: false})
         laravel.title='Laravel Database Essentials'
         laravel.slug='laravel-database-essentials'
-        laravel.description='Learn how take advantage of Laravel\'s built in model classes, schema builder and migration manager.'
+        laravel.description='Learn how take advantage of Laravel\'s built in model classes, model builder and migration manager.'
         laravel.level='Intermediate'
         laravel.color='yellow'
         laravel.image='database.png'

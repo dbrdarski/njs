@@ -2385,6 +2385,7 @@ var app = (function(){
         };
         var getDeps = function(deps, callerName){
             return deps.map(function(dep){
+                console.log({deps, callerName, dep})
                 if( storage[dep].deps.indexOf(callerName) !== -1 ){
                     throw new Error("You have a circular dependency between '" + dep + "' and '" + callerName + "' module.");
                 }
@@ -6114,20 +6115,22 @@ app.config('components', components.getAll);
 
 var routes = app.store();
 
-app.config('slugify', function (st) {
-  st = st.toLowerCase();
-  st = st.replace(/[\u00C0-\u00C5]/ig, 'a');
-  st = st.replace(/[\u00C8-\u00CB]/ig, 'e');
-  st = st.replace(/[\u00CC-\u00CF]/ig, 'i');
-  st = st.replace(/[\u00D2-\u00D6]/ig, 'o');
-  st = st.replace(/[\u00D9-\u00DC]/ig, 'u');
-  st = st.replace(/[\u00D1]/ig, 'n');
-  st = st.replace(/[\-]/g, ' ');
-  // st = st.replace(/[^a-z0-9 ]+/gi,'')
-  st = st.trim().replace(/ /g, '-');
-  st = st.replace(/[\-]{2,}/g, '-');
-  st = st.replace(/^[^a-z]+/g, '');
-  return st.replace(/[^a-z0-9\- ]*/gi, '');
+app.config('str', {
+  slugify: function slugify(st) {
+    st = st.toLowerCase();
+    st = st.replace(/[\u00C0-\u00C5]/ig, 'a');
+    st = st.replace(/[\u00C8-\u00CB]/ig, 'e');
+    st = st.replace(/[\u00CC-\u00CF]/ig, 'i');
+    st = st.replace(/[\u00D2-\u00D6]/ig, 'o');
+    st = st.replace(/[\u00D9-\u00DC]/ig, 'u');
+    st = st.replace(/[\u00D1]/ig, 'n');
+    st = st.replace(/[\-]/g, ' ');
+    // st = st.replace(/[^a-z0-9 ]+/gi,'')
+    st = st.trim().replace(/ /g, '-');
+    st = st.replace(/[\-]{2,}/g, '-');
+    st = st.replace(/^[^a-z]+/g, '');
+    return st.replace(/[^a-z0-9\- ]*/gi, '');
+  }
 });
 
 app.config('group', function (route, fn) {
@@ -6168,14 +6171,14 @@ var routeHandler = function routeHandler(route, view) {
       //     state.title = v
       //   },
       //   setSlug: function(v) {
-      //     state.customSlug = slugify(v)
+      //     state.customSlug = str.slugify(v)
       //   },
       //   setDescription: function(v){
       //     state.description = v
       //   }
       // }
       // Object.defineProperty(state, 'slug', {
-      //   get: () => state.customSlug || slugify(state.title)
+      //   get: () => state.customSlug || str.slugify(state.title)
       // })
       return vnode;
     }

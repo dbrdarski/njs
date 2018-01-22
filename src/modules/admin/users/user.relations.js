@@ -1,5 +1,5 @@
 export default function({
-  models: { User, Course, Role }
+  schemas: { User, Course, Role }
 }){
   User.Courses = User.hasMany(Course, {
     as: 'courses', foreignKey: 'authorId'

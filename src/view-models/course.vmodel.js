@@ -1,5 +1,5 @@
 export default function({
-  _, m, slugify,
+  _, m, str,
   components : { Topbar, Content, CourseItem }
 }){
   var xetter = (state) => (prop, xettings) => (value) => {
@@ -13,8 +13,8 @@ export default function({
     return {
         title: x('title'),
         slug: x('slug', {
-          // set: [ slugify ],
-          // get: [ ( state ) => state.slug || slugify( state.title() ) ]
+          // set: [ str.slugify ],
+          // get: [ ( state ) => state.slug || str.slugify( state.title() ) ]
         }),
         description: x('description'),
         num: x('num')
@@ -32,7 +32,7 @@ export default function({
           state.title = v
         },
         slug: function(v) {
-          state.customSlug = slugify(v)
+          state.customSlug = str.slugify(v)
         },
         description: function(v) {
           state.description = v
@@ -48,7 +48,7 @@ export default function({
       num: null
     }
     Object.defineProperty(state, 'slug', {
-      get: () => state.customSlug || slugify(state.title)
+      get: () => state.customSlug || str.slugify(state.title)
     })
     return state
   })

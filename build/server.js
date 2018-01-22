@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 38);
+/******/ 	return __webpack_require__(__webpack_require__.s = 42);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -141,10 +141,10 @@ module.exports = function parseURL(url, root) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__users_module__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__roles_permissions_module__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__courses_module__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lessions_module__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_utils_module__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__admin_admin_module__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__courses_module__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lessions_module__ = __webpack_require__(37);
 
 
 
@@ -157,11 +157,11 @@ module.exports = function parseURL(url, root) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__topbar_component__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__course_item_component__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__content_component__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__courses_template__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__course_edit_template__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__topbar_component__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__course_item_component__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__content_component__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__courses_template__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__course_edit_template__ = __webpack_require__(44);
 
 
 
@@ -188,7 +188,7 @@ __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('templates', function ($)
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__course_vmodel__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__course_vmodel__ = __webpack_require__(48);
 
 
 
@@ -207,9 +207,9 @@ __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('templates', function ($)
 "use strict";
 
 
-var pushStateMock = __webpack_require__(49)
-var domMock = __webpack_require__(48)
-var xhrMock = __webpack_require__(50)
+var pushStateMock = __webpack_require__(53)
+var domMock = __webpack_require__(52)
+var xhrMock = __webpack_require__(54)
 
 module.exports = function(env) {
 	env = env || {}
@@ -252,130 +252,89 @@ module.exports = require("fs");
 /* 11 */
 /***/ (function(module, exports) {
 
-module.exports = require("mithril");
+module.exports = require("jsonapi-serializer");
 
 /***/ }),
 /* 12 */
 /***/ (function(module, exports) {
 
-module.exports = require("mithril-node-render");
+module.exports = require("mithril");
 
 /***/ }),
 /* 13 */
 /***/ (function(module, exports) {
 
-module.exports = require("ramda");
+module.exports = require("mithril-node-render");
 
 /***/ }),
 /* 14 */
 /***/ (function(module, exports) {
 
-module.exports = require("sequelize");
+module.exports = require("ramda");
 
 /***/ }),
 /* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = CourseCtrl;
-function CourseCtrl({
-  models: { Course }
-}) {
-  // let { Course } = $.models
-  this.relations.Course;
-  return {
-    index: function () {
-      return Course.findAll({
-        include: [Course.Author]
-      });
-    },
-    edit: function ($) {
-      return Course.findOne({
-        where: {
-          slug: $.params.slug
-        },
-        include: [Course.Author]
-      });
-    },
-    new: function ($) {
-      return new Promise((resolve, reject) => resolve(new Course()));
-    },
-    create: function ($) {
-      var course = Course.build($.query);
-      return course.save();
-    },
-    install: function ($) {
-      Course.sync({ force: true });
-      $.data.msg = { installed: 'courses table' };
-      $.json();
-    }
-  };
-}
+module.exports = require("sequelize");
 
 /***/ }),
 /* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-// export default @model Course {
-//   @uuid({
-//     primaryKey : true
-//   }) id
-//   @str title
-//   @str slug
-//   @text description
-//   @str video
-//   @str image
-//   @enum({
-//     values: [ 'default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue' ],
-//     defaultValue: 'default'
-//   }) color
-//   @enum({
-//     values : [ 'Beginner', 'Intermediate', 'Advanced' ],
-//     defaultValue: 'Beginner'
-//   }) level
-//   @bool({
-//     defaultValue : false
-//   }) active
-// }
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__users_user_model__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__users_user_relations__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__users_user_controller__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__roles_permissions_role_model__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__roles_permissions_permission_model__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__roles_permissions_roles_permissions_model__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__roles_permissions_role_controller__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__roles_permissions_permission_controller__ = __webpack_require__(17);
 
-/* harmony default export */ __webpack_exports__["a"] = (function ({ Q, db }) {
-  return db.define('course', {
-    id: {
-      type: Q.UUID,
-      primaryKey: true,
-      defaultValue: Q.UUIDV1
-    },
-    title: {
-      type: Q.STRING
-    },
-    slug: {
-      type: Q.STRING
-    },
-    description: {
-      type: Q.TEXT
-    },
-    video: {
-      type: Q.STRING
-    },
-    image: {
-      type: Q.STRING
-    },
-    color: {
-      type: Q.ENUM,
-      values: ['default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue'],
-      defaultValue: 'default'
-    },
-    level: {
-      type: Q.ENUM,
-      values: ['Beginner', 'Intermediate', 'Advanced'],
-      defaultValue: 'Beginner'
-    },
-    active: {
-      type: Q.BOOLEAN,
-      defaultValue: false
-    }
-  });
+
+
+
+
+
+
+
+
+
+
+// import UserRoutes from './users/user.routes'
+// import PermissionRoutes from './roles-permissions/permission.routes'
+// import RoleRoutes from './roles-permissions/role.routes'
+
+__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('admin', function ($) {
+	$.schema({ User: __WEBPACK_IMPORTED_MODULE_1__users_user_model__["a" /* default */] });
+	$.relation({ User: __WEBPACK_IMPORTED_MODULE_2__users_user_relations__["a" /* default */] });
+	$.controller({ UserCtrl: __WEBPACK_IMPORTED_MODULE_3__users_user_controller__["a" /* default */] });
+	$.schema({ Role: __WEBPACK_IMPORTED_MODULE_4__roles_permissions_role_model__["a" /* default */] });
+	$.schema({ Permission: __WEBPACK_IMPORTED_MODULE_5__roles_permissions_permission_model__["a" /* default */] });
+	$.schema({ RolePermission: __WEBPACK_IMPORTED_MODULE_6__roles_permissions_roles_permissions_model__["a" /* default */] });
+	$.relation('Role', __webpack_require__(23));
+	$.relation('Permission', __webpack_require__(19));
+	$.controller({ RoleCtrl: __WEBPACK_IMPORTED_MODULE_7__roles_permissions_role_controller__["a" /* default */] });
+	$.controller({ PermissionCtrl: __WEBPACK_IMPORTED_MODULE_8__roles_permissions_permission_controller__["a" /* default */] });
+	// $.route({UserRoutes})
+	// $.route({RoleRoutes})
+	// $.route({PermissionRoutes})
+	$.resolver({ 'admin': function ({
+			api,
+			server,
+			controllers: { PermissionCtrl, RoleCtrl, UserCtrl }
+		}) {
+
+			api.get('/users', UserCtrl.index);
+			api.get('/user/:username', UserCtrl.single);
+
+			server.get('/users', UserCtrl.index).get('/user/new', UserCtrl.new).get('/user/install', UserCtrl.install).get('/permissions', PermissionCtrl.index).get('/permission/new', PermissionCtrl.new).get('/permission/install', PermissionCtrl.install).get('/roles', RoleCtrl.index).get('/role/new', RoleCtrl.new).get('/role/install', RoleCtrl.install);
+		}
+	});
+	// console.log('ROUTES', $.routes.PermissionRoutes)
 });
 
 /***/ }),
@@ -383,214 +342,11 @@ function CourseCtrl({
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function ({ models: { User, Course, Lession } }) {
-  Course.Author = Course.belongsTo(User, { as: 'author' }); // owner (lecturer)
-  // Course.Student = Course.belongsToMany(User, { through: User })	// students
-  Course.Lession = Course.hasMany(Lession);
-});
-
-/***/ }),
-/* 18 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__course_model__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__course_relations__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__course_controller__ = __webpack_require__(15);
-
-
-
-
-
-// import CourseRoutes from './course.routes'
-
-
-__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('courses', function ($) {
-	$.model({ Course: __WEBPACK_IMPORTED_MODULE_1__course_model__["a" /* default */] });
-	$.relation('Course', __WEBPACK_IMPORTED_MODULE_2__course_relations__["a" /* default */]);
-	$.controller({ CourseCtrl: __WEBPACK_IMPORTED_MODULE_3__course_controller__["a" /* default */] });
-
-	// $.route({CourseRoutes}) 		// => this should be removed
-	// instead, user code snipped below
-
-	$.resolver('courses', function ({
-		api,
-		attach,
-		server,
-		controllers: { CourseCtrl }
-	}) {
-
-		attach('/courses', CourseCtrl.index);
-		attach('/course/:slug', CourseCtrl.edit);
-
-		api.get('/courses', CourseCtrl.index);
-		api.get('/course/:slug', CourseCtrl.edit);
-		api.get('/course/new', CourseCtrl.new);
-
-		server.get('/course/new', CourseCtrl.new).get('/course/install', CourseCtrl.install);
-	});
-});
-
-/***/ }),
-/* 19 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = LessionCtrl;
-function LessionCtrl({ models: { Lession } }) {
-  this.relations.Lession;
-  return {
-    index: function ($) {
-      Lession.findAll().then(lession => {
-        $.data.message = 'Hello World!!!!';
-        $.data.lession = lession;
-        $.data.body = $.body;
-        $.json();
-      });
-    },
-    new: function ($) {
-      var lession = Lession.build($.query);
-      $.data.msg = $.query;
-      lession.save();
-      $.json();
-    },
-    install: function ($) {
-      Lession.sync({ force: true });
-      $.data.msg = { installed: 'lession table' };
-      $.json();
-    }
-  };
-}
-
-/***/ }),
-/* 20 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function ({ Q, db }) {
-  return db.define('lession', {
-    id: {
-      type: Q.UUID,
-      primaryKey: true,
-      defaultValue: Q.UUIDV1
-    },
-    title: {
-      type: Q.STRING
-    },
-    slug: {
-      type: Q.STRING
-    },
-    description: {
-      type: Q.TEXT
-    },
-    video: {
-      type: Q.STRING
-    },
-    image: {
-      type: Q.STRING
-    },
-    grade: Q.INTEGER,
-    complete: {
-      type: Q.BOOLEAN
-    }
-  });
-});
-
-/***/ }),
-/* 21 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function ({ models: { Lession, User, Course, LessionUser } }) {
-  Lession.belongsTo(Course);
-  // Lession.belongsToMany(User)
-});
-
-/***/ }),
-/* 22 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lession_model__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lession_relations__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lession_controller__ = __webpack_require__(19);
-
-
-
-
-
-// import LessionRoutes from './lession.routes'
-
-__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('lessions', function ($) {
-	$.model({ Lession: __WEBPACK_IMPORTED_MODULE_1__lession_model__["a" /* default */] });
-	$.relation({ Lession: __WEBPACK_IMPORTED_MODULE_2__lession_relations__["a" /* default */] });
-	$.controller({ LessionCtrl: __WEBPACK_IMPORTED_MODULE_3__lession_controller__["a" /* default */] });
-	// $.route({LessionRoutes})
-	$.resolver({ lessions: function ({
-			server,
-			controllers: { LessionCtrl }
-		}) {
-			server.get('/lessions', LessionCtrl.index).get('/lession/new', LessionCtrl.new).get('/lession/install', LessionCtrl.install);
-		}
-	});
-});
-
-/***/ }),
-/* 23 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__role_model__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__permission_model__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__roles_permissions_model__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__role_controller__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__permission_controller__ = __webpack_require__(24);
-
-
-
-
-
-
-
-// import PermissionRoutes from './permission.routes'
-// import RoleRoutes from './role.routes'
-
-__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('admin', function ($) {
-	$.model({ Role: __WEBPACK_IMPORTED_MODULE_1__role_model__["a" /* default */] });
-	$.model({ Permission: __WEBPACK_IMPORTED_MODULE_2__permission_model__["a" /* default */] });
-	$.model({ RolePermission: __WEBPACK_IMPORTED_MODULE_3__roles_permissions_model__["a" /* default */] });
-	$.relation('Role', __webpack_require__(30));
-	$.relation('Permission', __webpack_require__(26));
-	$.controller({ RoleCtrl: __WEBPACK_IMPORTED_MODULE_4__role_controller__["a" /* default */] });
-	$.controller({ PermissionCtrl: __WEBPACK_IMPORTED_MODULE_5__permission_controller__["a" /* default */] });
-	// $.route({RoleRoutes})
-	// $.route({PermissionRoutes})
-	$.resolver({ 'roles-and-permissions': function ({
-			server,
-			controllers: { PermissionCtrl, RoleCtrl }
-		}) {
-			server.get('/permissions', PermissionCtrl.index).get('/permission/new', PermissionCtrl.new).get('/permission/install', PermissionCtrl.install).get('/roles', RoleCtrl.index).get('/role/new', RoleCtrl.new).get('/role/install', RoleCtrl.install);
-		}
-	});
-	// console.log('ROUTES', $.routes.PermissionRoutes)
-});
-
-/***/ }),
-/* 24 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = PermissionCtrl;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__permission_seed__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__permission_seed__ = __webpack_require__(20);
 
 function PermissionCtrl({
-  models: { Permission }
+  schemas: { Permission }
 }) {
   // relations.Permission
   return {
@@ -618,7 +374,7 @@ function PermissionCtrl({
 }
 
 /***/ }),
-/* 25 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -640,17 +396,17 @@ function PermissionCtrl({
 });
 
 /***/ }),
-/* 26 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony default export */ __webpack_exports__["default"] = (function ({ models: { Role, Permission, RolePermission } }) {
+/* harmony default export */ __webpack_exports__["default"] = (function ({ schema: { Role, Permission, RolePermission } }) {
 	Permission.Role = Permission.belongsToMany(Role, { through: RolePermission });
 });
 
 /***/ }),
-/* 27 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -670,15 +426,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 28 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = RoleCtrl;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__role_seed__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__role_seed__ = __webpack_require__(24);
 
 function RoleCtrl({
-  models: { Role },
+  schemas: { Role },
   relations: { RoleRel }
 }) {
   return {
@@ -706,7 +462,7 @@ function RoleCtrl({
 }
 
 /***/ }),
-/* 29 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -728,18 +484,18 @@ function RoleCtrl({
 });
 
 /***/ }),
-/* 30 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony default export */ __webpack_exports__["default"] = (function ({ models: { Role, User, Permission, RolePermission } }) {
+/* harmony default export */ __webpack_exports__["default"] = (function ({ schemas: { Role, User, Permission, RolePermission } }) {
 	Role.Permission = Role.belongsToMany(Permission, { through: RolePermission });
 	Role.User = Role.hasMany(User);
 });
 
 /***/ }),
-/* 31 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -759,7 +515,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 32 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -782,53 +538,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 33 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__user_model__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__user_relations__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__user_controller__ = __webpack_require__(34);
-
-
-
-
-
-// import UserRoutes from './user.routes'
-
-__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('users', function ($) {
-	$.model({ User: __WEBPACK_IMPORTED_MODULE_1__user_model__["a" /* default */] });
-	$.relation({ User: __WEBPACK_IMPORTED_MODULE_2__user_relations__["a" /* default */] });
-	$.controller({ UserCtrl: __WEBPACK_IMPORTED_MODULE_3__user_controller__["a" /* default */] });
-	// $.route({UserRoutes})
-
-	$.resolver({ 'users': function ({
-			api,
-			server,
-			controllers: { UserCtrl }
-		}) {
-
-			api.get('/users', UserCtrl.index);
-			api.get('/user/:username', UserCtrl.single);
-
-			server.get('/users', UserCtrl.index).get('/user/new', UserCtrl.new).get('/user/install', UserCtrl.install);
-		}
-	});
-});
-
-/***/ }),
-/* 34 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = UserCtrl;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__user_seed__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__user_seed__ = __webpack_require__(29);
 
 function UserCtrl($$) {
   this.relations.User;
-  let User = this.models.User;
+  let User = this.schemas.User;
 
   return {
     index: function ($) {
@@ -863,7 +582,7 @@ function UserCtrl($$) {
 }
 
 /***/ }),
-/* 35 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -911,12 +630,12 @@ function UserCtrl($$) {
 });
 
 /***/ }),
-/* 36 */
+/* 28 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony default export */ __webpack_exports__["a"] = (function ({
-  models: { User, Course, Role }
+  schemas: { User, Course, Role }
 }) {
   User.Courses = User.hasMany(Course, {
     as: 'courses', foreignKey: 'authorId'
@@ -927,12 +646,12 @@ function UserCtrl($$) {
 });
 
 /***/ }),
-/* 37 */
+/* 29 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony default export */ __webpack_exports__["a"] = (function ($) {
-  let { User, Role, Course } = $.models;
+  let { User, Role, Course } = $.schemas;
 
   $.chain(() => Role.build({
     name: 'admin',
@@ -1076,7 +795,7 @@ function UserCtrl($$) {
       laravel.setAuthor(jack, { save: false });
       laravel.title = 'Laravel Database Essentials';
       laravel.slug = 'laravel-database-essentials';
-      laravel.description = 'Learn how take advantage of Laravel\'s built in model classes, schema builder and migration manager.';
+      laravel.description = 'Learn how take advantage of Laravel\'s built in model classes, model builder and migration manager.';
       laravel.level = 'Intermediate';
       laravel.color = 'yellow';
       laravel.image = 'database.png';
@@ -1095,14 +814,50 @@ function UserCtrl($$) {
 });
 
 /***/ }),
-/* 38 */
+/* 30 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_module__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_models_module__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules__ = __webpack_require__(3);
+/* harmony export (immutable) */ __webpack_exports__["a"] = CourseCtrl;
+function CourseCtrl({
+  schemas: { Course }
+}) {
+  // let { Course } = $.schemas
+  this.relations.Course;
+  return {
+    index: function () {
+      return Course.findAll({
+        include: [Course.Author]
+      });
+    },
+    edit: function ($) {
+      return Course.findOne({
+        where: {
+          slug: $.params.slug
+        },
+        include: [Course.Author]
+      });
+    },
+    new: function ($) {
+      return new Promise((resolve, reject) => resolve(new Course()));
+    },
+    create: function ($) {
+      var course = Course.build($.query);
+      return course.save();
+    },
+    install: function ($) {
+      Course.sync({ force: true });
+      $.data.msg = { installed: 'courses table' };
+      $.json();
+    }
+  };
+}
+
+/***/ }),
+/* 31 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 function _initDefineProp(target, property, descriptor, context) {
   if (!descriptor) return;
   Object.defineProperty(target, property, {
@@ -1146,16 +901,789 @@ function _initializerWarningHelper(descriptor, context) {
   throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
 }
 
+/* harmony default export */ __webpack_exports__["a"] = (function ({
+  Model, Uuid, Str, Text, Enum, Bool, hasOne, hasMany, belongsTo, belongsToMany
+}) {
+  var _dec, _dec2, _dec3, _dec4, _dec5, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11;
+
+  return _dec = Uuid({
+    primaryKey: true
+  }), _dec2 = Enum({
+    values: ['default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue'],
+    defaultValue: 'default'
+  }), _dec3 = Enum({
+    values: ['Beginner', 'Intermediate', 'Advanced'],
+    defaultValue: 'Beginner'
+  }), _dec4 = Bool({
+    defaultValue: false
+  }), _dec5 = belongsTo({ type: 'User' }), Model(_class = (_class2 = class Course {
+    constructor() {
+      _initDefineProp(this, 'id', _descriptor, this);
+
+      _initDefineProp(this, 'title', _descriptor2, this);
+
+      _initDefineProp(this, 'slug', _descriptor3, this);
+
+      _initDefineProp(this, 'description', _descriptor4, this);
+
+      _initDefineProp(this, 'video', _descriptor5, this);
+
+      _initDefineProp(this, 'image', _descriptor6, this);
+
+      _initDefineProp(this, 'color', _descriptor7, this);
+
+      _initDefineProp(this, 'level', _descriptor8, this);
+
+      _initDefineProp(this, 'active', _descriptor9, this);
+
+      _initDefineProp(this, 'Author', _descriptor10, this);
+
+      _initDefineProp(this, 'Lession', _descriptor11, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class2.prototype, 'id', [_dec], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, 'title', [Str], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, 'slug', [Str], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, 'description', [Text], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, 'video', [Str], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, 'image', [Str], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, 'color', [_dec2], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, 'level', [_dec3], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, 'active', [_dec4], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, 'Author', [_dec5], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, 'Lession', [hasMany], {
+    enumerable: true,
+    initializer: null
+  })), _class2)) || _class;
+  // return db.define('course', {
+  //   id : {
+  //     type: Q.UUID,
+  //     primaryKey: true,
+  //     defaultValue : Q.UUIDV1
+  //   },
+  //   title : {
+  //     type: Q.STRING
+  //   },
+  //   slug : {
+  //     type: Q.STRING
+  //   },
+  //   description : {
+  //     type: Q.TEXT
+  //   },
+  //   video : {
+  //     type: Q.STRING
+  //   },
+  //   image : {
+  //     type: Q.STRING
+  //   },
+  //   color : {
+  //     type: Q.ENUM,
+  //     values: [ 'default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue' ],
+  //     defaultValue: 'default'
+  //   },
+  //   level : {
+  //     type: Q.ENUM,
+  //     values : [ 'Beginner', 'Intermediate', 'Advanced' ],
+  //     defaultValue: 'Beginner'
+  //   },
+  //   active : {
+  //     type : Q.BOOLEAN,
+  //     defaultValue : false
+  //   }
+  // })
+});
+
+/***/ }),
+/* 32 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony default export */ var _unused_webpack_default_export = (function ({ schemas: { User, Course, Lession } }) {
+  Course.Author = Course.belongsTo(User, { as: 'author' }); // owner (lecturer)
+  // Course.Student = Course.belongsToMany(User, { through: User })	// students
+  Course.Lession = Course.hasMany(Lession);
+});
+
+// let schema = schemas[target.name];
+// let relation = schemas[options && options.type || property]
+// schema[property] = schema[relation](relation, map())
+
+/***/ }),
+/* 33 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__course_model__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__course_relations__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__course_controller__ = __webpack_require__(30);
+
+
+
+
+
+// import CourseRoutes from './course.routes'
+
+
+__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('courses', function ($) {
+
+	$.config('color', ['default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue']);
+	$.config('level', ['Beginner', 'Intermediate', 'Advanced']);
+	$.model('Course', __WEBPACK_IMPORTED_MODULE_1__course_model__["a" /* default */]);
+	// $.relation('Course', CourseRelations)
+	$.controller({ CourseCtrl: __WEBPACK_IMPORTED_MODULE_3__course_controller__["a" /* default */] });
+
+	// @belongsTo({model: User}) Author
+	// Course.Author = Course.belongsTo(User, {as: 'Author'})
+
+
+	// @hasMany Lession
+	// Course.Lession = Course.hasMany(Lession)
+
+	// $.route({CourseRoutes}) 		// => this should be removed
+	// instead, user code snipped below
+
+	$.resolver('courses', function ({
+		api,
+		attach,
+		server,
+		controllers: { CourseCtrl }
+	}) {
+
+		attach('/courses', CourseCtrl.index);
+		attach('/course/:slug', CourseCtrl.edit);
+
+		api.get('/courses', CourseCtrl.index);
+		api.get('/course/:slug', CourseCtrl.edit);
+		api.get('/course/new', CourseCtrl.new);
+
+		server.get('/course/new', CourseCtrl.new).get('/course/install', CourseCtrl.install);
+	});
+});
+
+/***/ }),
+/* 34 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = LessionCtrl;
+function LessionCtrl({ schemas: { Lession } }) {
+  this.relations.Lession;
+  return {
+    index: function ($) {
+      Lession.findAll().then(lession => {
+        $.data.message = 'Hello World!!!!';
+        $.data.lession = lession;
+        $.data.body = $.body;
+        $.json();
+      });
+    },
+    new: function ($) {
+      var lession = Lession.build($.query);
+      $.data.msg = $.query;
+      lession.save();
+      $.json();
+    },
+    install: function ($) {
+      Lession.sync({ force: true });
+      $.data.msg = { installed: 'lession table' };
+      $.json();
+    }
+  };
+}
+
+/***/ }),
+/* 35 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function ({ Q, db }) {
+  return db.define('lession', {
+    id: {
+      type: Q.UUID,
+      primaryKey: true,
+      defaultValue: Q.UUIDV1
+    },
+    title: {
+      type: Q.STRING
+    },
+    slug: {
+      type: Q.STRING
+    },
+    description: {
+      type: Q.TEXT
+    },
+    video: {
+      type: Q.STRING
+    },
+    image: {
+      type: Q.STRING
+    },
+    grade: Q.INTEGER,
+    complete: {
+      type: Q.BOOLEAN
+    }
+  });
+});
+
+/***/ }),
+/* 36 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function ({ schemas: { Lession, User, Course, LessionUser } }) {
+  Lession.belongsTo(Course);
+  // Lession.belongsToMany(User)
+});
+
+/***/ }),
+/* 37 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lession_model__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lession_relations__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lession_controller__ = __webpack_require__(34);
+
+
+
+
+
+// import LessionRoutes from './lession.routes'
+
+__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('lessions', function ($) {
+	$.schema({ Lession: __WEBPACK_IMPORTED_MODULE_1__lession_model__["a" /* default */] });
+	$.relation({ Lession: __WEBPACK_IMPORTED_MODULE_2__lession_relations__["a" /* default */] });
+	$.controller({ LessionCtrl: __WEBPACK_IMPORTED_MODULE_3__lession_controller__["a" /* default */] });
+	// $.route({LessionRoutes})
+	$.resolver({ lessions: function ({
+			server,
+			controllers: { LessionCtrl }
+		}) {
+			server.get('/lessions', LessionCtrl.index).get('/lession/new', LessionCtrl.new).get('/lession/install', LessionCtrl.install);
+		}
+	});
+});
+
+/***/ }),
+/* 38 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
+function _initDefineProp(target, property, descriptor, context) {
+  if (!descriptor) return;
+  Object.defineProperty(target, property, {
+    enumerable: descriptor.enumerable,
+    configurable: descriptor.configurable,
+    writable: descriptor.writable,
+    value: descriptor.initializer ? descriptor.initializer.call(context) : void 0
+  });
+}
+
+function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
+  var desc = {};
+  Object['ke' + 'ys'](descriptor).forEach(function (key) {
+    desc[key] = descriptor[key];
+  });
+  desc.enumerable = !!desc.enumerable;
+  desc.configurable = !!desc.configurable;
+
+  if ('value' in desc || desc.initializer) {
+    desc.writable = true;
+  }
+
+  desc = decorators.slice().reverse().reduce(function (desc, decorator) {
+    return decorator(target, property, desc) || desc;
+  }, desc);
+
+  if (context && desc.initializer !== void 0) {
+    desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
+    desc.initializer = undefined;
+  }
+
+  if (desc.initializer === void 0) {
+    Object['define' + 'Property'](target, property, desc);
+    desc = null;
+  }
+
+  return desc;
+}
+
+function _initializerWarningHelper(descriptor, context) {
+  throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
+}
+
+
+/* harmony default export */ __webpack_exports__["a"] = (function ({ Q, db }) {
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11;
+
+  function propertyDecorator(fn) {
+    return function (...params) {
+      let descriptor = params[params.length - 1];
+      if (params.length === 3 && typeof descriptor === 'object' && descriptor.hasOwnProperty('enumerable') && descriptor.hasOwnProperty('initializer') && descriptor.hasOwnProperty('configurable')) {
+        return fn([], ...params);
+      } else {
+        return fn.bind(null, params);
+      }
+    };
+  }
+
+  function emptyDecorator(...params) {
+    let descriptor = params[params.length - 1];
+    if (params.length === 3 && typeof descriptor === 'object' && descriptor.hasOwnProperty('enumerable') && descriptor.hasOwnProperty('initializer') && descriptor.hasOwnProperty('configurable')) {
+      return null;
+    } else {
+      return function (target, property, descriptor) {
+        descriptor.initializer = () => null;
+      };
+    }
+  }
+
+  const removeEmptyKeys = o => {
+    let newObj = {};
+    Object.keys(o).forEach(key => {
+      let val = o[key];
+      if (val != null) {
+        newObj[key] = val;
+      }
+    });
+    return newObj;
+  };
+
+  const sequalizeClassAttributeDecorator = target => {
+    // console.log({name: (target.name), target})
+    return db.define(__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.str.kebab(target.name), removeEmptyKeys(new target()));
+  };
+
+  let dataType = (type, defaultOptions) => ([options], target, property, descriptor) => {
+    descriptor.initializer = () => Object.assign({}, defaultOptions, options, { type });
+    return descriptor;
+  };
+
+  let serializerAttributeDecorator = propertyDecorator(([options], target, property, descriptor) => {
+    descriptor.initializer = function () {
+      this.attributes = this.attributes || [];
+      this.attributes.push(property);
+    };
+  });
+  let relationType = type => ([options = {}], target, property, descriptor) => {
+    descriptor.initializer = function () {
+      let schema = __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.schemas[target.constructor.name];
+      let relation;
+      if (options.type) {
+        options.as = __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.str.kebab(property);
+        relation = __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.schemas[options.type];
+        delete options.type;
+      } else {
+        relation = __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.schemas[property];
+      }
+      // console.log(`\n\n\n\n\n${schema.name}.${property} = ${schema}.${type}(${relation.name}\n\n\n\n\n`, options)
+      schema[property] = schema[type](relation, options);
+    };
+  };
+  // let serializerRelationDecorator = propertyDecorator(([options], target, property, descriptor) => {
+  //
+  // })
+
+  let sequalizeAttributeDecorator = (type, defaultValue) => propertyDecorator(dataType(type, defaultValue));
+  let sequalizeRelationDecorator = type => propertyDecorator(relationType(type));
+
+  let attr = (target, property, descriptor) => {
+    descriptor.initializer = function () {
+      this.attributes = this.attributes || [];
+      this.attributes.push(property);
+      return target.name;
+    };
+    return descriptor;
+  };
+
+  let sequelizeAttributeDecorators = {
+    Model: sequalizeClassAttributeDecorator,
+    Enum: sequalizeAttributeDecorator(Q.ENUM),
+    Uuid: sequalizeAttributeDecorator(Q.UUID, {
+      primaryKey: true,
+      defaultValue: Q.UUIDV1
+    }),
+    Str: sequalizeAttributeDecorator(Q.STRING),
+    Text: sequalizeAttributeDecorator(Q.TEXT),
+    Bool: sequalizeAttributeDecorator(Q.BOOLEAN),
+    Int: sequalizeAttributeDecorator(Q.INTEGER),
+    BigInt: sequalizeAttributeDecorator(Q.BIGINT),
+    Float: sequalizeAttributeDecorator(Q.FLOAT),
+    Real: sequalizeAttributeDecorator(Q.REAL),
+    Dbl: sequalizeAttributeDecorator(Q.DOUBLE),
+    Dec: sequalizeAttributeDecorator(Q.DECIMAL),
+    hasOne: emptyDecorator,
+    belongsTo: emptyDecorator,
+    hasMany: emptyDecorator,
+    belongsToMany: emptyDecorator
+  };
+
+  const sequelizeRelationshipDecorators = {
+    // Model
+    Model: x => new x(),
+    Enum: emptyDecorator,
+    Uuid: emptyDecorator,
+    Str: emptyDecorator,
+    Text: emptyDecorator,
+    Bool: emptyDecorator,
+    Int: emptyDecorator,
+    BigInt: emptyDecorator,
+    Float: emptyDecorator,
+    Real: emptyDecorator,
+    Dbl: emptyDecorator,
+    Dec: emptyDecorator,
+    hasOne: sequalizeRelationDecorator('hasOne'),
+    belongsTo: sequalizeRelationDecorator('belongsTo'),
+    hasMany: sequalizeRelationDecorator('hasMany'),
+    belongsToMany: sequalizeRelationDecorator('belongsToMany')
+
+    // let serializer = {
+    //   Uuid: dataDecorator('UUID'),
+    //   Str: dataDecorator('STRING'),
+    //   Text: dataDecorator('TEXT'),
+    //   Bool: dataDecorator("BOOLEAN"),
+    //   Int: dataDecorator('INTEGER'),
+    //   BigInt: dataDecorator('BIGINT'),
+    //   Float: dataDecorator('FLOAT'),
+    //   Real: dataDecorator('REAL'),
+    //   Dbl: dataDecorator('DOUBLE'),
+    //   Dec: dataDecorator('DECIMAL')
+    // }
+
+
+    // let belongsTo = propertyDecorator(([options], target, prop, descriptor) => {
+    //   descriptor.initializer = () => i
+    //   let i = {}
+    //   let t = i.model = target.name // let t = $.model[target.name]
+    //   if(!options){
+    //     let r = i.target = prop // $.model[prop]
+    //     // t[prop] = t.belongsTo(r)
+    //     i.option = 'belongsTo'
+    //   } else {
+    //     let alias = options.useModel
+    //     if(alias){
+    //       options.as = prop
+    //       delete options.useModel
+    //     }
+    //     let r = i.target = alias || prop
+    //     // r = i.target = $.model[alias || prop]
+    //     options.relation = 'belongsTo'
+    //     i.options = options
+    //   }
+    // })
+
+    // const courseSerializer = new $.jsonapi('course', {
+    //     attributes: ['id','title','slug','description','video','image','color','level','author'],
+    //     author:{
+    //       ref: 'id',
+    //       attributes: ['id', 'username', 'email', 'firstName', 'lastName', 'image', 'description']
+    //     }
+    // })
+
+  };let { Model, Uuid, Str, Text, Enum, Bool, hasOne } = sequelizeAttributeDecorators;
+
+  let Course = (_dec = Uuid({
+    primaryKey: true
+  }), _dec2 = Str(), _dec3 = Str(), _dec4 = Text(), _dec5 = Str(), _dec6 = Str(), _dec7 = Enum({
+    values: ['default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue'],
+    defaultValue: 'default'
+  }), _dec8 = Enum({
+    values: ['Beginner', 'Intermediate', 'Advanced'],
+    defaultValue: 'Beginner'
+  }), _dec9 = Bool({
+    defaultValue: false
+  }), _dec10 = hasOne({ two: 2 }), (_class = class Course {
+    constructor() {
+      _initDefineProp(this, 'id', _descriptor, this);
+
+      _initDefineProp(this, 'title', _descriptor2, this);
+
+      _initDefineProp(this, 'slug', _descriptor3, this);
+
+      _initDefineProp(this, 'description', _descriptor4, this);
+
+      _initDefineProp(this, 'video', _descriptor5, this);
+
+      _initDefineProp(this, 'image', _descriptor6, this);
+
+      _initDefineProp(this, 'color', _descriptor7, this);
+
+      _initDefineProp(this, 'level', _descriptor8, this);
+
+      _initDefineProp(this, 'active', _descriptor9, this);
+
+      _initDefineProp(this, 'one', _descriptor10, this);
+
+      _initDefineProp(this, 'two', _descriptor11, this);
+    }
+
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'id', [_dec], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, 'title', [_dec2], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'slug', [_dec3], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, 'description', [_dec4], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, 'video', [_dec5], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'image', [_dec6], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, 'color', [_dec7], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, 'level', [_dec8], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, 'active', [_dec9], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, 'one', [hasOne], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor11 = _applyDecoratedDescriptor(_class.prototype, 'two', [_dec10], {
+    enumerable: true,
+    initializer: null
+  })), _class));
+
+  const nc = new Course();
+
+  let valid = {
+    id: {
+      type: Q.UUID,
+      primaryKey: true,
+      defaultValue: Q.UUIDV1
+    },
+    title: {
+      type: Q.STRING
+    },
+    slug: {
+      type: Q.STRING
+    },
+    description: {
+      type: Q.TEXT
+    },
+    video: {
+      type: Q.STRING
+    },
+    image: {
+      type: Q.STRING
+    },
+    color: {
+      type: Q.ENUM,
+      values: ['default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue'],
+      defaultValue: 'default'
+    },
+    level: {
+      type: Q.ENUM,
+      values: ['Beginner', 'Intermediate', 'Advanced'],
+      defaultValue: 'Beginner'
+    },
+    active: {
+      type: Q.BOOLEAN,
+      defaultValue: false
+    }
+  };
+  __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.config('Course', { nc, valid: Object.assign({}, valid) });
+
+  // ( function({
+  //   Model, Uuid, Str, Text, Enum, Bool, belongsTo, hasMany
+  // }){
+  //   let Course = @Model class {
+  //     // @Uuid({
+  //     //   primaryKey : true
+  //     // }) id
+  //     // @Str title
+  //     // @Str slug
+  //     // @Text description
+  //     // @Str video
+  //     // @Str image
+  //     // @Enum({
+  //     //   values: [ 'default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue' ],
+  //     //   defaultValue: 'default'
+  //     // }) color
+  //     // @Enum({
+  //     //   values : [ 'Beginner', 'Intermediate', 'Advanced' ],
+  //     //   defaultValue: 'Beginner'
+  //     // }) level
+  //     // @Bool({
+  //     //   defaultValue : false
+  //     // }) active
+  //     // // @belongsTo({
+  //     // //   type: 'User'
+  //     // // }) Author
+  //     // // @hasMany Lession
+  //   }
+  //   $.config('Course', Course);
+  // })(sequelizeAttributeDecorators)
+
+  // @Float(11, 12)
+  // TestFloat
+  return {
+    sequelizeAttributeDecorators,
+    sequelizeRelationshipDecorators
+  };
+});
+
+// function Model (target) {
+//   target.qwertyb='bsd'
+//   return function(...args) {
+//     target.qwerty='asd'
+//     return {
+//       wrappedValue: new target(...args)
+//     }
+//   }
+// }
+//
+
+// let attr = (target, property, descriptor) => {
+//   // target.attr = target.attr || []
+//   // target.attr.push(property)
+//   console.log('TARGET', {target})
+//   descriptor.initializer = function(){
+//     console.log('TARGET2', {target, self: this})
+//     this.attr = this.attr || []
+//     this.attr.push(property)
+//     return target.name;
+//   }
+//   return descriptor
+// }
+
+// function Enum(target, prop, descriptor){
+//   target.prototype[prop] = 'Enum'
+//   return function()
+// }
+
+// let Number = propertyDecorator((options, target, prop, descriptor) => {
+//   if(!options) {
+//     descriptor.initializer = () => 'Number'
+//   } else {
+//     options.type = 'Number'
+//     descriptor.initializer = () => options
+//   }
+//   return descriptor
+// })
+//
+
+/***/ }),
+/* 39 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = kebabCase;
+const KEBAB_REGEX = /[A-Z\u00C0-\u00D6\u00D8-\u00DE]/g;
+
+function kebabCase(str) {
+	return (str.charAt(0).toLowerCase() + str.slice(1)).replace(KEBAB_REGEX, function (match) {
+		return '-' + match.toLowerCase();
+	});
+};
+// const REVERSE_REGEX = /-[a-z\u00E0-\u00F6\u00F8-\u00FE]/g;
+// export function reverse(str) {
+// 	return str.replace(REVERSE_REGEX, function (match) {
+// 		return match.slice(1).toUpperCase();
+// 	});
+// };
+
+/***/ }),
+/* 40 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function (st) {
+  st = st.toLowerCase();
+  st = st.replace(/[\u00C0-\u00C5]/ig, 'a');
+  st = st.replace(/[\u00C8-\u00CB]/ig, 'e');
+  st = st.replace(/[\u00CC-\u00CF]/ig, 'i');
+  st = st.replace(/[\u00D2-\u00D6]/ig, 'o');
+  st = st.replace(/[\u00D9-\u00DC]/ig, 'u');
+  st = st.replace(/[\u00D1]/ig, 'n');
+  st = st.replace(/[\-]/g, ' ');
+  // st = st.replace(/[^a-z0-9 ]+/gi,'')
+  st = st.trim().replace(/ /g, '-');
+  st = st.replace(/[\-]{2,}/g, '-');
+  st = st.replace(/^[^a-z]+/g, '');
+  return st.replace(/[^a-z0-9\- ]*/gi, '');
+});
+
+/***/ }),
+/* 41 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__slugify__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__kebab__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__decorators__ = __webpack_require__(38);
+
+
+
+
+
+__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.config('str', {
+  slugify: __WEBPACK_IMPORTED_MODULE_1__slugify__["a" /* default */], kebab: __WEBPACK_IMPORTED_MODULE_2__kebab__["a" /* default */]
+});
+
+__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('utils', function () {
+  __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.config('decorators', __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__decorators__["a" /* default */])(__WEBPACK_IMPORTED_MODULE_0_moduler___default.a));
+});
+// $.modules('decorators')
+// $.config('decorators', decorators)
+
+/***/ }),
+/* 42 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__templates_module__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_models_module__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules__ = __webpack_require__(3);
 // Create an app
 const app = __webpack_require__(0);
-const SQL = __webpack_require__(14);
+const SQL = __webpack_require__(15);
 const diet = __webpack_require__(7);
 __webpack_require__(6)(global);
-const m = __webpack_require__(11);
-const render = __webpack_require__(12);
+const m = __webpack_require__(12);
+const render = __webpack_require__(13);
 const crossOrigin = __webpack_require__(8);
 const dietStatic = __webpack_require__(9);
-const r = __webpack_require__(13);
+const r = __webpack_require__(14);
+const jsonapi = __webpack_require__(11).Serializer;
+app.config('jsonapi', jsonapi);
 
 var fs = __webpack_require__(10);
 // app.module('a', function(){})
@@ -1195,41 +1723,59 @@ db.authenticate();
 
 app.config('server', server).config('Q', SQL).config('db', db).config('_', r);
 
+const courseSerializer = new jsonapi('course', {
+  attributes: ['id', 'title', 'slug', 'description', 'video', 'image', 'color', 'level', 'author'],
+  author: {
+    ref: 'id',
+    attributes: ['id', 'username', 'email', 'firstName', 'lastName', 'image', 'description']
+  }
+});
+
+// .register('author', {
+//   relationships: {
+//     course: {
+//       type: '<course></course>'
+//     }
+//   }
+// })
+
 // app.module('setup', function($){
 
 app.config('m', m);
 app.config('baseTemplate', baseTemplate);
 
-app.config('slugify', function (st) {
-  st = st.toLowerCase();
-  st = st.replace(/[\u00C0-\u00C5]/ig, 'a');
-  st = st.replace(/[\u00C8-\u00CB]/ig, 'e');
-  st = st.replace(/[\u00CC-\u00CF]/ig, 'i');
-  st = st.replace(/[\u00D2-\u00D6]/ig, 'o');
-  st = st.replace(/[\u00D9-\u00DC]/ig, 'u');
-  st = st.replace(/[\u00D1]/ig, 'n');
-  st = st.replace(/[\-]/g, ' ');
-  // st = st.replace(/[^a-z0-9 ]+/gi,'')
-  st = st.trim().replace(/ /g, '-');
-  st = st.replace(/[\-]{2,}/g, '-');
-  st = st.replace(/^[^a-z]+/g, '');
-  return st.replace(/[^a-z0-9\- ]*/gi, '');
-});
+const components = app.store();
 
-let components = app.store();
 app.config('component', components.getOrSet);
 app.config('components', components.getAll);
 
-let models = app.store();
-app.config('model', models.getOrSet);
-app.config('models', models.getAll);
-let relations = app.store();
+const schemas = app.store();
+app.config('schema', schemas.getOrSet);
+app.config('schemas', schemas.getAll);
+const relations = app.store();
 app.config('relation', relations.getOrSet);
 app.config('relations', relations.getAll);
-let controllers = app.store();
+const model = (nameOrBoth, maybeModel) => {
+  let name, model;
+  const hasSeparateModel = typeof maybeModel === 'function';
+  if (hasSeparateModel && typeof nameOrBoth === 'string') {
+    name = nameOrBoth;
+    model = maybeModel;
+  } else if (typeof maybeModel === 'object') {
+    name = Object.keys(nameOrBoth)[0], model = nameOrBoth[name];
+  }
+  console.log(`REGISTER MODEL ${name}`);
+  // console.log(app.decorators.sequelizeAttributeDecorators)
+  app.schema(name, () => {
+    return model(app.decorators.sequelizeAttributeDecorators);
+  });
+  app.relation(name, () => model(app.decorators.sequelizeRelationshipDecorators));
+};
+app.config('model', model);
+const controllers = app.store();
 app.config('controller', controllers.getOrSet);
 app.config('controllers', controllers.getAll);
-let resolver = app.store();
+const resolver = app.store();
 
 app.config('resolver', resolver.getOrSet);
 app.config('resolve', resolver.getAll);
@@ -1270,7 +1816,8 @@ const api = (options = {}) => {
     route: options.route
   };
   let dataHandler = ($, data) => {
-    $.data.data = data;
+    // $.data.data = data;
+    $.data = courseSerializer.serialize(data);
     $.json();
   };
   let json = controller => $ => {
@@ -1323,188 +1870,23 @@ app.config('chain', function () {
 });
 
 app.modules();
-app.run(function ({ server, resolve }) {
-  var _dec, _dec2, _dec3, _dec4, _dec5, _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10;
-
+app.run(function ({ utils, server, resolve }) {
   resolve();
-  function model(target, prop, descriptor) {
-    console.log('@model');
-    console.log(target);
-    console.log(prop);
-    console.log(descriptor);
-  }
-  // function Enum(target, prop, descriptor){
-  //   target.prototype[prop] = 'enum'
-  //   return function()
-  // }
-  function decorator(fn) {
-    return function (...params) {
-      let descriptor = params[params.length - 1];
-      if (params.length === 3 && typeof descriptor === 'object' && descriptor.hasOwnProperty('enumerable') && descriptor.hasOwnProperty('initializer') && descriptor.hasOwnProperty('configurable')) {
-        return fn([], ...params);
-      } else {
-        return fn.bind(null, params);
-      }
-    };
-  }
-  let Number = decorator(([options], target, prop, descriptor) => {
-    if (!options) {
-      descriptor.initializer = () => 'Number';
-    } else {
-      options.type = 'Number';
-      descriptor.initializer = () => options;
-    }
-    return descriptor;
-  });
-
-  let dataType = type => (options, target, property, descriptor) => {
-    if (!options) {
-      descriptor.initializer = () => type;
-    } else {
-      // options.type = type
-      let o = {};
-      o[type] = options;
-      descriptor.initializer = () => o;
-    }
-    return descriptor;
-  };
-
-  let dataDecorator = type => decorator(dataType(type));
-
-  let Enum = dataDecorator('ENUM');
-
-  let Uuid = dataDecorator('UUID');
-  let Str = dataDecorator('STRING');
-  let Text = dataDecorator('TEXT');
-  let Bool = dataDecorator("BOOLEAN");
-  let Int = dataDecorator('INTEGER');
-  let bigInt = dataDecorator('BIGINT');
-  let Float = dataDecorator('FLOAT');
-  let Real = dataDecorator('REAL');
-  let Dbl = dataDecorator('DOUBLE');
-  let Dec = dataDecorator('DECIMAL');
-
-  let belongsTo = decorator(([options], target, prop, descriptor) => {
-    descriptor.initializer = () => i;
-    let i = {};
-    let t = i.model = target.name; // let t = $.model[target.name]
-    if (!options) {
-      let r = i.target = prop; // $.model[prop]
-      // t[prop] = t.belongsTo(r)
-      i.option = 'belongsTo';
-    } else {
-      let alias = options.useModel;
-      if (alias) {
-        options.as = prop;
-        delete options.useModel;
-      }
-      let r = i.target = alias || prop;
-      // r = i.target = $.model[alias || prop]
-      options.relation = 'belongsTo';
-      i.options = options;
-    }
-  });
-  function Model(target) {
-    return function () {
-      return {
-        gay: true
-      };
-    };
-  }
-
-  // @Model
-  let Course = (_dec = Uuid({
-    primaryKey: true
-  }), _dec2 = Enum({
-    values: ['default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue'],
-    defaultValue: 'default'
-  }), _dec3 = Enum({
-    values: ['Beginner', 'Intermediate', 'Advanced'],
-    defaultValue: 'Beginner'
-  }), _dec4 = Bool({
-    defaultValue: false
-  }), _dec5 = Float(11, 12), (_class = class Course {
-    constructor() {
-      _initDefineProp(this, 'id', _descriptor, this);
-
-      _initDefineProp(this, 'title', _descriptor2, this);
-
-      _initDefineProp(this, 'slug', _descriptor3, this);
-
-      _initDefineProp(this, 'description', _descriptor4, this);
-
-      _initDefineProp(this, 'video', _descriptor5, this);
-
-      _initDefineProp(this, 'image', _descriptor6, this);
-
-      _initDefineProp(this, 'color', _descriptor7, this);
-
-      _initDefineProp(this, 'level', _descriptor8, this);
-
-      _initDefineProp(this, 'active', _descriptor9, this);
-
-      _initDefineProp(this, 'TestFloat', _descriptor10, this);
-    }
-
-  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'id', [_dec], {
-    enumerable: true,
-    initializer: null
-  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, 'title', [Str], {
-    enumerable: true,
-    initializer: null
-  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'slug', [Str], {
-    enumerable: true,
-    initializer: null
-  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, 'description', [Text], {
-    enumerable: true,
-    initializer: null
-  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, 'video', [Str], {
-    enumerable: true,
-    initializer: null
-  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'image', [Str], {
-    enumerable: true,
-    initializer: null
-  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, 'color', [_dec2], {
-    enumerable: true,
-    initializer: null
-  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, 'level', [_dec3], {
-    enumerable: true,
-    initializer: null
-  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, 'active', [_dec4], {
-    enumerable: true,
-    initializer: null
-  }), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, 'TestFloat', [_dec5], {
-    enumerable: true,
-    initializer: null
-  })), _class));
-  // @Model
-  // class Course {
-  //   @Number
-  //   prop
-  //   @Number({
-  //     mothaFucka : true
-  //   })
-  //   prop2
-  //   @belongsTo
-  //   Degen
-  //   @belongsTo({useModel: 'user'})
-  //   Author
-  // }
 
   server.get('/', $ => {
-    $.data.message = 'Hello World!!!!';
-    $.data.context = this.constructor.name;
-    $.data.r = Object.getOwnPropertyNames(routes);
-    $.data.app = app.constructor.name;
+    // $.data.message = 'Hello World!!!!'
+    // $.data.context = this.constructor.name
+    // $.data.r = Object.getOwnPropertyNames(routes)
+    // $.data.app = app.constructor.name
     render(m('div.asd.asd')).then(t => {
-      $.data.template = t;
-      $.data.class = new Course();
+      // $.data.template = t
+      $.data.class = app.Course;
       $.json();
     });
   });
 });
 
-// .run(['models'], ($, models) => {
+// .run(['schemas'], ($, schemas) => {
 //   $.run()
 // })
 
@@ -1519,7 +1901,7 @@ app.run(function ({ server, resolve }) {
 // force: true will drop the table if it already exists
 
 /***/ }),
-/* 39 */
+/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1532,154 +1914,11 @@ app.run(function ({ server, resolve }) {
 });
 
 /***/ }),
-/* 40 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function ({
-  _, m, slugify,
-  components: { Topbar, Content, CourseItem }
-}) {
-  var xetter = state => (prop, xettings) => value => {
-    if (value != null) {
-      state[prop] = value;
-    }
-    return state[prop];
-  };
-  var model = _.once(data => {
-    let x = xetter(data);
-    return {
-      title: x('title'),
-      slug: x('slug', {
-        // set: [ slugify ],
-        // get: [ ( state ) => state.slug || slugify( state.title() ) ]
-      }),
-      description: x('description'),
-      num: x('num')
-    };
-  });
-  var stateModel = _.once(data => {
-    console.log(data);
-    let state = {
-      $: {
-        colors: ['Red', 'Orange', 'Blue'],
-        levels: ['Beginner', 'Intermediate', 'Advanced']
-      },
-      $$: {
-        title: function (v) {
-          state.title = v;
-        },
-        slug: function (v) {
-          state.customSlug = slugify(v);
-        },
-        description: function (v) {
-          state.description = v;
-        },
-        num: function (v) {
-          console.log([v]);
-          state.num = v;
-        }
-      },
-      title: data.title,
-      customSlug: data.slug,
-      description: data.description,
-      num: null
-    };
-    Object.defineProperty(state, 'slug', {
-      get: () => state.customSlug || slugify(state.title)
-    });
-    return state;
-  });
-  return {
-    view: function (vnode) {
-      let item2 = stateModel(vnode.attrs.data);
-      let item = model(vnode.attrs.data);
-      return m('div', [m(Topbar), m(Content, {
-        title: "Edit course"
-      }, [m('#main-panel.col-md-9', [m('input[type="text"].form-control.form-control-lg[id="title"][name="title"][aria-describedby="couseTitle"][placeholder="Title"]', {
-        value: item.title(),
-        oninput: m.withAttr("value", item.title)
-      }), m('small#couseTitle.form-text.text-muted', "We'll never share your email with anyone else."), m('input[type="text"].form-control.form-control-sm', {
-        value: item.slug(),
-        onchange: m.withAttr("value", item.slug)
-      }), m('.form-section-meta', [m('.form-group', [m('label[for="description"]', 'Description'), m('textarea#description.form-control[name="description"]', {
-        value: item.description(),
-        oninput: m.withAttr("value", item.description)
-      })]), m('.row', [m('.col-md-4', m('select.form-control', item2.$.levels.map(items => m('option', items)))), m('.col-md-4', m('select.form-control', item2.$.colors.map(items => m('option', items)))), m('.col-md-4', m('input[type="text"].form-control', {
-        value: item.num(),
-        oninput: m.withAttr("value", item.num)
-      }))])]), m('a.btn.btn-primary.btn-lg[href="/courses"]', {
-        oncreate: m.route.link
-      }, 'Click here!!!!')]), m('#side-panel.col-md-3', [m('.buttons', [m('.btn.btn-primary.btn-alt.btn-lg', "Save"), m('.btn.btn-primary.btn-lg', "Unpublish")]), m(CourseItem, vnode.attrs.data)])])]);
-    }
-  };
-});
-
-/***/ }),
-/* 41 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__course_item_less__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__course_item_less___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__course_item_less__);
-
-/* harmony default export */ __webpack_exports__["a"] = (function ({ m }) {
-  return {
-    view: function ({ attrs, children }) {
-      return m('.course', [m('a.thumb', {
-        bg: attrs.color,
-        href: '/course/' + attrs.slug,
-        oncreate: m.route.link
-      }, [m(".thumb-img", {
-        bg: attrs.color,
-        style: {
-          backgroundImage: `url(/uploads/courses/${attrs.image})`
-        }
-      }), m("h2.name", m("span", attrs.title))]), m('.inner', m('ul', [m("li.description", attrs.description), m("li.author", ['by ', m('a', { href: attrs.author.id }, `${attrs.author.firstName} ${attrs.author.lastName}`)]), m("li.level", `Level: ${attrs.level}`)]))]);
-    }
-  };
-});
-
-/***/ }),
-/* 42 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function ({
-  m, components: { Topbar, Content, CourseItem }
-}) {
-  return {
-    view: function (vnode) {
-      console.log(vnode.attrs);
-      return m('div', [m(Topbar), m(Content, {
-        title: "Browse our courses..."
-      }, vnode.attrs.data.map(course => m('.col-sm-6.col-md-4.col-lg-3', m(CourseItem, course))))]);
-    }
-  };
-});
-
-/***/ }),
-/* 43 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__topbar_less__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__topbar_less___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__topbar_less__);
-
-/* harmony default export */ __webpack_exports__["a"] = (function ({ m }) {
-  return {
-    view: function () {
-      return m("header#header", m("div.container", m("div.row", [m("div.col-sm-3.logo", m("a#logo", { href: "/" })), m("div.col-sm-9.navigation", m("nav", { role: "navigation" }, m("ul.menu", m("li.nav-item", m('a', { href: "/signin" }, 'Login')), m("li.nav-item", m('a', { href: "/signup" }, 'Sign up')))))])));
-    }
-  };
-});
-
-/***/ }),
 /* 44 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* unused harmony default export */ var _unused_webpack_default_export = (function ({
+/* harmony default export */ __webpack_exports__["a"] = (function ({
   _, m, slugify,
   components: { Topbar, Content, CourseItem }
 }) {
@@ -1760,18 +1999,161 @@ app.run(function ({ server, resolve }) {
 
 /***/ }),
 /* 45 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__course_item_less__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__course_item_less___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__course_item_less__);
 
+/* harmony default export */ __webpack_exports__["a"] = (function ({ m }) {
+  return {
+    view: function ({ attrs, children }) {
+      return m('.course', [m('a.thumb', {
+        bg: attrs.color,
+        href: '/course/' + attrs.slug,
+        oncreate: m.route.link
+      }, [m(".thumb-img", {
+        bg: attrs.color,
+        style: {
+          backgroundImage: `url(/uploads/courses/${attrs.image})`
+        }
+      }), m("h2.name", m("span", attrs.title))]), m('.inner', m('ul', [m("li.description", attrs.description), m("li.author", ['by ', m('a', { href: attrs.author.id }, `${attrs.author.firstName} ${attrs.author.lastName}`)]), m("li.level", `Level: ${attrs.level}`)]))]);
+    }
+  };
+});
 
 /***/ }),
 /* 46 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function ({
+  m, components: { Topbar, Content, CourseItem }
+}) {
+  return {
+    view: function (vnode) {
+      console.log(vnode.attrs);
+      return m('div', [m(Topbar), m(Content, {
+        title: "Browse our courses..."
+      }, vnode.attrs.data.map(course => m('.col-sm-6.col-md-4.col-lg-3', m(CourseItem, course))))]);
+    }
+  };
+});
+
+/***/ }),
+/* 47 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__topbar_less__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__topbar_less___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__topbar_less__);
+
+/* harmony default export */ __webpack_exports__["a"] = (function ({ m }) {
+  return {
+    view: function () {
+      return m("header#header", m("div.container", m("div.row", [m("div.col-sm-3.logo", m("a#logo", { href: "/" })), m("div.col-sm-9.navigation", m("nav", { role: "navigation" }, m("ul.menu", m("li.nav-item", m('a', { href: "/signin" }, 'Login')), m("li.nav-item", m('a', { href: "/signup" }, 'Sign up')))))])));
+    }
+  };
+});
+
+/***/ }),
+/* 48 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony default export */ var _unused_webpack_default_export = (function ({
+  _, m, str,
+  components: { Topbar, Content, CourseItem }
+}) {
+  var xetter = state => (prop, xettings) => value => {
+    if (value != null) {
+      state[prop] = value;
+    }
+    return state[prop];
+  };
+  var model = _.once(data => {
+    let x = xetter(data);
+    return {
+      title: x('title'),
+      slug: x('slug', {
+        // set: [ str.slugify ],
+        // get: [ ( state ) => state.slug || str.slugify( state.title() ) ]
+      }),
+      description: x('description'),
+      num: x('num')
+    };
+  });
+  var stateModel = _.once(data => {
+    console.log(data);
+    let state = {
+      $: {
+        colors: ['Red', 'Orange', 'Blue'],
+        levels: ['Beginner', 'Intermediate', 'Advanced']
+      },
+      $$: {
+        title: function (v) {
+          state.title = v;
+        },
+        slug: function (v) {
+          state.customSlug = str.slugify(v);
+        },
+        description: function (v) {
+          state.description = v;
+        },
+        num: function (v) {
+          console.log([v]);
+          state.num = v;
+        }
+      },
+      title: data.title,
+      customSlug: data.slug,
+      description: data.description,
+      num: null
+    };
+    Object.defineProperty(state, 'slug', {
+      get: () => state.customSlug || str.slugify(state.title)
+    });
+    return state;
+  });
+  return {
+    view: function (vnode) {
+      let item2 = stateModel(vnode.attrs.data);
+      let item = model(vnode.attrs.data);
+      return m('div', [m(Topbar), m(Content, {
+        title: "Edit course"
+      }, [m('#main-panel.col-md-9', [m('input[type="text"].form-control.form-control-lg[id="title"][name="title"][aria-describedby="couseTitle"][placeholder="Title"]', {
+        value: item.title(),
+        oninput: m.withAttr("value", item.title)
+      }), m('small#couseTitle.form-text.text-muted', "We'll never share your email with anyone else."), m('input[type="text"].form-control.form-control-sm', {
+        value: item.slug(),
+        onchange: m.withAttr("value", item.slug)
+      }), m('.form-section-meta', [m('.form-group', [m('label[for="description"]', 'Description'), m('textarea#description.form-control[name="description"]', {
+        value: item.description(),
+        oninput: m.withAttr("value", item.description)
+      })]), m('.row', [m('.col-md-4', m('select.form-control', item2.$.levels.map(items => m('option', items)))), m('.col-md-4', m('select.form-control', item2.$.colors.map(items => m('option', items)))), m('.col-md-4', m('input[type="text"].form-control', {
+        value: item.num(),
+        oninput: m.withAttr("value", item.num)
+      }))])]), m('a.btn.btn-primary.btn-lg[href="/courses"]', {
+        oncreate: m.route.link
+      }, 'Click here!!!!')]), m('#side-panel.col-md-3', [m('.buttons', [m('.btn.btn-primary.btn-alt.btn-lg', "Save"), m('.btn.btn-primary.btn-lg', "Unpublish")]), m(CourseItem, vnode.attrs.data)])])]);
+    }
+  };
+});
+
+/***/ }),
+/* 49 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 47 */
+/* 50 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1813,7 +2195,7 @@ module.exports = function(string) {
 
 
 /***/ }),
-/* 48 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2351,7 +2733,7 @@ module.exports = function(options) {
 
 
 /***/ }),
-/* 49 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2549,7 +2931,7 @@ module.exports = function(options) {
 
 
 /***/ }),
-/* 50 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2557,7 +2939,7 @@ module.exports = function(options) {
 
 var callAsync = __webpack_require__(1)
 var parseURL = __webpack_require__(2)
-var parseQueryString = __webpack_require__(47)
+var parseQueryString = __webpack_require__(51)
 
 module.exports = function() {
 	var routes = {}

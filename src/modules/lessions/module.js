@@ -6,7 +6,7 @@ import LessionCtrl from './lession.controller'
 // import LessionRoutes from './lession.routes'
 
 $.module('lessions', function($){
-	$.model({Lession})
+	$.schema({Lession})
 	$.relation({Lession:LessionRelations})
 	$.controller({LessionCtrl})
 	// $.route({LessionRoutes})

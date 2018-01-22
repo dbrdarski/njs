@@ -1,7 +1,7 @@
 import seed from './user.seed'
 export default function UserCtrl($$){
   this.relations.User
-  let User = this.models.User
+  let User = this.schemas.User
 
   return {
     index : function($){
