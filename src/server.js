@@ -53,14 +53,17 @@
       .config('db', db)
       .config('_', r)
 
-    const courseSerializer = new jsonapi('course', {
-        attributes: ['id','title','slug','description','video','image','color','level','author'],
-        author:{
-          ref: 'id',
-          attributes: ['id', 'username', 'email', 'firstName', 'lastName', 'image', 'description']
-        }
-    })
-
+    // const courseSerializer = new jsonapi('course', {
+    //     ref: 'id',
+    //     attributes: ['id','title','slug','description','video','image','color','level','author'],
+    //     get author() {
+    //       return {
+    //         ref: 'id',
+    //         attributes: ['id', 'username', 'email', 'firstName', 'lastName', 'image', 'description']
+    //       }
+    //     }
+    // })
+    //
       // .register('author', {
       //   relationships: {
       //     course: {
@@ -85,6 +88,9 @@
     const relations = app.store()
     app.config('relation', relations.getOrSet)
     app.config('relations', relations.getAll)
+    const serializers = app.store()
+    app.config('serializer', serializers.getOrSet)
+    app.config('serializers', serializers.getAll)
     const model = (nameOrBoth, maybeModel) => {
       let name, model
       const hasSeparateModel = typeof maybeModel === 'function'
@@ -95,12 +101,11 @@
         name = Object.keys(nameOrBoth)[0],
         model = nameOrBoth[name]
       }
-      console.log(`REGISTER MODEL ${name}`)
+      // console.log(`REGISTER MODEL ${name}`)
       // console.log(app.decorators.sequelizeAttributeDecorators)
-      app.schema(name, () => {
-        return model(app.decorators.sequelizeAttributeDecorators)
-      })
+      app.schema(name, () => model(app.decorators.sequelizeAttributeDecorators))
       app.relation(name, () => model(app.decorators.sequelizeRelationshipDecorators))
+      app.serializer(name, () => model(app.decorators.serializerDecorators))
     }
     app.config('model', model)
     const controllers = app.store()
@@ -154,7 +159,7 @@
       }
       let dataHandler = ($, data) => {
         // $.data.data = data;
-        $.data = courseSerializer.serialize(data)
+        $.data = app.serializers.Course().serialize(data)
         $.json()
       }
       let json = controller => ($) => {

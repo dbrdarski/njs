@@ -1,5 +1,5 @@
 export default function({
-  Model, Uuid, Str, Text, Enum, Bool, hasOne, hasMany, belongsTo, belongsToMany
+  Model, Uuid, Enum, Str, Text, Bool, Int, BigInt, Float, Real, Dbl, Dec, hasOne, belongsTo, hasMany, belongsToMany
 }){
   return @Model class Course {
     @Uuid({

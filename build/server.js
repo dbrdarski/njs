@@ -1195,52 +1195,19 @@ __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.module('lessions', function ($) 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moduler___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moduler__);
-function _initDefineProp(target, property, descriptor, context) {
-  if (!descriptor) return;
-  Object.defineProperty(target, property, {
-    enumerable: descriptor.enumerable,
-    configurable: descriptor.configurable,
-    writable: descriptor.writable,
-    value: descriptor.initializer ? descriptor.initializer.call(context) : void 0
-  });
-}
-
-function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
-  var desc = {};
-  Object['ke' + 'ys'](descriptor).forEach(function (key) {
-    desc[key] = descriptor[key];
-  });
-  desc.enumerable = !!desc.enumerable;
-  desc.configurable = !!desc.configurable;
-
-  if ('value' in desc || desc.initializer) {
-    desc.writable = true;
-  }
-
-  desc = decorators.slice().reverse().reduce(function (desc, decorator) {
-    return decorator(target, property, desc) || desc;
-  }, desc);
-
-  if (context && desc.initializer !== void 0) {
-    desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
-    desc.initializer = undefined;
-  }
-
-  if (desc.initializer === void 0) {
-    Object['define' + 'Property'](target, property, desc);
-    desc = null;
-  }
-
-  return desc;
-}
-
-function _initializerWarningHelper(descriptor, context) {
-  throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
-}
-
 
 /* harmony default export */ __webpack_exports__["a"] = (function ({ Q, db }) {
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11;
+
+  const removeEmptyKeys = o => {
+    let newObj = {};
+    Object.keys(o).forEach(key => {
+      let val = o[key];
+      if (val != null) {
+        newObj[key] = val;
+      }
+    });
+    return newObj;
+  };
 
   function propertyDecorator(fn) {
     return function (...params) {
@@ -1264,33 +1231,58 @@ function _initializerWarningHelper(descriptor, context) {
     }
   }
 
-  const removeEmptyKeys = o => {
-    let newObj = {};
-    Object.keys(o).forEach(key => {
-      let val = o[key];
-      if (val != null) {
-        newObj[key] = val;
-      }
-    });
-    return newObj;
-  };
-
   const sequalizeClassAttributeDecorator = target => {
     // console.log({name: (target.name), target})
     return db.define(__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.str.kebab(target.name), removeEmptyKeys(new target()));
   };
 
-  let dataType = (type, defaultOptions) => ([options], target, property, descriptor) => {
+  const dataType = (type, defaultOptions) => ([options], target, property, descriptor) => {
     descriptor.initializer = () => Object.assign({}, defaultOptions, options, { type });
     return descriptor;
   };
 
-  let serializerAttributeDecorator = propertyDecorator(([options], target, property, descriptor) => {
-    descriptor.initializer = function () {
-      this.attributes = this.attributes || [];
-      this.attributes.push(property);
+  // const courseSerializer = new $.jsonapi('course', {
+  //     attributes: ['id','title','slug','description','video','image','color','level','author'],
+  //     get author() {
+  //       return {
+  //         ref: 'id',
+  //         attributes: ['id', 'username', 'email', 'firstName', 'lastName', 'image', 'description']
+  //       }
+  //     }
+  // })
+  //
+
+  const serializerDecoratorsTemplate = function (store = {}) {
+    return {
+      model: target => {
+        let schema = store[target.name] = removeEmptyKeys(new target());
+        console.log({ name: target.name, schema, jsonapi: __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.jsonapi });
+        return () => new __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.jsonapi(__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.str.kebab(target.name), schema);
+      },
+      attribute: (isRelation, isUuid) => propertyDecorator(([options], target, property, descriptor) => {
+        descriptor.initializer = function () {
+          this.attributes = this.attributes || [];
+          this.attributes.push(__WEBPACK_IMPORTED_MODULE_0_moduler___default.a.str.kebab(property));
+          if (isRelation) {
+            Object.defineProperty(this, __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.str.kebab(property), {
+              get: () => store[property],
+              enumerable: true
+            });
+          }
+          if (isUuid) {
+            this.rel = property;
+          }
+        };
+      })
     };
-  });
+  }();
+
+  // const serializerDecorator =
+
+  const serializerAttributeDecorator = serializerDecoratorsTemplate.attribute(false);
+  const serializerRelationDecorator = serializerDecoratorsTemplate.attribute(false);
+  const serializerUuidDecorator = serializerDecoratorsTemplate.attribute(false, true);
+
   let relationType = type => ([options = {}], target, property, descriptor) => {
     descriptor.initializer = function () {
       let schema = __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.schemas[target.constructor.name];
@@ -1320,6 +1312,25 @@ function _initializerWarningHelper(descriptor, context) {
       return target.name;
     };
     return descriptor;
+  };
+
+  let serializerDecorators = {
+    Model: serializerDecoratorsTemplate.model,
+    Enum: serializerAttributeDecorator,
+    Uuid: serializerUuidDecorator,
+    Str: serializerAttributeDecorator,
+    Text: serializerAttributeDecorator,
+    Bool: serializerAttributeDecorator,
+    Int: serializerAttributeDecorator,
+    BigInt: serializerAttributeDecorator,
+    Float: serializerAttributeDecorator,
+    Real: serializerAttributeDecorator,
+    Dbl: serializerAttributeDecorator,
+    Dec: serializerAttributeDecorator,
+    hasOne: serializerRelationDecorator,
+    belongsTo: serializerRelationDecorator,
+    hasMany: serializerRelationDecorator,
+    belongsToMany: serializerRelationDecorator
   };
 
   let sequelizeAttributeDecorators = {
@@ -1398,125 +1409,70 @@ function _initializerWarningHelper(descriptor, context) {
     //   }
     // })
 
-    // const courseSerializer = new $.jsonapi('course', {
-    //     attributes: ['id','title','slug','description','video','image','color','level','author'],
-    //     author:{
-    //       ref: 'id',
-    //       attributes: ['id', 'username', 'email', 'firstName', 'lastName', 'image', 'description']
-    //     }
-    // })
-
   };let { Model, Uuid, Str, Text, Enum, Bool, hasOne } = sequelizeAttributeDecorators;
 
-  let Course = (_dec = Uuid({
-    primaryKey: true
-  }), _dec2 = Str(), _dec3 = Str(), _dec4 = Text(), _dec5 = Str(), _dec6 = Str(), _dec7 = Enum({
-    values: ['default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue'],
-    defaultValue: 'default'
-  }), _dec8 = Enum({
-    values: ['Beginner', 'Intermediate', 'Advanced'],
-    defaultValue: 'Beginner'
-  }), _dec9 = Bool({
-    defaultValue: false
-  }), _dec10 = hasOne({ two: 2 }), (_class = class Course {
-    constructor() {
-      _initDefineProp(this, 'id', _descriptor, this);
-
-      _initDefineProp(this, 'title', _descriptor2, this);
-
-      _initDefineProp(this, 'slug', _descriptor3, this);
-
-      _initDefineProp(this, 'description', _descriptor4, this);
-
-      _initDefineProp(this, 'video', _descriptor5, this);
-
-      _initDefineProp(this, 'image', _descriptor6, this);
-
-      _initDefineProp(this, 'color', _descriptor7, this);
-
-      _initDefineProp(this, 'level', _descriptor8, this);
-
-      _initDefineProp(this, 'active', _descriptor9, this);
-
-      _initDefineProp(this, 'one', _descriptor10, this);
-
-      _initDefineProp(this, 'two', _descriptor11, this);
-    }
-
-  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'id', [_dec], {
-    enumerable: true,
-    initializer: null
-  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, 'title', [_dec2], {
-    enumerable: true,
-    initializer: null
-  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'slug', [_dec3], {
-    enumerable: true,
-    initializer: null
-  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, 'description', [_dec4], {
-    enumerable: true,
-    initializer: null
-  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, 'video', [_dec5], {
-    enumerable: true,
-    initializer: null
-  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'image', [_dec6], {
-    enumerable: true,
-    initializer: null
-  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, 'color', [_dec7], {
-    enumerable: true,
-    initializer: null
-  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, 'level', [_dec8], {
-    enumerable: true,
-    initializer: null
-  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, 'active', [_dec9], {
-    enumerable: true,
-    initializer: null
-  }), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, 'one', [hasOne], {
-    enumerable: true,
-    initializer: null
-  }), _descriptor11 = _applyDecoratedDescriptor(_class.prototype, 'two', [_dec10], {
-    enumerable: true,
-    initializer: null
-  })), _class));
-
-  const nc = new Course();
-
-  let valid = {
-    id: {
-      type: Q.UUID,
-      primaryKey: true,
-      defaultValue: Q.UUIDV1
-    },
-    title: {
-      type: Q.STRING
-    },
-    slug: {
-      type: Q.STRING
-    },
-    description: {
-      type: Q.TEXT
-    },
-    video: {
-      type: Q.STRING
-    },
-    image: {
-      type: Q.STRING
-    },
-    color: {
-      type: Q.ENUM,
-      values: ['default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue'],
-      defaultValue: 'default'
-    },
-    level: {
-      type: Q.ENUM,
-      values: ['Beginner', 'Intermediate', 'Advanced'],
-      defaultValue: 'Beginner'
-    },
-    active: {
-      type: Q.BOOLEAN,
-      defaultValue: false
-    }
-  };
-  __WEBPACK_IMPORTED_MODULE_0_moduler___default.a.config('Course', { nc, valid: Object.assign({}, valid) });
+  // class Course {
+  //   @Uuid({
+  //     primaryKey : true
+  //   }) id
+  //   @Str() title
+  //   @Str() slug
+  //   @Text() description
+  //   @Str() video
+  //   @Str() image
+  //   @Enum({
+  //     values: [ 'default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue' ],
+  //     defaultValue: 'default'
+  //   }) color
+  //   @Enum({
+  //     values: [ 'Beginner', 'Intermediate', 'Advanced' ],
+  //     defaultValue: 'Beginner'
+  //   }) level
+  //   @Bool({
+  //     defaultValue : false
+  //   }) active
+  //   @hasOne one
+  //   @hasOne({two: 2}) two
+  // }
+  // const nc = new Course
+  //
+  // let valid = {
+  //   id : {
+  //     type: Q.UUID,
+  //     primaryKey: true,
+  //     defaultValue : Q.UUIDV1
+  //   },
+  //   title : {
+  //     type: Q.STRING
+  //   },
+  //   slug : {
+  //     type: Q.STRING
+  //   },
+  //   description : {
+  //     type: Q.TEXT
+  //   },
+  //   video : {
+  //     type: Q.STRING
+  //   },
+  //   image : {
+  //     type: Q.STRING
+  //   },
+  //   color : {
+  //     type: Q.ENUM,
+  //     values: [ 'default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue' ],
+  //     defaultValue: 'default'
+  //   },
+  //   level : {
+  //     type: Q.ENUM,
+  //     values : [ 'Beginner', 'Intermediate', 'Advanced' ],
+  //     defaultValue: 'Beginner'
+  //   },
+  //   active : {
+  //     type : Q.BOOLEAN,
+  //     defaultValue : false
+  //   }
+  // }
+  // $.config('Course', {nc, valid: Object.assign({}, valid)})
 
   // ( function({
   //   Model, Uuid, Str, Text, Enum, Bool, belongsTo, hasMany
@@ -1553,7 +1509,8 @@ function _initializerWarningHelper(descriptor, context) {
   // TestFloat
   return {
     sequelizeAttributeDecorators,
-    sequelizeRelationshipDecorators
+    sequelizeRelationshipDecorators,
+    serializerDecorators
   };
 });
 
@@ -1723,14 +1680,17 @@ db.authenticate();
 
 app.config('server', server).config('Q', SQL).config('db', db).config('_', r);
 
-const courseSerializer = new jsonapi('course', {
-  attributes: ['id', 'title', 'slug', 'description', 'video', 'image', 'color', 'level', 'author'],
-  author: {
-    ref: 'id',
-    attributes: ['id', 'username', 'email', 'firstName', 'lastName', 'image', 'description']
-  }
-});
-
+// const courseSerializer = new jsonapi('course', {
+//     ref: 'id',
+//     attributes: ['id','title','slug','description','video','image','color','level','author'],
+//     get author() {
+//       return {
+//         ref: 'id',
+//         attributes: ['id', 'username', 'email', 'firstName', 'lastName', 'image', 'description']
+//       }
+//     }
+// })
+//
 // .register('author', {
 //   relationships: {
 //     course: {
@@ -1755,6 +1715,9 @@ app.config('schemas', schemas.getAll);
 const relations = app.store();
 app.config('relation', relations.getOrSet);
 app.config('relations', relations.getAll);
+const serializers = app.store();
+app.config('serializer', serializers.getOrSet);
+app.config('serializers', serializers.getAll);
 const model = (nameOrBoth, maybeModel) => {
   let name, model;
   const hasSeparateModel = typeof maybeModel === 'function';
@@ -1764,12 +1727,11 @@ const model = (nameOrBoth, maybeModel) => {
   } else if (typeof maybeModel === 'object') {
     name = Object.keys(nameOrBoth)[0], model = nameOrBoth[name];
   }
-  console.log(`REGISTER MODEL ${name}`);
+  // console.log(`REGISTER MODEL ${name}`)
   // console.log(app.decorators.sequelizeAttributeDecorators)
-  app.schema(name, () => {
-    return model(app.decorators.sequelizeAttributeDecorators);
-  });
+  app.schema(name, () => model(app.decorators.sequelizeAttributeDecorators));
   app.relation(name, () => model(app.decorators.sequelizeRelationshipDecorators));
+  app.serializer(name, () => model(app.decorators.serializerDecorators));
 };
 app.config('model', model);
 const controllers = app.store();
@@ -1817,7 +1779,8 @@ const api = (options = {}) => {
   };
   let dataHandler = ($, data) => {
     // $.data.data = data;
-    $.data = courseSerializer.serialize(data);
+    console.log({ serial: app.serializers.Course });
+    $.data = app.serializers.Course().serialize(data);
     $.json();
   };
   let json = controller => $ => {

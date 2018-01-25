@@ -1,6 +1,17 @@
 import $ from 'moduler'
 export default function({Q, db}){
 
+  const removeEmptyKeys = (o) => {
+    let newObj = {};
+    Object.keys(o).forEach(key => {
+      let val = o[key];
+      if( val != null){
+        newObj[key] = val
+      }
+    })
+    return newObj
+  }
+
   function propertyDecorator(fn){
     return function(...params) {
       let descriptor = params[params.length - 1]
@@ -36,33 +47,58 @@ export default function({Q, db}){
     }
   }
 
-  const removeEmptyKeys = (o) => {
-    let newObj = {};
-    Object.keys(o).forEach(key => {
-      let val = o[key];
-      if( val != null){
-        newObj[key] = val
-      }
-    })
-    return newObj
-  }
-
   const sequalizeClassAttributeDecorator = (target) => {
     // console.log({name: (target.name), target})
     return db.define($.str.kebab(target.name), removeEmptyKeys(new target))
   }
 
-  let dataType = (type, defaultOptions) => ([options], target, property, descriptor) => {
+  const dataType = (type, defaultOptions) => ([options], target, property, descriptor) => {
     descriptor.initializer = () => Object.assign({}, defaultOptions, options, {type})
     return descriptor
   }
 
-  let serializerAttributeDecorator = propertyDecorator(([options], target, property, descriptor) => {
-    descriptor.initializer = function(){
-      this.attributes = this.attributes || []
-      this.attributes.push(property)
+  // const courseSerializer = new $.jsonapi('course', {
+  //     attributes: ['id','title','slug','description','video','image','color','level','author'],
+  //     get author() {
+  //       return {
+  //         ref: 'id',
+  //         attributes: ['id', 'username', 'email', 'firstName', 'lastName', 'image', 'description']
+  //       }
+  //     }
+  // })
+  //
+
+  const serializerDecoratorsTemplate = (function(store = {}){
+    return {
+      model: (target) => {
+        let schema = store[target.name] = removeEmptyKeys(new target)
+        console.log({name: target.name, schema, jsonapi:$.jsonapi})
+        return () => new $.jsonapi($.str.kebab(target.name), schema)
+      },
+      attribute: (isRelation, isUuid) => propertyDecorator(([options], target, property, descriptor) => {
+        descriptor.initializer = function(){
+          this.attributes = this.attributes || []
+          this.attributes.push($.str.kebab(property))
+          if (isRelation) {
+            Object.defineProperty(this, $.str.kebab(property), {
+              get: () => store[property],
+              enumerable: true
+            })
+          }
+          if (isUuid) {
+            this.rel = property
+          }
+        }
+      })
     }
-  })
+  })()
+
+  // const serializerDecorator =
+
+  const serializerAttributeDecorator = serializerDecoratorsTemplate.attribute(false)
+  const serializerRelationDecorator = serializerDecoratorsTemplate.attribute(false)
+  const serializerUuidDecorator = serializerDecoratorsTemplate.attribute(false, true)
+
   let relationType = (type) => ([options = {}], target, property, descriptor) => {
     descriptor.initializer = function(){
       let schema = $.schemas[target.constructor.name]
@@ -92,6 +128,25 @@ export default function({Q, db}){
       return target.name;
     }
     return descriptor
+  }
+
+  let serializerDecorators = {
+    Model: serializerDecoratorsTemplate.model,
+    Enum: serializerAttributeDecorator,
+    Uuid: serializerUuidDecorator,
+    Str: serializerAttributeDecorator,
+    Text: serializerAttributeDecorator,
+    Bool: serializerAttributeDecorator,
+    Int: serializerAttributeDecorator,
+    BigInt: serializerAttributeDecorator,
+    Float: serializerAttributeDecorator,
+    Real: serializerAttributeDecorator,
+    Dbl: serializerAttributeDecorator,
+    Dec: serializerAttributeDecorator,
+    hasOne: serializerRelationDecorator,
+    belongsTo: serializerRelationDecorator,
+    hasMany: serializerRelationDecorator,
+    belongsToMany: serializerRelationDecorator
   }
 
   let sequelizeAttributeDecorators = {
@@ -171,78 +226,70 @@ export default function({Q, db}){
   //   }
   // })
 
-  // const courseSerializer = new $.jsonapi('course', {
-  //     attributes: ['id','title','slug','description','video','image','color','level','author'],
-  //     author:{
-  //       ref: 'id',
-  //       attributes: ['id', 'username', 'email', 'firstName', 'lastName', 'image', 'description']
-  //     }
-  // })
-
   let { Model, Uuid, Str, Text, Enum, Bool, hasOne } = sequelizeAttributeDecorators
 
-  class Course {
-    @Uuid({
-      primaryKey : true
-    }) id
-    @Str() title
-    @Str() slug
-    @Text() description
-    @Str() video
-    @Str() image
-    @Enum({
-      values: [ 'default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue' ],
-      defaultValue: 'default'
-    }) color
-    @Enum({
-      values: [ 'Beginner', 'Intermediate', 'Advanced' ],
-      defaultValue: 'Beginner'
-    }) level
-    @Bool({
-      defaultValue : false
-    }) active
-    @hasOne one
-    @hasOne({two: 2}) two
-  }
-  const nc = new Course
-
-  let valid = {
-    id : {
-      type: Q.UUID,
-      primaryKey: true,
-      defaultValue : Q.UUIDV1
-    },
-    title : {
-      type: Q.STRING
-    },
-    slug : {
-      type: Q.STRING
-    },
-    description : {
-      type: Q.TEXT
-    },
-    video : {
-      type: Q.STRING
-    },
-    image : {
-      type: Q.STRING
-    },
-    color : {
-      type: Q.ENUM,
-      values: [ 'default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue' ],
-      defaultValue: 'default'
-    },
-    level : {
-      type: Q.ENUM,
-      values : [ 'Beginner', 'Intermediate', 'Advanced' ],
-      defaultValue: 'Beginner'
-    },
-    active : {
-      type : Q.BOOLEAN,
-      defaultValue : false
-    }
-  }
-  $.config('Course', {nc, valid: Object.assign({}, valid)})
+  // class Course {
+  //   @Uuid({
+  //     primaryKey : true
+  //   }) id
+  //   @Str() title
+  //   @Str() slug
+  //   @Text() description
+  //   @Str() video
+  //   @Str() image
+  //   @Enum({
+  //     values: [ 'default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue' ],
+  //     defaultValue: 'default'
+  //   }) color
+  //   @Enum({
+  //     values: [ 'Beginner', 'Intermediate', 'Advanced' ],
+  //     defaultValue: 'Beginner'
+  //   }) level
+  //   @Bool({
+  //     defaultValue : false
+  //   }) active
+  //   @hasOne one
+  //   @hasOne({two: 2}) two
+  // }
+  // const nc = new Course
+  //
+  // let valid = {
+  //   id : {
+  //     type: Q.UUID,
+  //     primaryKey: true,
+  //     defaultValue : Q.UUIDV1
+  //   },
+  //   title : {
+  //     type: Q.STRING
+  //   },
+  //   slug : {
+  //     type: Q.STRING
+  //   },
+  //   description : {
+  //     type: Q.TEXT
+  //   },
+  //   video : {
+  //     type: Q.STRING
+  //   },
+  //   image : {
+  //     type: Q.STRING
+  //   },
+  //   color : {
+  //     type: Q.ENUM,
+  //     values: [ 'default', 'yellow', 'orange', 'red', 'violet', 'green', 'cyan', 'blue' ],
+  //     defaultValue: 'default'
+  //   },
+  //   level : {
+  //     type: Q.ENUM,
+  //     values : [ 'Beginner', 'Intermediate', 'Advanced' ],
+  //     defaultValue: 'Beginner'
+  //   },
+  //   active : {
+  //     type : Q.BOOLEAN,
+  //     defaultValue : false
+  //   }
+  // }
+  // $.config('Course', {nc, valid: Object.assign({}, valid)})
 
   // ( function({
   //   Model, Uuid, Str, Text, Enum, Bool, belongsTo, hasMany
@@ -279,7 +326,8 @@ export default function({Q, db}){
   // TestFloat
   return {
     sequelizeAttributeDecorators,
-    sequelizeRelationshipDecorators
+    sequelizeRelationshipDecorators,
+    serializerDecorators
   }
 }
 
