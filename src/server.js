@@ -91,23 +91,36 @@
     const serializers = app.store()
     app.config('serializer', serializers.getOrSet)
     app.config('serializers', serializers.getAll)
-    const model = (nameOrBoth, maybeModel) => {
+
+    const models = {}
+
+    const model = ((store = {}) => (nameOrBoth, maybeModel) => {
       let name, model
       const hasSeparateModel = typeof maybeModel === 'function'
       if(hasSeparateModel && typeof nameOrBoth === 'string'){
         name = nameOrBoth
         model = maybeModel
-      } else if (typeof maybeModel === 'object'){
+      } else if (typeof nameOrBoth === 'object'){
         name = Object.keys(nameOrBoth)[0],
         model = nameOrBoth[name]
       }
       // console.log(`REGISTER MODEL ${name}`)
       // console.log(app.decorators.sequelizeAttributeDecorators)
       app.schema(name, () => model(app.decorators.sequelizeAttributeDecorators))
-      app.relation(name, () => model(app.decorators.sequelizeRelationshipDecorators))
-      app.serializer(name, () => model(app.decorators.serializerDecorators))
-    }
+
+      Object.defineProperty(store, name, {
+        get: () => {
+          let schema = app.schemas[name]
+          // init relationships
+          model(app.decorators.sequelizeRelationshipDecorators)
+          schema.defaultSerializer = model(app.decorators.serializerDecorators)
+          return schema
+        }
+      })
+    }) (models)
+    // const models = ()
     app.config('model', model)
+    app.config('models', models)
     const controllers = app.store()
     app.config('controller', controllers.getOrSet)
     app.config('controllers', controllers.getAll)
@@ -159,7 +172,8 @@
       }
       let dataHandler = ($, data) => {
         // $.data.data = data;
-        $.data = app.serializers.Course().serialize(data)
+        console.log("NAME", data.constructor.name)
+        $.data = data || app.serializers.Course().serialize(data)
         $.json()
       }
       let json = controller => ($) => {

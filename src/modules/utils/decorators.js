@@ -121,20 +121,22 @@ export default function({Q, db}){
   let sequalizeAttributeDecorator = (type, defaultValue ) => propertyDecorator(dataType(type, defaultValue))
   let sequalizeRelationDecorator = (type) => propertyDecorator(relationType(type))
 
-  let attr = (target, property, descriptor) => {
-    descriptor.initializer = function(){
-      this.attributes = this.attributes || []
-      this.attributes.push(property)
-      return target.name;
-    }
-    return descriptor
-  }
+  // let attr = (target, property, descriptor) => {
+  //   descriptor.initializer = function(){
+  //     this.attributes = this.attributes || []
+  //     this.attributes.push(property)
+  //     return target.name;
+  //   }
+  //   return descriptor
+  // }
+  //
 
   let serializerDecorators = {
     Model: serializerDecoratorsTemplate.model,
     Enum: serializerAttributeDecorator,
     Uuid: serializerUuidDecorator,
     Str: serializerAttributeDecorator,
+    BinaryStr: serializerAttributeDecorator,
     Text: serializerAttributeDecorator,
     Bool: serializerAttributeDecorator,
     Int: serializerAttributeDecorator,
@@ -146,7 +148,8 @@ export default function({Q, db}){
     hasOne: serializerRelationDecorator,
     belongsTo: serializerRelationDecorator,
     hasMany: serializerRelationDecorator,
-    belongsToMany: serializerRelationDecorator
+    belongsToMany: serializerRelationDecorator,
+    Scope: emptyDecorator
   }
 
   let sequelizeAttributeDecorators = {
@@ -157,6 +160,7 @@ export default function({Q, db}){
       defaultValue : Q.UUIDV1
     }),
     Str: sequalizeAttributeDecorator(Q.STRING),
+    BinaryStr: sequalizeAttributeDecorator(Q.STRING.BINARY),
     Text: sequalizeAttributeDecorator(Q.TEXT),
     Bool: sequalizeAttributeDecorator(Q.BOOLEAN),
     Int: sequalizeAttributeDecorator(Q.INTEGER),
@@ -168,7 +172,8 @@ export default function({Q, db}){
     hasOne: emptyDecorator,
     belongsTo: emptyDecorator,
     hasMany: emptyDecorator,
-    belongsToMany: emptyDecorator
+    belongsToMany: emptyDecorator,
+    Scope: emptyDecorator
   }
 
   const sequelizeRelationshipDecorators = {
@@ -177,6 +182,7 @@ export default function({Q, db}){
     Enum: emptyDecorator,
     Uuid: emptyDecorator,
     Str: emptyDecorator,
+    BinaryStr: emptyDecorator,
     Text: emptyDecorator,
     Bool: emptyDecorator,
     Int: emptyDecorator,
@@ -188,12 +194,14 @@ export default function({Q, db}){
     hasOne: sequalizeRelationDecorator('hasOne'),
     belongsTo: sequalizeRelationDecorator('belongsTo'),
     hasMany: sequalizeRelationDecorator('hasMany'),
-    belongsToMany: sequalizeRelationDecorator('belongsToMany')
+    belongsToMany: sequalizeRelationDecorator('belongsToMany'),
+    Scope: emptyDecorator
   }
 
   // let serializer = {
   //   Uuid: dataDecorator('UUID'),
   //   Str: dataDecorator('STRING'),
+  // BinaryStr: dataDecorator('STRING'),
   //   Text: dataDecorator('TEXT'),
   //   Bool: dataDecorator("BOOLEAN"),
   //   Int: dataDecorator('INTEGER'),

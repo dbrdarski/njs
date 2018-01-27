@@ -1,7 +1,8 @@
 import $ from 'moduler'
 
 import User from './users/user.model'
-import UserRelations from './users/user.relations'
+import AdminInstall from './admin.seed'
+// import UserRelations from './users/user.relations'
 import UserCtrl from './users/user.controller'
 import Role from './roles-permissions/role.model'
 import Permission from './roles-permissions/permission.model'
@@ -9,24 +10,16 @@ import RolePermission from './roles-permissions/roles-permissions.model'
 import RoleCtrl from './roles-permissions/role.controller'
 import PermissionCtrl from './roles-permissions/permission.controller'
 
-// import UserRoutes from './users/user.routes'
-// import PermissionRoutes from './roles-permissions/permission.routes'
-// import RoleRoutes from './roles-permissions/role.routes'
-
 $.module('admin', function($){
-	$.schema({User})
-	$.relation({User:UserRelations})
+	$.model({User})
+	// $.relation({User:UserRelations})
 	$.controller({UserCtrl})
-	$.schema({Role})
-	$.schema({Permission})
-	$.schema({RolePermission})
-	$.relation('Role', require('./roles-permissions/role.relations'))
-	$.relation('Permission', require('./roles-permissions/permission.relations'))
+	$.model({Role})
+	$.model({Permission})
+	$.model({RolePermission})
 	$.controller({RoleCtrl})
 	$.controller({PermissionCtrl})
-	// $.route({UserRoutes})
-	// $.route({RoleRoutes})
-	// $.route({PermissionRoutes})
+
 	$.resolver({'admin': function({
 		api,
 		server,
@@ -37,6 +30,7 @@ $.module('admin', function($){
 		api.get('/user/:username', UserCtrl.single)
 
 	  server
+			// .get('/install/admin')
 	    .get('/users', UserCtrl.index)
 	    .get('/user/new', UserCtrl.new)
 	    .get('/user/install', UserCtrl.install)

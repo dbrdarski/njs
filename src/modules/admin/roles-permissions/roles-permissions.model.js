@@ -1,17 +1,7 @@
-export default function({Q, db}){
-  return db.define('role-permission', {
-    id : {
-      type: Q.UUID,
-      primaryKey: true,
-      defaultValue: Q.UUIDV1
-    // },
-    // roleId : {
-    //   type: Q.UUID,
-    //   allowNull: false
-    // },
-    // permissionId : {
-    //   type: Q.UUID,
-    //   allowNull: false
-    }
-  })
+export default function({
+  Model, Uuid, Enum, Str, Text, Bool, Int, BigInt, Float, Real, Dbl, Dec, hasOne, belongsTo, hasMany, belongsToMany
+}){
+  return @Model class RolePermission{
+    @Uuid id
+  }
 }

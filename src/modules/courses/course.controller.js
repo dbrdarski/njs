@@ -1,8 +1,7 @@
 export default function CourseCtrl({
-  schemas: { Course }
+  models: { Course }
 }){
-  // let { Course } = $.schemas
-  this.relations.Course
+
   return {
     index : function(){
       return Course.findAll({
@@ -31,3 +30,31 @@ export default function CourseCtrl({
     }
   }
 }
+
+// function ApiController(){}
+// function ActiveModelSerializer(){}
+//
+// let serializer = {
+//   attributes: ['id', 'asdf'],
+//   relations: {
+//     allow: ['lessions'],
+//     include: ['author']
+//   }
+// };
+//
+// @ApiController({
+//   model: 'Course',
+//   endpoints: true
+// }) class Course {
+//   @ActiveModelSerializer(serializer)
+//   @Include('Author')
+//   index
+//   // new
+//   @ActiveModelSerializer
+//   create
+//
+//   show
+//   // edit
+//   update
+//   destroy
+// }

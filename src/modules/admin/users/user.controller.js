@@ -1,8 +1,6 @@
-import seed from './user.seed'
-export default function UserCtrl($$){
-  this.relations.User
-  let User = this.schemas.User
-
+export default function UserCtrl({
+  models: { User }
+}){
   return {
     index : function($){
       return User.findAll()
@@ -28,7 +26,7 @@ export default function UserCtrl($$){
     install : function($){
       User.sync({force: true}).then(()=>{
         $.data.msg = {installed: 'users table'}
-        seed($$)
+        // seed($$)
         $.json()
       })
     }

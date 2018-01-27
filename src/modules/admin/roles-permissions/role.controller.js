@@ -1,7 +1,5 @@
-import seed from './role.seed'
 export default function RoleCtrl({
-    schemas: { Role },
-    relations : { RoleRel }
+    models: { Role },
   }){
   return {
     index : function($){

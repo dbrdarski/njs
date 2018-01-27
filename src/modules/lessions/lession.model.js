@@ -10,5 +10,7 @@ export default function({
     @Str image
     @Int grade
     @Bool complete
+
+    @belongsTo Course
   }
 }
