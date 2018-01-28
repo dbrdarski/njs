@@ -1,4 +1,9 @@
 import $ from 'moduler'
+
+import sequelize_decorators from './decorators/sequalize.decorators'
+import serializer_decorators from './decorators/serializer.decorators'
+import api_controller_decorators from './decorators/api_controller.decorators'
+
 export default function({Q, db}){
 
   const removeEmptyKeys = (o) => {
@@ -47,59 +52,12 @@ export default function({Q, db}){
     }
   }
 
-  const sequalizeClassAttributeDecorator = (target) => {
-    // console.log({name: (target.name), target})
-    return db.define($.str.kebab(target.name), removeEmptyKeys(new target))
-  }
-
   const dataType = (type, defaultOptions) => ([options], target, property, descriptor) => {
     descriptor.initializer = () => Object.assign({}, defaultOptions, options, {type})
     return descriptor
   }
 
-  // const courseSerializer = new $.jsonapi('course', {
-  //     attributes: ['id','title','slug','description','video','image','color','level','author'],
-  //     get author() {
-  //       return {
-  //         ref: 'id',
-  //         attributes: ['id', 'username', 'email', 'firstName', 'lastName', 'image', 'description']
-  //       }
-  //     }
-  // })
-  //
-
-  const serializerDecoratorsTemplate = (function(store = {}){
-    return {
-      model: (target) => {
-        let schema = store[target.name] = removeEmptyKeys(new target)
-        console.log({name: target.name, schema, jsonapi:$.jsonapi})
-        return () => new $.jsonapi($.str.kebab(target.name), schema)
-      },
-      attribute: (isRelation, isUuid) => propertyDecorator(([options], target, property, descriptor) => {
-        descriptor.initializer = function(){
-          this.attributes = this.attributes || []
-          this.attributes.push($.str.kebab(property))
-          if (isRelation) {
-            Object.defineProperty(this, $.str.kebab(property), {
-              get: () => store[property],
-              enumerable: true
-            })
-          }
-          if (isUuid) {
-            this.rel = property
-          }
-        }
-      })
-    }
-  })()
-
-  // const serializerDecorator =
-
-  const serializerAttributeDecorator = serializerDecoratorsTemplate.attribute(false)
-  const serializerRelationDecorator = serializerDecoratorsTemplate.attribute(false)
-  const serializerUuidDecorator = serializerDecoratorsTemplate.attribute(false, true)
-
-  let relationType = (type) => ([options = {}], target, property, descriptor) => {
+  const relationType = (type) => ([options = {}], target, property, descriptor) => {
     descriptor.initializer = function(){
       let schema = $.schemas[target.constructor.name]
       let relation
@@ -114,12 +72,34 @@ export default function({Q, db}){
       schema[property] = schema[type](relation, options)
     }
   }
+
+
+
+  const decoratorHelpers  = {
+    removeEmptyKeys,
+    propertyDecorator,
+    emptyDecorator,
+    dataType,
+    relationType
+  }
+
+  // const courseSerializer = new $.jsonapi('course', {
+  //     attributes: ['id','title','slug','description','video','image','color','level','author'],
+  //     get author() {
+  //       return {
+  //         ref: 'id',
+  //         attributes: ['id', 'username', 'email', 'firstName', 'lastName', 'image', 'description']
+  //       }
+  //     }
+  // })
+  //
+
+  // const serializerDecorator =
+
   // let serializerRelationDecorator = propertyDecorator(([options], target, property, descriptor) => {
   //
   // })
 
-  let sequalizeAttributeDecorator = (type, defaultValue ) => propertyDecorator(dataType(type, defaultValue))
-  let sequalizeRelationDecorator = (type) => propertyDecorator(relationType(type))
 
   // let attr = (target, property, descriptor) => {
   //   descriptor.initializer = function(){
@@ -130,73 +110,6 @@ export default function({Q, db}){
   //   return descriptor
   // }
   //
-
-  let serializerDecorators = {
-    Model: serializerDecoratorsTemplate.model,
-    Enum: serializerAttributeDecorator,
-    Uuid: serializerUuidDecorator,
-    Str: serializerAttributeDecorator,
-    BinaryStr: serializerAttributeDecorator,
-    Text: serializerAttributeDecorator,
-    Bool: serializerAttributeDecorator,
-    Int: serializerAttributeDecorator,
-    BigInt: serializerAttributeDecorator,
-    Float: serializerAttributeDecorator,
-    Real: serializerAttributeDecorator,
-    Dbl: serializerAttributeDecorator,
-    Dec: serializerAttributeDecorator,
-    hasOne: serializerRelationDecorator,
-    belongsTo: serializerRelationDecorator,
-    hasMany: serializerRelationDecorator,
-    belongsToMany: serializerRelationDecorator,
-    Scope: emptyDecorator
-  }
-
-  let sequelizeAttributeDecorators = {
-    Model: sequalizeClassAttributeDecorator,
-    Enum: sequalizeAttributeDecorator(Q.ENUM),
-    Uuid: sequalizeAttributeDecorator(Q.UUID, {
-      primaryKey: true,
-      defaultValue : Q.UUIDV1
-    }),
-    Str: sequalizeAttributeDecorator(Q.STRING),
-    BinaryStr: sequalizeAttributeDecorator(Q.STRING.BINARY),
-    Text: sequalizeAttributeDecorator(Q.TEXT),
-    Bool: sequalizeAttributeDecorator(Q.BOOLEAN),
-    Int: sequalizeAttributeDecorator(Q.INTEGER),
-    BigInt: sequalizeAttributeDecorator(Q.BIGINT),
-    Float: sequalizeAttributeDecorator(Q.FLOAT),
-    Real: sequalizeAttributeDecorator(Q.REAL),
-    Dbl: sequalizeAttributeDecorator(Q.DOUBLE),
-    Dec: sequalizeAttributeDecorator(Q.DECIMAL),
-    hasOne: emptyDecorator,
-    belongsTo: emptyDecorator,
-    hasMany: emptyDecorator,
-    belongsToMany: emptyDecorator,
-    Scope: emptyDecorator
-  }
-
-  const sequelizeRelationshipDecorators = {
-    // Model
-    Model: x => new x,
-    Enum: emptyDecorator,
-    Uuid: emptyDecorator,
-    Str: emptyDecorator,
-    BinaryStr: emptyDecorator,
-    Text: emptyDecorator,
-    Bool: emptyDecorator,
-    Int: emptyDecorator,
-    BigInt: emptyDecorator,
-    Float: emptyDecorator,
-    Real: emptyDecorator,
-    Dbl: emptyDecorator,
-    Dec: emptyDecorator,
-    hasOne: sequalizeRelationDecorator('hasOne'),
-    belongsTo: sequalizeRelationDecorator('belongsTo'),
-    hasMany: sequalizeRelationDecorator('hasMany'),
-    belongsToMany: sequalizeRelationDecorator('belongsToMany'),
-    Scope: emptyDecorator
-  }
 
   // let serializer = {
   //   Uuid: dataDecorator('UUID'),
@@ -234,7 +147,7 @@ export default function({Q, db}){
   //   }
   // })
 
-  let { Model, Uuid, Str, Text, Enum, Bool, hasOne } = sequelizeAttributeDecorators
+  // let { Model, Uuid, Str, Text, Enum, Bool, hasOne } = sequelizeAttributeDecorators
 
   // class Course {
   //   @Uuid({
@@ -332,7 +245,12 @@ export default function({Q, db}){
 
   // @Float(11, 12)
   // TestFloat
+  let { sequelizeAttributeDecorators, sequelizeRelationshipDecorators } = sequelize_decorators($, decoratorHelpers)
+  let serializerDecorators = serializer_decorators($, decoratorHelpers)
+  let ApiControllerDecorators = api_controller_decorators($, decoratorHelpers)
+
   return {
+    ApiControllerDecorators,
     sequelizeAttributeDecorators,
     sequelizeRelationshipDecorators,
     serializerDecorators

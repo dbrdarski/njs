@@ -109,13 +109,15 @@
       app.schema(name, () => model(app.decorators.sequelizeAttributeDecorators))
 
       Object.defineProperty(store, name, {
-        get: () => {
+        get: r.once(() => {
           let schema = app.schemas[name]
           // init relationships
           model(app.decorators.sequelizeRelationshipDecorators)
-          schema.defaultSerializer = model(app.decorators.serializerDecorators)
+          let serializer = model(app.decorators.serializerDecorators)
+          console.log({serializer})
+          schema.defaultSerializer = serializer
           return schema
-        }
+        })
       })
     }) (models)
     // const models = ()
@@ -138,49 +140,52 @@
       fn.call(newInstance, newInstance)
     })
 
-    const serializer = (options) => (data) => {
-      if (options.with) {
-        data = options.with.reduce( (obj, prop) => {
-          obj[prop] = data[prop]
-          return obj
-        }, {})
-      }
-      if (options.without) {
-        options.without.forEach( prop => {
-          if (data[prop]) {
-            delete data[prop]
-          }
-        })
-      }
-	    return data
-    }
-
-    const publicUser = serializer({
-      without : [ 'password' ],
-      with: [
-        'id',
-        'username',
-        'firstName',
-        'lastName',
-        'description',
-      ]
-    })
+    // const serializer = (options) => (data) => {
+    //   if (options.with) {
+    //     data = options.with.reduce( (obj, prop) => {
+    //       obj[prop] = data[prop]
+    //       return obj
+    //     }, {})
+    //   }
+    //   if (options.without) {
+    //     options.without.forEach( prop => {
+    //       if (data[prop]) {
+    //         delete data[prop]
+    //       }
+    //     })
+    //   }
+	  //   return data
+    // }
+    //
+    // const publicUser = serializer({
+    //   without : [ 'password' ],
+    //   with: [
+    //     'id',
+    //     'username',
+    //     'firstName',
+    //     'lastName',
+    //     'description',
+    //   ]
+    // })
 
     const api = (options = {}) => {
       let config = {
         route: options.route
       }
-      let dataHandler = ($, data) => {
-        // $.data.data = data;
-        console.log("NAME", data.constructor.name)
-        $.data = data || app.serializers.Course().serialize(data)
-        $.json()
+      let dataHandler = (signal, data) => {
+        // signal.data.data = data;
+        // console.log("NAME", data.constructor.name)
+        signal.data = data // || app.serializers.Course().serialize(data)
+        signal.json()
       }
-      let json = controller => ($) => {
+      let json = (action) => (signal) => {
         // fetchData  then  handleData
-        controller($).then( dataHandler.bind(null, $) )
+        console.log(action)
+        action(signal)
+        // .then( action.serializer().serialize )
+        .then( dataHandler.bind(null, signal) )
       }
-      api.method = (method) => (route, controller) => server[method](options.route + route, json(controller))
+      api.method = (method) => (route, action) => server[method](options.route + route, json(action))
       return {
         get: api.method('get'),
         post: api.method('post'),
